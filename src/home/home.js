@@ -54,7 +54,6 @@ class Home extends React.Component {
         <div>
             <h3>Featured products</h3> 
             {
-                
                 <Carousel> 
                     
                     <div id="products">
@@ -78,7 +77,6 @@ class Home extends React.Component {
                     }
                     </div>
                 </Carousel>
-
             }
         </div>
         );
