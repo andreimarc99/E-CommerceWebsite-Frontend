@@ -1,0 +1,56 @@
+.App {
+    font-family: "Roboto Condensed";
+    text-align: center;
+  }
+
+#edit-img:hover img {
+  -webkit-filter: invert(100%);
+}
+  
+.logo {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+}
+
+.contact {
+filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%) contrast(115%);
+}
+
+.container {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 2%;
+  margin: 0 auto;
+}
+
+.side-content {
+  border: 3px solid black;
+  padding: 0px;
+}
+
+.card-row {
+  margin-top: 1rem;
+  background-color: #000000;
+  padding: 2%;
+}
+
+.card-content:hover {
+  transform: scale(1.1);
+}
+
+.carousel-control-next-icon:after
+{
+  content: '>';
+  font-size: 55px;
+  color: red;
+}
+
+.carousel-control-prev-icon:after {
+  content: '<';
+  font-size: 55px;
+  color: red;
+}
+
+.carousel-caption {
+  color: red
+}
