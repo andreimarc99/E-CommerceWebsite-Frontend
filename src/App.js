@@ -5,11 +5,10 @@ import Home from "./home/home.js"
 import ErrorPage from "./error-page.js"
 import "./styles.css"
 import NavbarPage from "./nav-bar.js"
-import instagram from "./img/instagram.png"
-import facebook from "./img/facebook.png"
-import location from "./img/location.png"
-import email from "./img/email.png"
-import twitter from "./img/twit.png"
+import instagram from "./img/instagram_icon.png"
+import facebook from "./img/facebook_icon.png"
+import email from "./img/gmail_icon.png"
+import twitter from "./img/twitter_icon.png"
 import ProductStockPage from './admin/components/product-stock-page';
 
 function App() {
@@ -68,22 +67,6 @@ function App() {
                       src={facebook}
                       style={{ width: "2%" }}
                       alt="facebook"
-                    ></img>
-                  </span>
-                </a>
-                <a
-                  target="_tab"
-                  href="https://www.google.com/maps/place/Facultatea+de+Automatic%C4%83+%C8%99i+Calculatoare/@44.4359395,26.0425057,15z/data=!4m5!3m4!1s0x40b201ebafcdf7a3:0xeafb513bd76c5277!8m2!3d44.4357327!4d26.0477521"
-                >
-                  <span
-                    id="edit-img"
-                    style={{ marginLeft: "2px", marginRight: "2px" }}
-                  >
-                    <img
-                      className="logo"
-                      src={location}
-                      style={{ width: "2%" }}
-                      alt="location"
                     ></img>
                   </span>
                 </a>

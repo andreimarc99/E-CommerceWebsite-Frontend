@@ -7,7 +7,6 @@ import * as CATEGORIES_API from "../../product/api/category-api"
 import Select from "react-select";
 import {HOST} from "../../commons/hosts";
 import axios from 'axios';
-import RestApiClient from "../../commons/rest-client"
 
 
 class PatientForm extends React.Component {
@@ -154,7 +153,7 @@ class PatientForm extends React.Component {
             price: this.state.formControls.price.value,
             description: this.state.formControls.description.value,
             stock: this.state.formControls.stock.value,
-            numberSold: 0
+            numberSold: 1
         };
 
         let prodJSON = JSON.stringify({
@@ -180,7 +179,6 @@ class PatientForm extends React.Component {
         const {selectedFile} = this.state;
         
         const formData = new FormData();
-        console.log(selectedFile);
         formData.append('file', new Blob([selectedFile], {type: 'image/png'}));
         formData.append('product', new Blob([prodJSON], {type: 'application/json'}));
         formData.append('specs', new Blob([specsJSON], {type: 'application/json'}));
