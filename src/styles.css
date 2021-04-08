@@ -32,7 +32,9 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
 }
 
 .carousel-item {
+  transition: opacity 1s ease-in-out !important;
   height: 55vh;
   background-size: cover;
   background-position: center center;
 }
+

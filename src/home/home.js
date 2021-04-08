@@ -71,7 +71,7 @@ class Home extends React.Component {
           <br />
           <h1 style={{color: 'red'}}>Featured products</h1>
             <Col md={9} className="carousel-content" style = {{marginLeft: "auto", marginRight:"auto"}}>
-            <Carousel>
+            <Carousel fade>
               <Carousel.Item>
                 <img
                   className="d-block w-100 contain"
