@@ -81,7 +81,6 @@ class Home extends React.Component {
                 />
                 <Carousel.Caption>
                   <h3>{products[0].name}</h3>
-                  <p>{products[0].description}</p>
                   <p>{products[0].price + "$"}</p>
                 </Carousel.Caption>
               </Carousel.Item>
@@ -95,7 +94,6 @@ class Home extends React.Component {
 
                 <Carousel.Caption>
                 <h3>{products[1].name}</h3>
-                <p>{products[1].description}</p>
                 <p>{products[1].price + "$"}</p>
                 </Carousel.Caption>
               </Carousel.Item>
@@ -109,7 +107,6 @@ class Home extends React.Component {
 
                 <Carousel.Caption>
                 <h3>{products[2].name}</h3>
-                <p>{products[2].description}</p>
                 <p>{products[2].price + "$"}</p>
                 </Carousel.Caption>
               </Carousel.Item>
