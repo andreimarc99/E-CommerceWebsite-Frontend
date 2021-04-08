@@ -54,22 +54,17 @@ class Home extends React.Component {
         if (products !== "undefined" && products.length >0) {
             console.log(products[0]);
             var buf1 = products[0].image.data;
-
             imageElem1 = document.createElement('img1');
             imageElem1.src = 'data:image/png;base64,' + buf1.toString('base64');
-            var src1 = document.getElementById("product1");
 
 
             var buf2 = products[1].image.data;
-
             imageElem2 = document.createElement('img2');
             imageElem2.src = 'data:image/png;base64,' + buf2.toString('base64');
-            var src2 = document.getElementById("product2"); 
-            var buf3 = products[2].image.data;
 
+            var buf3 = products[2].image.data;
             imageElem3 = document.createElement('img3');
             imageElem3.src = 'data:image/png;base64,' + buf3.toString('base64');
-            var src3 = document.getElementById("product3"); 
 
         return(
         <div>
