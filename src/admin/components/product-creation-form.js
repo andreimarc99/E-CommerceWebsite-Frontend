@@ -7,6 +7,8 @@ import * as CATEGORIES_API from "../../product/api/category-api"
 import Select from "react-select";
 import {HOST} from "../../commons/hosts";
 import axios from 'axios';
+import RestApiClient from "../../commons/rest-client"
+
 
 class PatientForm extends React.Component {
 
@@ -175,17 +177,13 @@ class PatientForm extends React.Component {
             'categories': categ
         })
 
+        const {selectedFile} = this.state;
+        
         const formData = new FormData();
-        formData.append('file', new Blob([this.state.selectedFile.value], {
-            type: "image/png"
-        }));
-        formData.append('product', new Blob([prodJSON], {
-            type: "application/json"
-        }));
-        formData.append('specs', new Blob([specsJSON], {
-            type: "application/json"
-        }));
-
+        console.log(selectedFile);
+        formData.append('file', new Blob([selectedFile], {type: 'image/png'}));
+        formData.append('product', new Blob([prodJSON], {type: 'application/json'}));
+        formData.append('specs', new Blob([specsJSON], {type: 'application/json'}));
         axios.post(HOST.backend_api + "/products/save", formData)
         this.reloadHandler();
     }
@@ -216,26 +214,6 @@ class PatientForm extends React.Component {
             selectedFile: e.target.files[0]
         });
     }
-
-    /*insertProduct(product, specs) {
-        const formData = new FormData();
-        formData.append('file', this.state.selectedFile);
-        formData.append('product', product);
-        //Append the rest data then send
-        axios({
-           method: 'POST',
-           url: HOST.backend_api + "/products/save/",
-           data: formData,
-           headers: {'Content-Type': 'multipart/form-data' }
-        })
-        .then(function (response) {
-           //handle success
-           console.log(response);
-        }, 
-        function(error) { 
-           // handle error 
-        });
-    }*/
 
     componentDidMount() {
         this.fetchCategories();

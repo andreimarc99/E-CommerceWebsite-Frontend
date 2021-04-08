@@ -63,6 +63,8 @@ class Home extends React.Component {
                                     {
                                         products.map( (product) => { 
                                             var buf = product.image.data;
+                                            console.log(buf);
+
                                             var imageElem = document.createElement('img');
                                             imageElem.src = 'data:image/png;base64,' + buf.toString('base64');
                                             var src = document.getElementById("products"); 
@@ -71,7 +73,7 @@ class Home extends React.Component {
                                         })
                                     }
                                 <Carousel.Caption>
-                                    First slide label
+                                    <h3>First slide label</h3>
                                 </Carousel.Caption>
                             </Carousel.Item>
                     }

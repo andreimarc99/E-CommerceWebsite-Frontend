@@ -39,7 +39,7 @@ class ProductStockPage extends React.Component {
             isProductLoaded: false
         });
         this.toggleCreateProductForm();
-        this.fetchPatients();
+        this.fetchProducts();
     }
 
     fetchProducts() {
@@ -83,7 +83,7 @@ class ProductStockPage extends React.Component {
                     <tbody>
                     {
                         this.state.productList.map(
-                            product =>
+                            product => 
                                 <tr key={product.productId}>
                                     <td className="text-center"> {product.productId}</td>
                                     <td className="text-center"> {product.name} </td>
@@ -94,8 +94,7 @@ class ProductStockPage extends React.Component {
                                     <td className="text-center"> <b>Size:</b> {product.specs.size}  <br /><b>Weight:</b> {product.specs.weight}</td>
                                     <td className="text-center"> {product.specs.categories.map((category) => <p style={{borderStyle:"solid", borderRadius:'12px'}}> {category.name} </p> )}</td>
 
-                                </tr>
-                        )
+                                </tr>)
                     }
                     </tbody>
                 </table>
