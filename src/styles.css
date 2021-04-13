@@ -38,3 +38,7 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
   background-position: center center;
 }
 
+.prod-img {
+  object-fit: contain;
+  height: 70vh;
+}

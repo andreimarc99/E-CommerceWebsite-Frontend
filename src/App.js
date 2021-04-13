@@ -10,6 +10,7 @@ import facebook from "./img/facebook_icon.png"
 import email from "./img/gmail_icon.png"
 import twitter from "./img/twitter_icon.png"
 import ProductStockPage from './admin/components/product-stock-page';
+import ProductPage from './product/component/product-page';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
                         <Route
                             exact
                             path='/'
-                            render={() => <Home/>}
+                            render={() => <Home />}
                         />
 
                         <Route
@@ -37,7 +38,9 @@ function App() {
                             render={() => <ProductStockPage /> }
                         />
 
-                        <Route render={() =><ErrorPage/>} />
+                    <Route path="/product_page/:id" render={(props) => <ProductPage {...props}/>}/>
+
+                        <Route render={() =><ErrorPage />} />
                     </Switch>
             </Router>
 
@@ -96,7 +99,7 @@ function App() {
                     ></img>
                   </span>
                 </a>
-
+                
               </footer>
             </div>
     </div>

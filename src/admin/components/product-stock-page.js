@@ -9,6 +9,7 @@ import {
     ModalHeader
 } from 'reactstrap';
 import ProductCreationForm from './product-creation-form'
+import {Link} from "react-router-dom"
 
 class ProductStockPage extends React.Component {
 
@@ -43,7 +44,7 @@ class ProductStockPage extends React.Component {
     }
 
     fetchProducts() {
-        return API_PRODUCT.getProducts((result, status, err) => {
+        return API_PRODUCT.getProductsWithImages((result, status, err) => {
             if (result !== null && status === 200) {
                 this.setState({
                     productList: result,
@@ -86,8 +87,10 @@ class ProductStockPage extends React.Component {
                             product => 
                                 <tr key={product.productId}>
                                     <td className="text-center"> {product.productId}</td>
+                                   <Link style={{textDecoration:"none", color: "black"}} to={{ pathname: `/product_page/${product.productId}`, state: { product: product } }}>
                                     <td className="text-center"> {product.name} </td>
-                                    <td className="text-center"> {product.price}</td>
+                                    </Link>
+                                    <td className="text-center"> ${product.price}</td>
                                     <td className="text-center"> {product.description}</td>
                                     <td className="text-center"> {product.stock}</td>
                                     <td className="text-center"> {product.numberSold}</td>

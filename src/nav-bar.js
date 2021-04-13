@@ -57,7 +57,7 @@ const NavbarPage = (props) => {
             </UncontrolledDropdown>
           </Nav>
           <Form inline>
-      <FormControl type="text" placeholder="Search product..." className="mr-sm-2" />
+      <FormControl type="search" placeholder="Search product..." className="mr-sm-2" />
       <Button variant="outline-light">Search</Button>
     </Form>
         </Collapse>
