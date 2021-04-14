@@ -30,6 +30,15 @@ function getProductById(params, callback){
     RestApiClient.performRequest(request, callback);
 }
 
+function getProductsByCategoryId(categoryId, callback){
+    let request = new Request(HOST.backend_api + endpoint.product + "/getByCategory/" + categoryId, {
+        method: 'GET'
+    });
+
+    console.log(request.url);
+    RestApiClient.performRequest(request, callback);
+}
+
 function postProduct(_product, callback){
     let request = new Request(HOST.backend_api + endpoint.product , {
         method: 'POST',
@@ -56,5 +65,6 @@ export {
     getProducts,
     getProductById,
     postProduct,
-    getProductsWithImages
+    getProductsWithImages,
+    getProductsByCategoryId
 };

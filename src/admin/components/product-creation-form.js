@@ -153,7 +153,7 @@ class PatientForm extends React.Component {
             price: this.state.formControls.price.value,
             description: this.state.formControls.description.value,
             stock: this.state.formControls.stock.value,
-            numberSold: 1
+            numberSold: 0
         };
 
         let prodJSON = JSON.stringify({

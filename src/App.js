@@ -38,7 +38,7 @@ function App() {
                             render={() => <ProductStockPage /> }
                         />
 
-                    <Route path="/product_page/:id" render={(props) => <ProductPage {...props}/>}/>
+                    <Route path="/product_page/:id" render={(props) => <ProductPage {...props} key={Date.now()}/>}/>
 
                         <Route render={() =><ErrorPage />} />
                     </Switch>

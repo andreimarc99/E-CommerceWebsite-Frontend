@@ -44,7 +44,17 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
   height: 70vh;
 }
 
+.rel-img {
+  height: 20vh;
+}
+
+
 .shadowed {
   width: 150px;
   filter: drop-shadow(5px 5px 10px rgb(255, 81, 81));
+}
+
+.red-card-header {
+  color: white !important;
+  background-color: rgb(255, 81, 81) !important;
 }
