@@ -153,7 +153,7 @@ class ProductPage extends React.Component {
             <br /> <br />
            <h6>{product.description}</h6>
               
-           {(isNaN(rating)) ? <div>No rating available</div> : <StarRatings rating={rating} starDimension="40px" starSpacing="10px" starRatedColor="red"/>}
+           {(isNaN(rating)) ? <div className="text-muted">No rating available</div> : <StarRatings rating={rating} starDimension="40px" starSpacing="10px" starRatedColor="red"/>}
            <hr
             style={{
                 color: 'rgb(255, 81, 81)',
@@ -182,7 +182,7 @@ class ProductPage extends React.Component {
             }}
             />
             <h5><b>Reviews</b></h5>
-            {(isNaN(rating)) ? <p  className="font-text-light">No reviews found</p> : <p className="font-text-light">Average: {rating}</p>}
+            {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="font-text-light">Average: {rating}</p>}
 
             <div> {
             reviewList.map((review) => {return(
@@ -246,7 +246,7 @@ class ProductPage extends React.Component {
                   <Button className="btn btn-danger">Add to cart</Button>
                 </Card.Body>
               </Card></div> );
-            }) : <div>No related products</div> }</div></div>
+            }) : <div className="text-muted">No related products</div> }</div></div>
 
         </div>
         );

@@ -69,7 +69,12 @@ class Home extends React.Component {
         <div>
           <br />
           <h1 style={{color: 'red'}}>Featured products</h1>
-          <br /> <br />
+          <hr
+            style={{
+                color: 'rgb(255, 81, 81)',
+                backgroundColor: 'rgb(255, 81, 81)',
+                height: 10
+            }}/>
             <Col md={9} className="carousel-content" style = {{marginLeft: "auto", marginRight:"auto"}}>
             <Carousel fade>
             

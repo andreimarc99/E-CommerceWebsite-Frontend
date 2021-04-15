@@ -11,6 +11,9 @@ import email from "./img/gmail_icon.png"
 import twitter from "./img/twitter_icon.png"
 import ProductStockPage from './admin/components/product-stock-page';
 import ProductPage from './product/component/product-page';
+import Login from "./login/login-page"
+import Register from "./register/register-page"
+import UserPage from './user/component/user-page';
 
 function App() {
   return (
@@ -37,6 +40,21 @@ function App() {
                             path='/product_stock_page'
                             render={() => <ProductStockPage /> }
                         />
+
+
+                        <Route 
+                            exact 
+                            path='/login'
+                            render={() => <Login /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/register'
+                            render={() => <Register /> }
+                        />
+
+                    <Route path="/user_page/:username" render={(props) => <UserPage {...props} key={Date.now()}/>}/>
 
                     <Route path="/product_page/:id" render={(props) => <ProductPage {...props} key={Date.now()}/>}/>
 
