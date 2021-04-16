@@ -13,8 +13,8 @@ function getCategories(callback) {
     RestApiClient.performRequest(request, callback);
 }
 
-function getCategoryById(params, callback){
-    let request = new Request(HOST.backend_api + endpoint.categories + params.id, {
+function getCategoryByName(name, callback){
+    let request = new Request(HOST.backend_api + endpoint.categories  + "/" + name, {
         method: 'GET'
     });
 
@@ -42,6 +42,6 @@ function postCategories(_category, callback){
 
 export {
     getCategories,
-    getCategoryById,
+    getCategoryByName,
     postCategories
 };

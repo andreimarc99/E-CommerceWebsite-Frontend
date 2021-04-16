@@ -25,26 +25,19 @@ class LoginPage extends React.Component {
         console.log(userRole);
         let path_comp = {};
         switch(userRole) {
-            /*
-            case 'DOCTOR':
-                path_comp = {
-                    path: '/doctor',
-                    comp: PatientContainer
-                };
-                break;
-            case 'PATIENT':
-                path_comp = {
-                    path: '/patient',
-                    comp: PatientPage
-                };
-                break;
-            case 'CAREGIVER':
-                path_comp = {
-                    path: '/caregiver',
-                    comp: CaregiverContainer
-                };
-                break;*/
             case 'CUSTOMER':
+                path_comp = {
+                    path: '/',
+                    comp: Home
+                }
+                break;
+            case 'ADMIN':
+                path_comp = {
+                    path: '/',
+                    comp: Home
+                }
+                break;
+            case 'DELIVERY_GUY':
                 path_comp = {
                     path: '/',
                     comp: Home
@@ -83,6 +76,7 @@ class LoginPage extends React.Component {
                 }));
             }
         })
+        
 
     }
 

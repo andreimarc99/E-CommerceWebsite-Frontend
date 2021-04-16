@@ -14,6 +14,7 @@ import ProductPage from './product/component/product-page';
 import Login from "./login/login-page"
 import Register from "./register/register-page"
 import UserPage from './user/component/user-page';
+import CategoryPage from './product/component/category-page';
 
 function App() {
   return (
@@ -57,6 +58,9 @@ function App() {
                     <Route path="/user_page/:username" render={(props) => <UserPage {...props} key={Date.now()}/>}/>
 
                     <Route path="/product_page/:id" render={(props) => <ProductPage {...props} key={Date.now()}/>}/>
+
+                    <Route path="/category/:name" render={(props) => <CategoryPage {...props} key={Date.now()}/>}/>
+
 
                         <Route render={() =><ErrorPage />} />
                     </Switch>

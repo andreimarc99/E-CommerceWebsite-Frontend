@@ -3,6 +3,10 @@ import Select from "react-select";
 import validate from "../admin/components/validator";
 import {FormGroup, Input, Label} from "reactstrap";
 import * as API_USERS from "../user/user-api"
+import * as CUSTOMER_API from "../user/customer-api"
+import * as ADMIN_API from "../user/admin-api"
+import * as DELIVERY_GUY_API from "../user/delivery-guy-api"
+import { Button } from "react-bootstrap";
 
 function isEmpty(item) {
     for(const p in item) {
@@ -20,13 +24,16 @@ class RegisterContainer extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
+        this.handleGenderChange = this.handleGenderChange.bind(this);
         this.state = {
             completed: false,
             error: '',
             errorStatus: 0,
             userList: [],
             formIsValid: false,
-            role: '',
+            role: 'CUSTOMER',
+            gender: 'M',
+            dateHired: '',
             formControls: {
                 username: {
                     value: '',
@@ -49,9 +56,9 @@ class RegisterContainer extends React.Component {
                         isRequired: true
                     }
                 },
-                name: {
+                firstName: {
                     value: '',
-                    placeholder: 'Name...',
+                    placeholder: 'First name...',
                     valid: false,
                     touched: false,
                     validationRules: {
@@ -59,13 +66,23 @@ class RegisterContainer extends React.Component {
                         isRequired: true
                     }
                 },
-                address: {
+                lastName: {
                     value: '',
-                    placeholder: 'Cluj, Zorilor, Str. Lalelelor 21...',
+                    placeholder: 'Last name...',
                     valid: false,
                     touched: false,
                     validationRules: {
                         minLength: 3,
+                        isRequired: true
+                    }
+                },
+                cnp: {
+                    value: '',
+                    placeholder: 'CNP...',
+                    valid: false,
+                    touched: false,
+                    validationRules: {
+                        minLength: 12,
                         isRequired: true
                     }
                 },
@@ -77,6 +94,16 @@ class RegisterContainer extends React.Component {
                     touched: false,
                     validationRules: {
                         isRequired: true
+                    }
+                },
+                dateHired: {
+                    value: '',
+                    type: "date",
+                    placeholder: 'Hiring Date...',
+                    valid: true,
+                    touched: true,
+                    validationRules: {
+                        isRequired: false
                     }
                 }
             }
@@ -125,8 +152,51 @@ class RegisterContainer extends React.Component {
     };
 
     handleSelectionChange = role => {
-        this.setState({role})
+        this.setState({role: role.value})
     }
+    handleGenderChange = gender => {
+        this.setState({gender: gender.value})
+    }
+
+    registerCustomer(customer) {
+        return CUSTOMER_API.postCustomer(customer, (result, status, error) => {
+            if (result !== null && (status === 200 || status === 201)) {
+                console.log("Successfully inserted customer with id: " + result);
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: error
+                }));
+            }
+        });
+    }
+    
+    registerAdmin(admin) {
+        return ADMIN_API.postAdmin(admin, (result, status, error) => {
+            if (result !== null && (status === 200 || status === 201)) {
+                console.log("Successfully inserted admin with id: " + result);
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: error
+                }));
+            }
+        });
+    }
+
+    registerDeliveryGuy(delivery_guy) {
+        return DELIVERY_GUY_API.postDeliveryGuy(delivery_guy, (result, status, error) => {
+            if (result !== null && (status === 200 || status === 201)) {
+                console.log("Successfully inserted delivery guy with id: " + result);
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: error
+                }));
+            }
+        });
+    }
+
 
     handleSubmit() {
         const {userList} = this.state;
@@ -137,29 +207,68 @@ class RegisterContainer extends React.Component {
                 break;
             }
         }
+        const dateHired = this.state.formControls.dateHired.value;
         if (!unique) {
             alert("Username is taken. Try again.");
         } else {
             console.log(this.state.formControls);
-            let person = {
-                username: this.state.formControls.username.value,
-                password: this.state.formControls.password.value,
-                name: this.state.formControls.name.value,
-                address: this.state.formControls.address.value,
-                birthDate: this.state.formControls.birthDate.value,
-                role: this.state.role
-            };
-            switch (this.state.role.value) {
-                case 'PATIENT':
+            
+            switch (this.state.role) {
+                case 'ADMIN':
+                    if (dateHired === '') {
+                        dateHired = new Date().toJSON().slice(0,10);
+                    }
+                    console.log("Date hired: " + dateHired);
+                    let admin = {
+                        username: this.state.formControls.username.value,
+                        password: this.state.formControls.password.value,
+                        firstName: this.state.formControls.firstName.value,
+                        lastName: this.state.formControls.lastName.value,
+                        birthDate: this.state.formControls.birthDate.value,
+                        CNP: this.state.formControls.cnp.value,
+                        gender: this.state.gender,
+                        role: 'ADMIN',
+                        dateHired: dateHired
+                    };
+                    this.registerAdmin(admin);                    
+                    window.location.href = '/login';
                     break;
-                case 'CAREGIVER':
+                case 'CUSTOMER':
+                    let customer = {
+                        username: this.state.formControls.username.value,
+                        password: this.state.formControls.password.value,
+                        firstName: this.state.formControls.firstName.value,
+                        lastName: this.state.formControls.lastName.value,
+                        birthDate: this.state.formControls.birthDate.value,
+                        CNP: this.state.formControls.cnp.value,
+                        gender: this.state.gender,
+                        role: 'CUSTOMER',
+                        dateJoined: new Date().toJSON().slice(0,10)
+                    };
+                    this.registerCustomer(customer);
+                    window.location.href = '/login';
                     break;
-                case 'DOCTOR':
+                case 'DELIVERY_GUY':
+                    if (dateHired === '') {
+                        dateHired = new Date().toJSON().slice(0,10);
+                    }
+                    let delivery_guy = {
+                        username: this.state.formControls.username.value,
+                        password: this.state.formControls.password.value,
+                        firstName: this.state.formControls.firstName.value,
+                        lastName: this.state.formControls.lastName.value,
+                        birthDate: this.state.formControls.birthDate.value,
+                        CNP: this.state.formControls.cnp.value,
+                        gender: this.state.gender,
+                        role: 'DELIVERY_GUY',
+                        dateHired: dateHired
+                    };
+                    this.registerDeliveryGuy(delivery_guy);
+                    window.location.href = '/login';
                     break;
                 default:
-                    console.log(person);
+                    break;
             }
-            window.location.href = "/login";
         }
     }
 
@@ -170,7 +279,12 @@ class RegisterContainer extends React.Component {
         roles.push({value: 'CUSTOMER', label: 'CUSTOMER'});
         roles.push({value: 'DELIVERY_GUY', label: 'DELIVERY GUY'});
 
-        const defaultRole = roles[0];
+        const defaultRole = roles[1];
+
+        const genders = [];
+        genders.push({value: "M", label: "Male"});
+        genders.push({value: "F", label: "Female"});
+        const defaultGender = genders[0];
         return (
             <div>
                 <br />
@@ -178,7 +292,7 @@ class RegisterContainer extends React.Component {
                 <small className="text-muted"> to continue.</small>
                 </h2><br />
                 <FormGroup id='username' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='usernameField'> Username: </Label>
+                    <Label for='usernameField'> Username </Label>
                     <Input name='username' id='usernameField' placeholder={this.state.formControls.username.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.username.value}
@@ -191,7 +305,7 @@ class RegisterContainer extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='password' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='passwordField'> Password: </Label>
+                    <Label for='passwordField'> Password </Label>
                     <Input name='password' id='passwordField' placeholder={this.state.formControls.password.placeholder}
                            type="password"
                            onChange={this.handleChange}
@@ -204,30 +318,43 @@ class RegisterContainer extends React.Component {
                     <div className={"error-message"}> * Password not valid </div>}
                 </FormGroup>
 
-                <FormGroup id='name' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='nameField'> Name: </Label>
-                    <Input name='name' id='nameField' placeholder={this.state.formControls.name.placeholder}
+                <FormGroup id='firstName' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
+                    <Label for='firstNameField'> First Name </Label>
+                    <Input name='firstName' id='firstNameField' placeholder={this.state.formControls.firstName.placeholder}
                            onChange={this.handleChange}
-                           defaultValue={this.state.formControls.name.value}
-                           touched={this.state.formControls.name.touched? 1 : 0}
-                           valid={this.state.formControls.name.valid}
+                           defaultValue={this.state.formControls.firstName.value}
+                           touched={this.state.formControls.firstName.touched? 1 : 0}
+                           valid={this.state.formControls.firstName.valid}
                            required
                     />
-                    {this.state.formControls.name.touched && !this.state.formControls.name.valid &&
-                    <div className={"error-message"}> * Name not valid </div>}
+                    {this.state.formControls.firstName.touched && !this.state.formControls.firstName.valid &&
+                    <div className={"error-message"}> * First Name not valid </div>}
                 </FormGroup>
 
-                <FormGroup id='address' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='addressField'> Address: </Label>
-                    <Input name='address' id='addressField' placeholder={this.state.formControls.address.placeholder}
+                <FormGroup id='lastName' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
+                    <Label for='lastNameField'> Last Name </Label>
+                    <Input name='lastName' id='lastNameField' placeholder={this.state.formControls.lastName.placeholder}
                            onChange={this.handleChange}
-                           defaultValue={this.state.formControls.address.value}
-                           touched={this.state.formControls.address.touched? 1 : 0}
-                           valid={this.state.formControls.address.valid}
+                           defaultValue={this.state.formControls.lastName.value}
+                           touched={this.state.formControls.lastName.touched? 1 : 0}
+                           valid={this.state.formControls.lastName.valid}
                            required
                     />
-                    {this.state.formControls.address.touched && !this.state.formControls.address.valid &&
-                    <div className={"error-message"}> * Address not valid </div>}
+                    {this.state.formControls.lastName.touched && !this.state.formControls.lastName.valid &&
+                    <div className={"error-message"}> * Last Name not valid </div>}
+                </FormGroup>
+
+                <FormGroup id='cnp' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
+                    <Label for='cnpField'> CNP </Label>
+                    <Input name='cnp' id='cnpField' placeholder={this.state.formControls.cnp.placeholder}
+                           onChange={this.handleChange}
+                           defaultValue={this.state.formControls.cnp.value}
+                           touched={this.state.formControls.cnp.touched? 1 : 0}
+                           valid={this.state.formControls.cnp.valid}
+                           required
+                    />
+                    {this.state.formControls.cnp.touched && !this.state.formControls.cnp.valid &&
+                    <div className={"error-message"}> * CNP not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='birthDate' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
@@ -245,6 +372,20 @@ class RegisterContainer extends React.Component {
                 </FormGroup>
 
                 <div className="form-group" style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
+                    <label>Gender</label>
+                    <Select theme={(theme) => ({
+                                                ...theme,
+                                                colors: {
+                                                ...theme.colors,
+                                                    text: 'white',
+                                                    primary25: 'rgb(255,81,81)',
+                                                    primary: 'rgb(255,81,81)',
+                                                },})} options={genders} defaultValue={defaultGender} onChange={this.handleGenderChange}/>
+                    {isEmpty(role) &&
+                    <div className="help">Gender is required</div>}
+                </div>
+
+                <div className="form-group" style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
                     <label>Role</label>
                     <Select theme={(theme) => ({
                                                 ...theme,
@@ -258,7 +399,32 @@ class RegisterContainer extends React.Component {
                     <div className="help">Role is required</div>}
                 </div>
 
-                <button onClick={this.handleSubmit} disabled={!this.state.formIsValid} style={{marginLeft: "auto", marginRight:"auto", width:'300px'}} type="submit" className="btn btn-dark btn-lg btn-block">Register</button>
+                
+
+                {
+                    (role === "ADMIN" || role === "DELIVERY_GUY" ? 
+                    <div>
+                        <FormGroup id='dateHired' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
+                        <Label for='dateHiredField'> Date Hired </Label>
+                        <Input name='dateHired' id='dateHiredField' placeholder={this.state.formControls.dateHired.placeholder}
+                            type="date"
+                            onChange={this.handleChange}
+                            defaultValue={this.state.formControls.dateHired.value}
+                            touched={this.state.formControls.dateHired.touched? 1 : 0}
+                            valid={this.state.formControls.dateHired.valid}
+                            required
+                        />
+                        {this.state.formControls.dateHired.touched && !this.state.formControls.dateHired.valid &&
+                        <div className={"error-message"}> * Date hired not valid </div>}
+                        </FormGroup>
+                    </div> 
+                    :
+                    <div />
+                    )
+                }
+                <br />
+
+                <Button variant="danger" onClick={this.handleSubmit} disabled={!this.state.formIsValid} style={{marginLeft: "auto", marginRight:"auto", width:'300px'}} type="submit" className="btn btn-dark btn-lg btn-block">Register</Button>
                 <p className="forgot-password">
                     Already registered? <a style={{color:'red'}} href="/login">Log in.</a>
                 </p>

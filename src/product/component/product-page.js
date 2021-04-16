@@ -172,7 +172,19 @@ class ProductPage extends React.Component {
                 height: 10
             }}/>
             <h5><b>Categories</b></h5>
-            {product.specs.categories.map((category) => <p style={{margin:'auto', marginBottom:'10px', borderStyle:"solid", borderRadius:'12px', width:'15%'}}> {category.name} </p> )}
+            <div className="container fluid">
+                <div className="row justify-content-center " style={{display:'inline-block', verticalAlign:'middle'}}>
+                {product.specs.categories.map((category) => 
+                 <div className="col">
+                <Link style={{textDecoration:"none", color:"black"}} to={{ pathname: `/category/${category.name}`, state: { categoryName: category.name } }}>
+
+                <h4 style={{borderStyle:"solid", borderColor:'red', borderRadius:'12px', width:'100%'}}> {category.name} </h4> 
+                </Link></div>
+                )}
+
+            </div>
+            
+            </div>
             
             <hr
             style={{
