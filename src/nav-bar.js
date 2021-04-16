@@ -125,7 +125,7 @@ class NavbarPage extends React.Component {
                 
                 {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 
-              <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/user_page/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { user: localStorage.getItem("loggedUser") } }}>
+              <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/fav_products/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
                 <img src={heart} className="logo" height="30" alt="account" style={{marginLeft:'20px'}}></img>
               </Link>
               :

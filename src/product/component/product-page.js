@@ -64,7 +64,6 @@ class ProductPage extends React.Component {
                     related.push(relatedProducts[i]);
                 }
             }
-            console.log(related);
             if (related !== "undefined" && related.length > 0) {
             for (let i = 0; i < related.length; ++i) {
                 if (rel.length > 0) {
@@ -84,7 +83,6 @@ class ProductPage extends React.Component {
                 }
             }
         }
-        console.log(rel.length);
         relatedProducts = rel;
         this.setState({relatedProducts});}.bind(this), 1000);
 
@@ -102,7 +100,6 @@ class ProductPage extends React.Component {
         let reviewNumber = 0;
         const {relatedProducts} = this.state;
         if (reviewList !== "undefined" && reviewList.length > 0) {
-        console.log(reviewList);
             reviewList.map((review) => {
                 rating += parseInt(review.rating);
                 reviewNumber++;
