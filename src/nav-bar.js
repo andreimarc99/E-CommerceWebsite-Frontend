@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Collapse,
   Navbar,
-  NavbarToggler,
   NavbarBrand,
   Nav,
   NavItem,
@@ -23,7 +21,6 @@ import logout from "./img/log-out.png"
 import heart from "./img/heart.png"
 
 import {Link} from 'react-router-dom'
-import UserPage from "./user/component/user-page"
 import * as CATEGORY_API from "./product/api/category-api"
 
 class NavbarPage extends React.Component {
@@ -132,8 +129,15 @@ class NavbarPage extends React.Component {
                 <div />
               )
               }
-
+              {
+              ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 
+              <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/cart/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
                 <img src={cart} height="30" alt="cart" className="logo" style={{marginLeft:'20px', marginRight:'10px'}}></img>
+              </Link>
+              :
+                <div />
+              )
+              }
                 {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "") ? <img onClick={this.handleLogout} src={logout} height="30" alt="cart" className="logo" style={{marginLeft:'20px', marginRight:'10px'}}></img> : <div />)}
               </Form>
             </Navbar>

@@ -16,6 +16,7 @@ import Register from "./register/register-page"
 import UserPage from './user/component/user-page';
 import CategoryPage from './product/component/category-page';
 import FavoritesPage from './user/component/favorites-page';
+import CartPage from './user/component/cart-page';
 
 function App() {
   return (
@@ -64,7 +65,7 @@ function App() {
 
                     <Route path="/fav_products/:username" render={(props) => <FavoritesPage {...props} key={Date.now()}/>}/>
 
-
+                    <Route path="/cart/:username" render={(props) => <CartPage {...props} key={Date.now()}/>}/>
 
                         <Route render={() =><ErrorPage />} />
                     </Switch>

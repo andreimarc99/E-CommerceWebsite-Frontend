@@ -46,7 +46,6 @@ class FavoritesPage extends React.Component {
     }
 
     render() {
-        const {username} = this.state;
         const {productList} = this.state;
         var imageElems = [];
 
@@ -54,74 +53,70 @@ class FavoritesPage extends React.Component {
         if (productList !== "undefined" && productList.length > 0) {
             for (let i = 0; i < productList.length; ++i) {
                 var buf1 = productList[i].image.data;
-                var imageElem1 = document.createElement('img1');
+                var imageElem1 = document.createElement('img' + i);
                 imageElem1.src = 'data:image/png;base64,' + buf1.toString('base64');
                 imageElems[productList[i].productId] = imageElem1.src;
-
-                return (
-                    <div>   
-                        <br />
-                        <h1>Favorite products</h1>
-                        <hr
-                                        style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
-                                            height: 5
-                                        }}/>
-                        <div className="container fluid">
-                    {(productList !== "undefined" && productList.length > 0) ? productList.map((prod) => { 
-                        return(
-                            <div className="row">
-                        <div className="col">
-        
-                        <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
-                            
-                        <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
-                        <Card.Header className="red-card-header"><h4>{prod.name}</h4></Card.Header></Link>
-                        <Card.Body>
-                            <div className="container fluid">
-                            <div className="row">
-                                <div className="col">
-        
-                                    <img
-                                    style={{width:'60%'}}
-                                    src={imageElems[prod.productId]}
-                                    alt="First slide"
-                                    />
-                                </div>
-                                    <hr
-                                        style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
-                                            height: 3
-                                        }} />
-                                <div className="col">
-                                    <Card.Text>
-                                        <p className="text-muted">{prod.description}</p>
-                                        <hr
-                                        style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
-                                            height: 3
-                                        }}/>
-                                        <h4>${prod.price}</h4>
-                                        
-                                    </Card.Text>
-                                    <Button className="btn btn-danger">Add to cart</Button>
-                                </div>
-                            </div>
-                          </div>
-                        </Card.Body>
-                      </Card></div></div> );
-                    }) : <div className="text-muted">No related products</div> }</div>
-                    </div>
-                );
             }
         }
-        return <div></div>
-       
-    }
+        return (
+            <div>   
+                <br />
+                <h1>Favorite products</h1>
+                <hr
+                                style={{
+                                    color: 'rgb(255, 81, 81)',
+                                    backgroundColor: 'rgb(255, 81, 81)',
+                                    height: 5
+                                }}/>
+                <div className="container fluid">
+            {(productList !== "undefined" && productList.length > 0) ? productList.map((prod) => { 
+                return(
+                    <div className="row">
+                <div className="col">
 
+                <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
+                    
+                <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
+                <Card.Header className="red-card-header"><h4>{prod.name}</h4></Card.Header></Link>
+                <Card.Body>
+                    <div className="container fluid">
+                    <div className="row">
+                        <div className="col">
+
+                            <img
+                            style={{width:'60%'}}
+                            src={imageElems[prod.productId]}
+                            alt="First slide"
+                            />
+                        </div>
+                            <hr
+                                style={{
+                                    color: 'rgb(255, 81, 81)',
+                                    backgroundColor: 'rgb(255, 81, 81)',
+                                    height: 3
+                                }} />
+                        <div className="col">
+                            <Card.Text>
+                                <p className="text-muted">{prod.description}</p>
+                                <hr
+                                style={{
+                                    color: 'rgb(255, 81, 81)',
+                                    backgroundColor: 'rgb(255, 81, 81)',
+                                    height: 3
+                                }}/>
+                                <h4>${prod.price}</h4>
+                                
+                            </Card.Text>
+                            <Button className="btn btn-danger">Add to cart</Button>
+                        </div>
+                    </div>
+                    </div>
+                </Card.Body>
+                </Card></div></div> );
+            }) : <div className="text-muted">No related products</div> }</div>
+            </div>
+        );
+    }
 
 }
 

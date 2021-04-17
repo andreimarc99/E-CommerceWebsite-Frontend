@@ -13,8 +13,8 @@ function getCustomers(callback) {
     RestApiClient.performRequest(request, callback);
 }
 
-function getCustomerById(customerId, callback){
-    let request = new Request(HOST.backend_api + endpoint.customer + "/" + customerId, {
+function getCustomerByUsername(username, callback){
+    let request = new Request(HOST.backend_api + endpoint.customer + "/" + username, {
         method: 'GET'
     });
 
@@ -51,6 +51,6 @@ function postCustomer(_users, callback){
 
 export {
     getCustomers,
-    getCustomerById,
+    getCustomerByUsername,
     postCustomer
 };

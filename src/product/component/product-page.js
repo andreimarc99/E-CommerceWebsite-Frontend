@@ -2,11 +2,14 @@ import React from 'react';
 import {withRouter} from "react-router-dom";
 import * as REVIEW_API from "../api/review-api"
 import * as PRODUCT_API from "../api/product-api"
+import * as FAV_PRODUCTS_API from "../api/favorite-products-api"
+import * as CUSTOMER_API from "../../user/customer-api"
 import StarRatings from "react-star-ratings"
 import {Card, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import logo from "../../img/logo.png"
 import heart from "../../img/heart.png"
+import {HOST} from "../../commons/hosts"
 
 class ProductPage extends React.Component {
 
@@ -19,9 +22,124 @@ class ProductPage extends React.Component {
             errorStatus: 0,
             error: "",
             relatedProducts: [],
-            isRelatedProductsLoaded: false
+            isRelatedProductsLoaded: false,
+            isFavorite: false
+        }
+        this.handleAddToFavorites = this.handleAddToFavorites.bind(this);
+        this.handleRemoveFromFavorites = this.handleRemoveFromFavorites.bind(this);
+        this.isAFavorite = this.isAFavorite.bind(this);
+    }
+
+    isAFavorite() {
+        let prods = {};
+        if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") {
+            FAV_PRODUCTS_API.getFavoriteProductsByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (result, status, err) => {
+                if (result !== null && status === 200) {
+                    prods = result;
+                    const {product} = this.state;
+                    for (let i = 0; i < prods.products.length; ++i) {
+                        if (product.productId === prods.products[i].productId) {
+                            this.setState({isFavorite: true});
+                        }
+                    }
+                }
+            })
         }
     }
+
+    handleAddToFavorites() {
+        
+        let prods = {};
+        let customer = {};
+        FAV_PRODUCTS_API.getFavoriteProductsByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (result, status, err) => {
+            if (result !== null && status === 200) {
+                prods = result;
+                const {product} = this.state;
+                prods.products.push(product);
+
+                console.log(prods);
+                
+                CUSTOMER_API.getCustomerByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (res, st, err) => {
+                    if (res !== null && st === 200) {
+                        customer = res;
+                        console.log(customer);
+                        const putMethod = {
+                            method: 'PUT',
+                            headers: {
+                                'Content-type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    'favoriteProductsId': prods.favoriteProductsId,
+                                    'customer': customer,
+                                    'products': prods.products
+                                }
+                            )
+                        }
+                        console.log(putMethod.body);
+                
+                        fetch(HOST.backend_api + '/favorite_products', putMethod)
+                            .then(response => response.json())
+                            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+                            .catch(err => console.log(err));
+                    }
+                })
+
+                
+            }
+        })
+        window.location.reload(false);
+    }
+
+    handleRemoveFromFavorites() {
+        let prods = {};
+        let customer = {};
+        FAV_PRODUCTS_API.getFavoriteProductsByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (result, status, err) => {
+            if (result !== null && status === 200) {
+                prods = result;
+                const {product} = this.state;
+                
+                prods.products = prods.products.filter(function(item) {
+                    return item.productId !== product.productId
+                })
+
+                console.log(prods);
+                
+                CUSTOMER_API.getCustomerByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (res, st, err) => {
+                    if (res !== null && st === 200) {
+                        customer = res;
+                        console.log(customer);
+                        const putMethod = {
+                            method: 'PUT',
+                            headers: {
+                                'Content-type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    'favoriteProductsId': prods.favoriteProductsId,
+                                    'customer': customer,
+                                    'products': prods.products
+                                }
+                            )
+                        }
+                        console.log(putMethod.body);
+                
+                        fetch(HOST.backend_api + '/favorite_products', putMethod)
+                            .then(response => response.json())
+                            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+                            .catch(err => console.log(err));
+                    }
+                })
+
+                
+            }
+        })
+        window.location.reload(false);
+
+    }
+    
 
     fetchReviews() {
         const {product} = this.state
@@ -88,14 +206,17 @@ class ProductPage extends React.Component {
 
     }
 
+
     componentDidMount() {
         this.fetchReviews();
         this.fetchRelatedProducts();
+        this.isAFavorite();
     }
 
     render() {
         const {product} = this.state;
         const {reviewList} = this.state;
+        const {isFavorite} = this.state;
         let rating = 0;
         let reviewNumber = 0;
         const {relatedProducts} = this.state;
@@ -143,7 +264,14 @@ class ProductPage extends React.Component {
             <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-center">
             <div className="d-flex align-items-stretch ">
             <Button style={{marginRight:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
-            <Button style={{marginLeft:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+            {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined
+            && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ?
+            ( (isFavorite === true) ?
+            <Button onClick={this.handleRemoveFromFavorites} style={{marginLeft:'5px', width:'100px', height:'60px'}} className="btn btn-light"><img src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+            :
+            <Button onClick={this.handleAddToFavorites} style={{marginLeft:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+            )
+            : <div />)}
             </div>
             </div></div>
 

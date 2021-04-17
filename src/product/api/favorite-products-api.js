@@ -13,7 +13,7 @@ function getFavoriteProducts(callback) {
     RestApiClient.performRequest(request, callback);
 }
 
-function getFavoriteProductsByUsername(username, callback){
+function getFavoriteProductsByUsername(username, callback) {
     let request = new Request(HOST.backend_api + endpoint.fav_prod  + "/" + username, {
         method: 'GET'
     });

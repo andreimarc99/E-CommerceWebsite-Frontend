@@ -83,7 +83,6 @@ class Home extends React.Component {
                   className="d-block w-100 contain"
                   src={imageElem1.src}
                   alt="First slide"
-                  width='40%'
                 />
                 <Carousel.Caption>
                 <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/product_page/${products[0].productId}`, state: { product: products[0] } }}>
@@ -97,7 +96,6 @@ class Home extends React.Component {
                   className="d-block w-100 contain"
                   src={imageElem2.src}
                   alt="Second slide"
-                  width='40%'
                 />
 
                 <Carousel.Caption>
@@ -112,7 +110,6 @@ class Home extends React.Component {
                   className="d-block w-100 contain"
                   src={imageElem3.src}
                   alt="Third slide"
-                  width='40%'
                 />
 
                 <Carousel.Caption>

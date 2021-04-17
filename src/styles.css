@@ -29,12 +29,12 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
 
 .contain {
   object-fit: contain;
-  height: 45vh;
+  height: 55vh;
 }
 
 .carousel-item {
   transition: opacity 1s ease-in-out !important;
-  height: 60vh;
+  height: 70vh;
   background-size: cover;
   background-position: center center;
 }

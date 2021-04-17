@@ -208,7 +208,7 @@ class UserPage extends React.Component {
 
                                 <h4>    
                                     <b>{address.alias}</b>
-                                    <img className="aniamted fadeInRight" onClick={() => this.handleDeleteAddress(address.addressId)} style={{marginLeft:'10px', width:'3.5%'}} src={del}></img>
+                                    <img onClick={() => this.handleDeleteAddress(address.addressId)} style={{marginLeft:'10px', width:'3%'}} src={del}></img>
                                     <Button style={{marginRight:'10px', marginLeft:'10px'}} size="sm" variant="danger"  onClick={() => this.toggleUpdateForm(address)}>Edit</Button>
                                     
                                 </h4>                                 
