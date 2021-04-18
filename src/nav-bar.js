@@ -19,6 +19,7 @@ import account from "./img/account.png"
 import cart from "./img/cart.png"
 import logout from "./img/log-out.png"
 import heart from "./img/heart.png"
+import bear from "./img/bear.png"
 
 import {Link} from 'react-router-dom'
 import * as CATEGORY_API from "./product/api/category-api"
@@ -79,10 +80,10 @@ class NavbarPage extends React.Component {
       <div>
         <Navbar color="danger" light expand="md">
         <a href="/" className="navbar-brand">
-              <img className="logo" src={logo} height="70" alt="logo"></img>
+              <img className="logo" src={bear} height="33" alt="logo"></img>
           </a>
           <NavbarBrand href="/" style={{color:"white"}}>
-            eCommerce System
+            bearMAG
           </NavbarBrand>
             <Nav className="mr-auto" navbar>
               {(JSON.stringify(localStorage.getItem("loggedUser")).role === "ADMIN") ?

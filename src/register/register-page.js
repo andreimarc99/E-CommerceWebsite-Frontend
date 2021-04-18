@@ -6,6 +6,8 @@ import * as API_USERS from "../user/user-api"
 import * as CUSTOMER_API from "../user/customer-api"
 import * as ADMIN_API from "../user/admin-api"
 import * as DELIVERY_GUY_API from "../user/delivery-guy-api"
+import * as CART_API from "../user/cart-api"
+import * as FAVORITE_PRODUCTS_API from "../product/api/favorite-products-api"
 import { Button } from "react-bootstrap";
 
 function isEmpty(item) {
@@ -159,13 +161,55 @@ class RegisterContainer extends React.Component {
     }
 
     registerCustomer(customer) {
-        return CUSTOMER_API.postCustomer(customer, (result, status, error) => {
+        CUSTOMER_API.postCustomer(customer, (result, status, error) => {
             if (result !== null && (status === 200 || status === 201)) {
                 console.log("Successfully inserted customer with id: " + result);
             } else {
                 this.setState(({
                     errorStatus: status,
                     error: error
+                }));
+            }
+        });
+
+        CUSTOMER_API.getCustomerByUsername(customer.username, (res, st, err) => {
+            if (res !== null && (st === 200 || st === 201)) {
+                let cart = {
+                    customer: res,
+                    products: [],
+                    fullPrice: 0
+                }
+                console.log(cart);
+                CART_API.postCart(cart, (r, s, e) => {
+                    if (r !== null && (s === 200 || s === 201)) {
+                        console.log("Successfully inserted cart with id: " + r);
+                    } else {
+                        this.setState(({
+                            errorStatus: s,
+                            error: e
+                        }));
+                    }
+                });
+
+                let fav = {
+                    customer: res,
+                    products: []
+                }
+
+                FAVORITE_PRODUCTS_API.postFavoriteProducts(fav, (r, s, e) => {
+                    if (r !== null && (s === 200 || s === 201)) {
+                        console.log("Successfully inserted fav_prod with id: " + r);
+                    } else {
+                        this.setState(({
+                            errorStatus: s,
+                            error: e
+                        }));
+                    }
+                });
+            } else {
+                this.setState(({
+                    errorStatus: st,
+                    error: err
                 }));
             }
         });
@@ -246,7 +290,7 @@ class RegisterContainer extends React.Component {
                         dateJoined: new Date().toJSON().slice(0,10)
                     };
                     this.registerCustomer(customer);
-                    window.location.href = '/login';
+                    //window.location.href = '/login';
                     break;
                 case 'DELIVERY_GUY':
                     if (dateHired === '') {

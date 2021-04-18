@@ -57,7 +57,6 @@ class ProductPage extends React.Component {
                 const {product} = this.state;
                 prods.products.push(product);
 
-                console.log(prods);
                 
                 CUSTOMER_API.getCustomerByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (res, st, err) => {
                     if (res !== null && st === 200) {
@@ -77,7 +76,8 @@ class ProductPage extends React.Component {
                                 }
                             )
                         }
-                        console.log(putMethod.body);
+                        
+                        this.setState({isAFavorite: true});
                 
                         fetch(HOST.backend_api + '/favorite_products', putMethod)
                             .then(response => response.json())
@@ -89,7 +89,9 @@ class ProductPage extends React.Component {
                 
             }
         })
-        window.location.reload(false);
+        setTimeout( function() {
+            window.location.reload();
+        }, 500)
     }
 
     handleRemoveFromFavorites() {
@@ -125,7 +127,8 @@ class ProductPage extends React.Component {
                             )
                         }
                         console.log(putMethod.body);
-                
+                        this.setState({isAFavorite: true});
+
                         fetch(HOST.backend_api + '/favorite_products', putMethod)
                             .then(response => response.json())
                             .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
@@ -136,7 +139,9 @@ class ProductPage extends React.Component {
                 
             }
         })
-        window.location.reload(false);
+        setTimeout( function() {
+            window.location.reload();
+        }, 500)
 
     }
     

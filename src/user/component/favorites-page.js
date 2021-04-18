@@ -1,10 +1,13 @@
 import React from 'react';
 import {withRouter} from "react-router-dom";
 import * as FAVORITE_PRODUCTS_API from "../../product/api/favorite-products-api"
+import {HOST} from "../../commons/hosts"
+import * as CUSTOMER_API from "../customer-api"
 
 
 import {Card, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import heart from "../../img/heart.png"
 
 
 class FavoritesPage extends React.Component {
@@ -20,6 +23,52 @@ class FavoritesPage extends React.Component {
         }
         this.fetchProducts = this.fetchProducts.bind(this);
 
+    }
+
+    handleRemoveFromFavorites(productId) {
+        let prods = {};
+        let customer = {};
+        FAVORITE_PRODUCTS_API.getFavoriteProductsByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (result, status, err) => {
+            if (result !== null && status === 200) {
+                prods = result;
+                
+                prods.products = prods.products.filter(function(item) {
+                    return item.productId !== productId
+                })
+
+                
+                CUSTOMER_API.getCustomerByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (res, st, err) => {
+                    if (res !== null && st === 200) {
+                        customer = res;
+                        const putMethod = {
+                            method: 'PUT',
+                            headers: {
+                                'Content-type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    'favoriteProductsId': prods.favoriteProductsId,
+                                    'customer': customer,
+                                    'products': prods.products
+                                }
+                            )
+                        }
+                
+                        fetch(HOST.backend_api + '/favorite_products', putMethod)
+                            .then(response => response.json())
+                            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+                            .catch(err => console.log(err));
+                    }
+                })
+
+                
+            }
+        })
+
+        setTimeout( function() {
+            window.location.reload();
+        }, 500)
     }
 
     fetchProducts() {
@@ -108,6 +157,7 @@ class FavoritesPage extends React.Component {
                                 
                             </Card.Text>
                             <Button className="btn btn-danger">Add to cart</Button>
+                            <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img src={heart} style={{width:'20px', height:'20px'}}></img></Button>
                         </div>
                     </div>
                     </div>

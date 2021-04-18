@@ -2,6 +2,11 @@ import React from 'react';
 import * as API_USERS from "../user/user-api"
 import {Button} from "react-bootstrap"
 import Home from '../home/home';
+import {
+    Modal,
+    ModalBody,
+    ModalHeader
+} from 'reactstrap';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -61,11 +66,13 @@ class LoginPage extends React.Component {
             return;
         }
         let _user = {};
+        let wrong = true;
         //let user = login(username, password, userList);
         API_USERS.getUserById(username, (result, status, err) => {
+            console.log(result + " " + status + " " + err);
             if (result !== null && status === 200) {
+                wrong = false;
                 _user= result;
-                console.log(_user);
                 localStorage.setItem('loggedUser', JSON.stringify(_user));
                 const path = this.getPath(_user.role);
                 window.location.href = path.path;
@@ -77,6 +84,7 @@ class LoginPage extends React.Component {
             }
         })
         
+        setTimeout(function() {return (wrong === true ? alert("Wrong credentials. Please try again") : null)}, 500);
 
     }
 
@@ -89,8 +97,10 @@ class LoginPage extends React.Component {
         window.location.href = "/register";
     }
 
+
+
     render() {
-        const {username, password, completed, error} = this.state;
+        const {username, password, completed} = this.state;
         return (
             <div>
                 <br /><br />
@@ -115,6 +125,9 @@ class LoginPage extends React.Component {
                             completed && !username &&
                             <div className='error-message'>Password is required</div>
                         }
+                    </div>
+                    <div id={this.state.wrong}>
+                    {(this.state.wrong === true) ? <p style={{color:'red'}}> Incorrect credentials </p> : <div/>}
                     </div>
                         <br />
                     <div className={'form-group'}>

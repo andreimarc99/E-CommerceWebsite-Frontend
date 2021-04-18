@@ -23,21 +23,40 @@ function getFavoriteProductsByUsername(username, callback) {
 }
 
 function postFavoriteProducts(p, callback){
-    let request = new Request(HOST.backend_api + endpoint.fav_prod , {
-        method: 'POST',
-        headers : {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            'customer': p.customer,
-            'product': p.product
-        })
-    });
+    if (p.products.length === 0) {
+        let request = new Request(HOST.backend_api + endpoint.fav_prod , {
+            method: 'POST',
+            headers : {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'customer': p.customer,
+                'products': []
+            })
+        });
 
-    console.log("URL: " + request.url);
+        console.log("URL: " + request.url);
 
-    RestApiClient.performRequest(request, callback);
+        RestApiClient.performRequest(request, callback);
+    }
+    else {
+        let request = new Request(HOST.backend_api + endpoint.fav_prod , {
+            method: 'POST',
+            headers : {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'customer': p.customer,
+                'products': p.products
+            })
+        });
+
+        console.log("URL: " + request.url);
+
+        RestApiClient.performRequest(request, callback);
+    }
 }
 
 
