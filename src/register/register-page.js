@@ -275,7 +275,7 @@ class RegisterContainer extends React.Component {
                         dateHired: dateHired
                     };
                     this.registerAdmin(admin);                    
-                    window.location.href = '/login';
+                    //window.location.href = '/login';
                     break;
                 case 'CUSTOMER':
                     let customer = {
@@ -308,7 +308,7 @@ class RegisterContainer extends React.Component {
                         dateHired: dateHired
                     };
                     this.registerDeliveryGuy(delivery_guy);
-                    window.location.href = '/login';
+                   //window.location.href = '/login';
                     break;
                 default:
                     break;

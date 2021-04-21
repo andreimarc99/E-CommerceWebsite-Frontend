@@ -68,14 +68,12 @@ class NavbarPage extends React.Component {
   }
 
   handleLogout() {
-    console.log(localStorage.getItem("loggedUser"))
     localStorage.removeItem('loggedUser');
     window.location.href = "/";
   }
 
   render() {
     const {categoryList} = this.state;
-    console.log(categoryList);
     return (
       <div>
         <Navbar color="danger" light expand="md">
@@ -86,10 +84,10 @@ class NavbarPage extends React.Component {
             bearMAG
           </NavbarBrand>
             <Nav className="mr-auto" navbar>
-              {(JSON.stringify(localStorage.getItem("loggedUser")).role === "ADMIN") ?
+              {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
               <NavItem>
-                <NavLink href="/product_stock_page" style={{color:"white"}}>Products</NavLink>
-              </NavItem> : <div />
+                <NavLink href="/product_stock_page" style={{color:"white"}}>Products Stock</NavLink>
+              </NavItem> : <div />) : <div />)
               }
 
               
@@ -122,7 +120,7 @@ class NavbarPage extends React.Component {
               }
                 
                 {
-              ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 
+              ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/fav_products/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
                 <img src={heart} className="logo" height="30" alt="account" style={{marginLeft:'20px'}}></img>
               </Link>
@@ -131,7 +129,7 @@ class NavbarPage extends React.Component {
               )
               }
               {
-              ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 
+              ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/cart/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
                 <img src={cart} height="30" alt="cart" className="logo" style={{marginLeft:'20px', marginRight:'10px'}}></img>
               </Link>

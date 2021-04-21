@@ -112,11 +112,11 @@ class FavoritesPage extends React.Component {
                 <br />
                 <h1>Favorite products</h1>
                 <hr
-                                style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
-                                    height: 5
-                                }}/>
+                style={{
+                    color: 'rgb(255, 81, 81)',
+                    backgroundColor: 'rgb(255, 81, 81)',
+                    height: 5
+                }}/>
                 <div className="container fluid">
             {(productList !== "undefined" && productList.length > 0) ? productList.map((prod) => { 
                 return(
@@ -163,7 +163,7 @@ class FavoritesPage extends React.Component {
                     </div>
                 </Card.Body>
                 </Card></div></div> );
-            }) : <div className="text-muted">No related products</div> }</div>
+            }) : <div className="text-muted">No favorite products found.</div> }</div>
             </div>
         );
     }

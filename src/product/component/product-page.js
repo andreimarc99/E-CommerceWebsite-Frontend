@@ -80,7 +80,7 @@ class ProductPage extends React.Component {
                         this.setState({isAFavorite: true});
                 
                         fetch(HOST.backend_api + '/favorite_products', putMethod)
-                            .then(response => response.json())
+                            .then(response => {window.location.reload()})
                             .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
                             .catch(err => console.log(err));
                     }
@@ -89,9 +89,6 @@ class ProductPage extends React.Component {
                 
             }
         })
-        setTimeout( function() {
-            window.location.reload();
-        }, 500)
     }
 
     handleRemoveFromFavorites() {
@@ -111,7 +108,6 @@ class ProductPage extends React.Component {
                 CUSTOMER_API.getCustomerByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (res, st, err) => {
                     if (res !== null && st === 200) {
                         customer = res;
-                        console.log(customer);
                         const putMethod = {
                             method: 'PUT',
                             headers: {
@@ -126,11 +122,10 @@ class ProductPage extends React.Component {
                                 }
                             )
                         }
-                        console.log(putMethod.body);
                         this.setState({isAFavorite: true});
 
                         fetch(HOST.backend_api + '/favorite_products', putMethod)
-                            .then(response => response.json())
+                            .then(response => {window.location.reload()})
                             .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
                             .catch(err => console.log(err));
                     }
@@ -139,9 +134,6 @@ class ProductPage extends React.Component {
                 
             }
         })
-        setTimeout( function() {
-            window.location.reload();
-        }, 500)
 
     }
     
@@ -164,13 +156,13 @@ class ProductPage extends React.Component {
     }
 
     fetchRelatedProducts() {
-        var relatedProducts = [];
         const {product} = this.state;
-        
+
         product.specs.categories.map((category) => {
             PRODUCT_API.getProductsByCategoryId(category.categoryId, (result, status, err) => {
                 if (result !== null && status === 200) {
-                    relatedProducts.push(...result);
+                    
+                    this.setState({relatedProducts : result});
                 } else {
                     this.setState(({
                         errorStatus: status,
@@ -178,36 +170,6 @@ class ProductPage extends React.Component {
                     }));
                 }
         })})
-        var rel = [];
-        var related = [];
-        setTimeout(function() {
-            
-            for (let i = 0; i < relatedProducts.length; ++i) {
-                if (product.productId !== relatedProducts[i].productId){
-                    related.push(relatedProducts[i]);
-                }
-            }
-            if (related !== "undefined" && related.length > 0) {
-            for (let i = 0; i < related.length; ++i) {
-                if (rel.length > 0) {
-                    for (let j = 0; j < rel.length; ++j) {
-                        if (related[i].productId === rel[j].productId) {
-                            break;
-                        } else {
-                            if (product.productId !== related[i].productId){
-                                rel.push(related[i]);
-                            }
-                        }
-                    }
-                } else {
-                    if (product.productId !== related[i].productId){
-                        rel.push(related[i]);
-                    }
-                }
-            }
-        }
-        relatedProducts = rel;
-        this.setState({relatedProducts});}.bind(this), 1000);
 
     }
 
@@ -224,7 +186,7 @@ class ProductPage extends React.Component {
         const {isFavorite} = this.state;
         let rating = 0;
         let reviewNumber = 0;
-        const {relatedProducts} = this.state;
+        var {relatedProducts} = this.state;
         if (reviewList !== "undefined" && reviewList.length > 0) {
             reviewList.map((review) => {
                 rating += parseInt(review.rating);
@@ -232,9 +194,11 @@ class ProductPage extends React.Component {
             });
         }
         rating /= reviewNumber;
-
         var imageElems = [];
         if (relatedProducts !== "undefined" && relatedProducts.length > 0) {
+            relatedProducts = relatedProducts.filter(function(item) {
+                return item.productId !== product.productId
+              });
             for (let i = 0; i < relatedProducts.length; ++i) {
                 var buf1 = relatedProducts[i].image.data;
                 var imageElem1 = document.createElement('img1');
@@ -248,6 +212,7 @@ class ProductPage extends React.Component {
         imageElem.src = 'data:image/png;base64,' + buf.toString('base64');
         return (
         <div>
+            <br />
             <h1 >{product.name}</h1>
             {(product.stock > 10 ? (<h5 style={{color: 'green'}}>{product.stock} left</h5>) : (<h5 style={{color: 'red'}}>{product.stock} left</h5>))}
             <hr
@@ -281,7 +246,7 @@ class ProductPage extends React.Component {
             </div></div>
 
             <br /> <br />
-           <h6>{product.description}</h6>
+           <h6 style={{marginLeft:'100px', marginRight:'100px'}}>{product.description}</h6>
               
            {(isNaN(rating)) ? <div className="text-muted">No rating available</div> : <StarRatings rating={rating} starDimension="40px" starSpacing="10px" starRatedColor="red"/>}
            <hr
@@ -305,10 +270,10 @@ class ProductPage extends React.Component {
             <div className="container fluid">
                 <div className="row justify-content-center " style={{display:'inline-block', verticalAlign:'middle'}}>
                 {product.specs.categories.map((category) => 
-                 <div className="col">
-                <Link style={{textDecoration:"none", color:"black"}} to={{ pathname: `/category/${category.name}`, state: { categoryName: category.name } }}>
+                <div className="col" style={{borderStyle:"solid", borderColor:'rgb(255,81,81)', borderRadius:'20px', backgroundColor:'rgb(255,81,81)', marginTop:'6px'}}>
+                <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/category/${category.name}`, state: { categoryName: category.name } }}>
 
-                <h4 style={{borderStyle:"solid", borderColor:'red', borderRadius:'12px', width:'100%'}}> {category.name} </h4> 
+                <h4 style={{ width:'100%'}}> {category.name} </h4> 
                 </Link></div>
                 )}
 
@@ -324,7 +289,7 @@ class ProductPage extends React.Component {
             }}
             />
             <h5><b>Reviews</b></h5>
-            {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="font-text-light">Average: {rating}</p>}
+            {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {rating}</p>}
 
             <div> {
             reviewList.map((review) => {return(
@@ -343,8 +308,8 @@ class ProductPage extends React.Component {
                     starSpacing="5px"
                     starRatedColor="red"
                 /></p> 
-                <h5 style={{marginLeft:"20px"}} className="text-left"><b>Customer:</b> {review.customer.user.firstName} {review.customer.user.lastName} </h5>
-                <p  style={{marginLeft:"20px"}} className="text-left font-weight-light" >@{review.customer.user.username}</p>
+                <h5 style={{marginLeft:"20px"}} className="text-left"><b> {review.customer.user.firstName} {review.customer.user.lastName}</b> </h5>
+                <p  style={{marginLeft:"20px"}} className="text-left text-muted" >@{review.customer.user.username}</p>
                 <h4 style={{marginLeft:"20px"}} className="text-left">{review.message}</h4>                
                 </div>)
             })
@@ -359,36 +324,39 @@ class ProductPage extends React.Component {
             }}
             />
             <h5><b>Related products</b></h5>
+            {(relatedProducts.length > 0) ? 
+            
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-center">
-            {(relatedProducts !== "undefined" && imageElems.length > 0) ? relatedProducts.map((prod) => { 
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left">
+                    {relatedProducts.map((prod) => { 
+
                 return(
-            <div className="col-lg-4 d-flex align-items-stretch ">
-                <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
-                    
-                <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
-                <Card.Header className="red-card-header">{prod.name}</Card.Header></Link>
-                <Card.Body>
-                    
-                <img
-                  className="rel-img"
-                  src={imageElems[prod.productId]}
-                  alt="First slide"
-                 />
-                 <hr
-                    style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
-                        height: 3
-                    }} />
-                  <Card.Text>
-                    <h4>${prod.price}</h4>
-                    
-                  </Card.Text>
-                  <Button className="btn btn-danger">Add to cart</Button>
-                </Card.Body>
-              </Card></div> );
-            }) : <div className="text-muted">No related products</div> }</div></div>
+                    <div className="col-lg-4 d-flex align-items-stretch ">
+                        <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
+                            
+                        <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
+                        <Card.Header className="red-card-header">{prod.name}</Card.Header></Link>
+                        <Card.Body>
+                            
+                        <img
+                        className="rel-img"
+                        src={imageElems[prod.productId]}
+                        alt="First slide"
+                        />
+                        <hr
+                        style={{
+                            color: 'rgb(255, 81, 81)',
+                            backgroundColor: 'rgb(255, 81, 81)',
+                            height: 3
+                        }} />
+                        <Card.Text>
+                            <h4>${prod.price}</h4>
+                            
+                        </Card.Text>
+                        <Button className="btn btn-danger">Add to cart</Button>
+                        </Card.Body>
+                    </Card></div> );
+            }) }</div></div>: <div style={{textAlign:'center'}} className="text-muted">No related products</div> }
 
         </div>
         );

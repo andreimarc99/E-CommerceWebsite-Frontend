@@ -62,3 +62,24 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
 .categ-img {
   width: 30%
 }
+
+.txtarea {
+  overflow-y: scroll;
+  height: 100px;
+  resize: none;
+  text-align: center;
+}
+
+.txtarea:focus {
+  border: none
+}
+
+textarea::-webkit-scrollbar {
+  width: 0.15em;
+}
+
+
+textarea::-webkit-scrollbar-thumb {
+background-color: rgb(255, 81, 81);
+outline: 1px solid rgb(255, 81, 81);
+}

@@ -1,11 +1,14 @@
 
 import React from 'react'
 import * as API_PRODUCT from "../product/api/product-api"
+import * as CATEGORY_API from "../product/api/category-api"
 import "../styles.css"
 import {
     Col,
     Carousel
   } from "react-bootstrap";
+  import {Card, Button} from "react-bootstrap";
+
 
 import {Link} from "react-router-dom";
 
@@ -19,10 +22,25 @@ class Home extends React.Component {
             error: null,
             imageElem: {
                 src: ""
-            }
+            },
+            categories: []
         }
     }
 
+    fetchCategories() {
+      return CATEGORY_API.getCategories((result, status, err) => {
+        if (result !== null && status === 200 || status === 201) {
+            this.setState({
+              categories: result
+            });
+        } else {
+            this.setState(({
+              errorStatus: status,
+              error: err
+            }));
+        }
+    })
+    }
 
     fetchProducts() {
         return API_PRODUCT.getProductsWithImages((result, status, err) => {
@@ -44,15 +62,18 @@ class Home extends React.Component {
 
     componentDidMount() {
         this.fetchProducts();
+        this.fetchCategories();
     }
 
     render() {
         const {products} = this.state;
+        const {categories} = this.state;
+        console.log(categories);
         products.sort(compare);
         var imageElem1, imageElem2, imageElem3;
 
         if (products !== "undefined" && products.length >0) {
-            var buf1 = products[0].image.data;
+            /*var buf1 = products[0].image.data;
             imageElem1 = document.createElement('img1');
             imageElem1.src = 'data:image/png;base64,' + buf1.toString('base64');
 
@@ -63,25 +84,42 @@ class Home extends React.Component {
 
             var buf3 = products[2].image.data;
             imageElem3 = document.createElement('img3');
-            imageElem3.src = 'data:image/png;base64,' + buf3.toString('base64');
+            imageElem3.src = 'data:image/png;base64,' + buf3.toString('base64');*/
 
+          var imageElems = [];
+          for (let i = 0; i < products.length; ++i) {
+              var buf1 = products[i].image.data;
+              var imageElem1 = document.createElement('img1');
+              imageElem1.src = 'data:image/png;base64,' + buf1.toString('base64');
+              imageElems[products[i].productId] = imageElem1.src;
+          }
+          var productsCategories = [];
+          products.map((prod) => {
+            prod.specs.categories.map((categ) =>
+              productsCategories.push({category: categ.name, product: prod})
+          )})
+            console.log(productsCategories);
         return(
         <div>
           <br />
-          <h1 style={{color: 'red'}}>Featured products</h1>
+          <h1 style={{color: 'rgb(255, 81, 81)'}}>Featured products</h1>
+          <br />
           <hr
             style={{
                 color: 'rgb(255, 81, 81)',
                 backgroundColor: 'rgb(255, 81, 81)',
                 height: 10
             }}/>
+            {
+              (imageElems.length > 0 ?
+              
             <Col md={9} className="carousel-content" style = {{marginLeft: "auto", marginRight:"auto"}}>
             <Carousel fade>
             
               <Carousel.Item>
                 <img
                   className="d-block w-100 contain"
-                  src={imageElem1.src}
+                  src={imageElems[products[0].productId]}
                   alt="First slide"
                 />
                 <Carousel.Caption>
@@ -94,7 +132,7 @@ class Home extends React.Component {
               <Carousel.Item>
                 <img
                   className="d-block w-100 contain"
-                  src={imageElem2.src}
+                  src={imageElems[products[1].productId]}
                   alt="Second slide"
                 />
 
@@ -108,7 +146,7 @@ class Home extends React.Component {
               <Carousel.Item>
                 <img
                   className="d-block w-100 contain"
-                  src={imageElem3.src}
+                  src={imageElems[products[2].productId]}
                   alt="Third slide"
                 />
 
@@ -121,12 +159,88 @@ class Home extends React.Component {
               </Carousel.Item>
             </Carousel>
           </Col>
+              : <p className="text-muted">No products found.</p>)}
           <br />
+          <hr
+            style={{
+                color: 'rgb(255, 81, 81)',
+                backgroundColor: 'rgb(255, 81, 81)',
+                height: 5
+            }}/>
+
+        <h1 style={{color: 'rgb(255, 81, 81)'}}>Our products by categories</h1>
+          <hr
+            style={{
+                color: 'rgb(255, 81, 81)',
+                backgroundColor: 'rgb(255, 81, 81)',
+                height: 5
+            }}/>
+            
+          <div className="container fluid">
+                {
+                  (productsCategories.length > 0 && categories.length > 0 && imageElems.length > 0 ?
+                    categories.map((category) => {
+                      let temp = [];
+                      temp = productsCategories.filter(function(item) {
+                        console.log(item.category + " , " + category.name);
+                        return item.category === category.name
+                      });
+                        return (
+                        <div>
+                        <div className="d-flex overflow-auto justify-content-center" style={{marginBottom:'20px'}}>
+                          <h4 style={{textAlign:'center'}}>{temp[0].category}</h4>
+                          </div>
+                          <hr
+                          style={{
+                              color: 'rgb(255, 81, 81)',
+                              backgroundColor: 'rgb(255, 81, 81)',
+                              height: 3,
+                              width: '30%'
+                          }}/>
+            
+                          <div className="d-flex overflow-auto justify-content-left" style={{marginBottom:'20px'}}>
+
+                            {temp.map((prod) => { 
+                              console.log(prod);
+                              return(
+                                <div className="col">
+                                    <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
+                                        
+                                    <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.product.productId}`, state: { product: prod.product }}} >
+                                    <Card.Header className="red-card-header">{prod.product.name}</Card.Header></Link>
+                                    <Card.Body>
+                                        
+                                    <img
+                                      className="rel-img"
+                                      src={imageElems[prod.product.productId]}
+                                      alt="First slide"
+                                    />
+                                    <hr
+                                        style={{
+                                            color: 'rgb(255, 81, 81)',
+                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            height: 3
+                                        }} />
+                                        <textarea readOnly='true' style={{width:'100%', border:'none'}} className="txtarea text-muted">{prod.product.description}</textarea>
+                                      <Card.Text>
+                                        <h4>${prod.product.price}</h4>
+                                        
+                                      </Card.Text>
+                                      <Button className="btn btn-danger">Add to cart</Button>
+                                    </Card.Body>
+                                  </Card>
+                                  </div> );
+                                })} 
+                                </div></div>)
+                  })
+                    : 
+                    <p className="text-muted"> No products found. </p>) 
+                  } </div>
         </div>
         );
    
     } else {
-        return (<div></div>)
+        return (<div>No products registered yet.</div>)
     }
          
 }

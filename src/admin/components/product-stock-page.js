@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import ProductCreationForm from './product-creation-form'
 import {Link} from "react-router-dom"
+import {HOST} from '../../commons/hosts'
 
 class ProductStockPage extends React.Component {
 
@@ -59,6 +60,11 @@ class ProductStockPage extends React.Component {
         })
     }
 
+    handleDelete(id) {
+        fetch(HOST.backend_api + '/products/' + id, {method: 'DELETE'})
+            .then(this.fetchProducts());
+    }
+
     render() {
         return(
         <div style={{marginLeft:"30px", marginRight:"30px"}}>
@@ -75,10 +81,10 @@ class ProductStockPage extends React.Component {
                         <th className="text-center"> Price</th>
                         <th className="text-center"> Description</th>
                         <th className="text-center"> Stock</th>
-                        <th className="text-center"> Number of products sold</th>
+                        <th className="text-center"> Sold</th>
                         <th className="text-center"> Specs</th>
                         <th className="text-center"> Categories</th>
-
+                        <th className="text-center"> Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -95,8 +101,9 @@ class ProductStockPage extends React.Component {
                                     <td className="text-center"> {product.stock}</td>
                                     <td className="text-center"> {product.numberSold}</td>
                                     <td className="text-center"> <b>Size:</b> {product.specs.size}  <br /><b>Weight:</b> {product.specs.weight}</td>
-                                    <td className="text-center"> {product.specs.categories.map((category) => <p style={{borderStyle:"solid", borderRadius:'12px'}}> {category.name} </p> )}</td>
-
+                                    <td className="text-center"> {product.specs.categories.map((category) => <p style={{color:'white', backgroundColor:'rgb(255,81,81', borderStyle:"solid", borderRadius:'12px'}}> {category.name} </p> )}</td>
+                                    <td className="text-center"> <Button onClick={() => {this.handleDelete(product.productId)}} style={{margin:'5px'}} variant='danger' size='sm'>Delete</Button>
+                                                                <Button style={{margin:'5px'}} variant='outline-danger' size='sm'>Update</Button></td>
                                 </tr>)
                     }
                     </tbody>

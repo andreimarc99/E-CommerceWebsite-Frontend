@@ -81,9 +81,6 @@ class CategoryPage extends React.Component {
                 
             }
         })
-        setTimeout( function() {
-            window.location.reload();
-        }, 500)
     }
 
     handleRemoveFromFavorites(productId) {

@@ -36,7 +36,6 @@ function postCart(c, callback){
                 'fullPrice': 0
             })
         });
-        console.log(request.body);
         console.log("URL: " + request.url);
 
         RestApiClient.performRequest(request, callback);
