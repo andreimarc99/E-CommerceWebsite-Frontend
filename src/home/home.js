@@ -9,8 +9,10 @@ import {
   } from "react-bootstrap";
   import {Card, Button} from "react-bootstrap";
 
-
+import logo from "../img/logo.png"
 import {Link} from "react-router-dom";
+
+import {HOST} from "../commons/hosts"
 
 class Home extends React.Component {
     constructor(props) {
@@ -25,11 +27,12 @@ class Home extends React.Component {
             },
             categories: []
         }
+        this.handleAddToCart = this.handleAddToCart.bind(this);
     }
 
     fetchCategories() {
       return CATEGORY_API.getCategories((result, status, err) => {
-        if (result !== null && status === 200 || status === 201) {
+        if (result !== null && (status === 200 || status === 201)) {
             this.setState({
               categories: result
             });
@@ -60,6 +63,40 @@ class Home extends React.Component {
         
     }
 
+    handleAddToCart(product) {
+      console.log(product);
+      fetch(HOST.backend_api + "/carts/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+      .then(response => response.json())
+      .then(data => {
+          data.products.push(product);
+
+          var price = 0;
+          data.products.map((p) => {
+              price += p.price
+          })
+          const putMethod = {
+              method: 'PUT',
+              headers: {
+                  'Content-type': 'application/json',
+                  'Accept': 'application/json'
+              },
+              body: JSON.stringify(
+                  {
+                      'cartId': data.cartId,
+                      'customer': data.customer,
+                      'products': data.products,
+                      'fullPrice': price
+                  }
+              )
+          }
+
+          fetch(HOST.backend_api + '/carts', putMethod)
+              .then(response => {alert(product.name + " added to cart.")})
+              .catch(err => console.log(err));
+      })
+      .catch(error => console.log(error));
+  }
+
     componentDidMount() {
         this.fetchProducts();
         this.fetchCategories();
@@ -68,23 +105,9 @@ class Home extends React.Component {
     render() {
         const {products} = this.state;
         const {categories} = this.state;
-        console.log(categories);
         products.sort(compare);
-        var imageElem1, imageElem2, imageElem3;
 
         if (products !== "undefined" && products.length >0) {
-            /*var buf1 = products[0].image.data;
-            imageElem1 = document.createElement('img1');
-            imageElem1.src = 'data:image/png;base64,' + buf1.toString('base64');
-
-
-            var buf2 = products[1].image.data;
-            imageElem2 = document.createElement('img2');
-            imageElem2.src = 'data:image/png;base64,' + buf2.toString('base64');
-
-            var buf3 = products[2].image.data;
-            imageElem3 = document.createElement('img3');
-            imageElem3.src = 'data:image/png;base64,' + buf3.toString('base64');*/
 
           var imageElems = [];
           for (let i = 0; i < products.length; ++i) {
@@ -98,18 +121,11 @@ class Home extends React.Component {
             prod.specs.categories.map((categ) =>
               productsCategories.push({category: categ.name, product: prod})
           )})
-            console.log(productsCategories);
         return(
         <div>
           <br />
-          <h1 style={{color: 'rgb(255, 81, 81)'}}>Featured products</h1>
-          <br />
-          <hr
-            style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
-                height: 10
-            }}/>
+          <h1 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Featured products</h1>
+        <br />
             {
               (imageElems.length > 0 ?
               
@@ -161,28 +177,16 @@ class Home extends React.Component {
           </Col>
               : <p className="text-muted">No products found.</p>)}
           <br />
-          <hr
-            style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
-                height: 5
-            }}/>
 
-        <h1 style={{color: 'rgb(255, 81, 81)'}}>Our products by categories</h1>
-          <hr
-            style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
-                height: 5
-            }}/>
-            
+        <h1 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Our products by categories</h1>
+   
+            <br />
           <div className="container fluid">
                 {
                   (productsCategories.length > 0 && categories.length > 0 && imageElems.length > 0 ?
                     categories.map((category) => {
                       let temp = [];
                       temp = productsCategories.filter(function(item) {
-                        console.log(item.category + " , " + category.name);
                         return item.category === category.name
                       });
                         return (
@@ -201,7 +205,6 @@ class Home extends React.Component {
                           <div className="d-flex overflow-auto justify-content-left" style={{marginBottom:'20px'}}>
 
                             {temp.map((prod) => { 
-                              console.log(prod);
                               return(
                                 <div className="col">
                                     <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
@@ -221,12 +224,14 @@ class Home extends React.Component {
                                             backgroundColor: 'rgb(255, 81, 81)',
                                             height: 3
                                         }} />
-                                        <textarea readOnly='true' style={{width:'100%', border:'none'}} className="txtarea text-muted">{prod.product.description}</textarea>
+                                        <textarea readOnly='true' style={{width:'100%', border:'none'}} value={prod.product.description} className="txtarea text-muted"></textarea>
                                       <Card.Text>
                                         <h4>${prod.product.price}</h4>
                                         
                                       </Card.Text>
-                                      <Button className="btn btn-danger">Add to cart</Button>
+                                      {(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
+                                      <Button onClick={() => this.handleAddToCart(prod.product)} style={{marginRight:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" alt="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
+                                      :<div/>)}
                                     </Card.Body>
                                   </Card>
                                   </div> );

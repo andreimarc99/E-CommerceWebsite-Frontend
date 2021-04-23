@@ -4,6 +4,9 @@ function performRequest(request, callback){
             function(response) {
                 if (response.ok) {
                     response.json().then(json => callback(json, response.status,null));
+                    if (request.method === 'POST') {
+                        window.location.reload();
+                    }
                 }
                 else {
                     response.json().then(err => callback(null, response.status,  err));

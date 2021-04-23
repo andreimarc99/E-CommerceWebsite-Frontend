@@ -1,3 +1,3 @@
 export const HOST = {
-    backend_api: 'http://backend-licenta-marc-andrei.herokuapp.com/',
+    backend_api: 'http://backend-licenta-marc-andrei.herokuapp.com',
 };

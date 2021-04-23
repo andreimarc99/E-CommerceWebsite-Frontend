@@ -26,6 +26,8 @@ class ProductPage extends React.Component {
             isFavorite: false
         }
         this.handleAddToFavorites = this.handleAddToFavorites.bind(this);
+        this.handleAddToCart = this.handleAddToCart.bind(this);
+
         this.handleRemoveFromFavorites = this.handleRemoveFromFavorites.bind(this);
         this.isAFavorite = this.isAFavorite.bind(this);
     }
@@ -173,6 +175,40 @@ class ProductPage extends React.Component {
 
     }
 
+    handleAddToCart() {
+        const {product} = this.state;
+        console.log(product);
+        fetch(HOST.backend_api + "/carts/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+        .then(response => response.json())
+        .then(data => {
+            data.products.push(product);
+
+            var price = 0;
+            data.products.map((p) => {
+                price += p.price
+            })
+            const putMethod = {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        'cartId': data.cartId,
+                        'customer': data.customer,
+                        'products': data.products,
+                        'fullPrice': price
+                    }
+                )
+            }
+
+            fetch(HOST.backend_api + '/carts', putMethod)
+                .then(response => {alert(product.name + " added to cart.")})
+                .catch(err => console.log(err));
+        })
+        .catch(error => console.log(error));
+    }
 
     componentDidMount() {
         this.fetchReviews();
@@ -233,13 +269,15 @@ class ProductPage extends React.Component {
             <div className="container fluid">
             <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-center">
             <div className="d-flex align-items-stretch ">
-            <Button style={{marginRight:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
+            {(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
+                <Button onClick={this.handleAddToCart} style={{marginRight:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" alt="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
+                :<div/>)}
             {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined
             && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ?
             ( (isFavorite === true) ?
-            <Button onClick={this.handleRemoveFromFavorites} style={{marginLeft:'5px', width:'100px', height:'60px'}} className="btn btn-light"><img src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+            <Button onClick={this.handleRemoveFromFavorites} style={{marginLeft:'5px', width:'100px', height:'60px'}} className="btn btn-light"><img alt="fav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
             :
-            <Button onClick={this.handleAddToFavorites} style={{marginLeft:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+            <Button onClick={this.handleAddToFavorites} style={{marginLeft:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img alt="unfav" className="logo" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
             )
             : <div />)}
             </div>
@@ -353,7 +391,9 @@ class ProductPage extends React.Component {
                             <h4>${prod.price}</h4>
                             
                         </Card.Text>
-                        <Button className="btn btn-danger">Add to cart</Button>
+                        {(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
+                    <Button style={{marginRight:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" alt="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
+                    :<div/>)}
                         </Card.Body>
                     </Card></div> );
             }) }</div></div>: <div style={{textAlign:'center'}} className="text-muted">No related products</div> }

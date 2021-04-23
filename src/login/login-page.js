@@ -2,11 +2,6 @@ import React from 'react';
 import * as API_USERS from "../user/user-api"
 import {Button} from "react-bootstrap"
 import Home from '../home/home';
-import {
-    Modal,
-    ModalBody,
-    ModalHeader
-} from 'reactstrap';
 
 class LoginPage extends React.Component {
     constructor(props) {

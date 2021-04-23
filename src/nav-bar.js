@@ -14,7 +14,6 @@ import {
 import {Form, FormControl, Button} from "react-bootstrap"
 
 import "./styles.css"
-import logo from "./img/logo.png"
 import account from "./img/account.png"
 import cart from "./img/cart.png"
 import logout from "./img/log-out.png"

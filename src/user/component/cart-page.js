@@ -3,7 +3,7 @@ import {withRouter} from "react-router-dom";
 import * as CART_API from "../cart-api"
 
 
-import {Card, Button} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {HOST} from "../../commons/hosts"
 
 import plus from "../../img/plus.png"
@@ -69,12 +69,8 @@ class CartPage extends React.Component {
         }
 
         fetch(HOST.backend_api + '/carts', putMethod)
-            .then(response => response.json())
-            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+            .then(response => {response.json(); window.location.reload()})
             .catch(err => console.log(err));
-        setTimeout(function() {
-            window.location.reload();
-        }, 500);
     }
 
     handleMinus(product) {
@@ -110,13 +106,9 @@ class CartPage extends React.Component {
         }
 
         fetch(HOST.backend_api + '/carts', putMethod)
-            .then(response => response.json())
-            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+            .then(response => {response.json(); window.location.reload()})
             .catch(err => console.log(err));
 
-        setTimeout(function() {
-            window.location.reload();
-        }, 500);
     }
 
     componentDidMount() {
@@ -175,7 +167,7 @@ class CartPage extends React.Component {
                     (uniqueProductList.length > 0 ? 
                         uniqueProductList.map((prod) => { 
                             return(
-                                <div style={{ marginLeft:'5px', marginRight:'5px'}}> 
+                                <div style={{ marginLeft:'5px', marginRight:'5px', marginTop:'20px'}}> 
                                     
                                 <h4>{prod.value.name}</h4>
                                 <hr
@@ -230,9 +222,9 @@ class CartPage extends React.Component {
                                                             
                                                             <div className="container">
                                                                 <div className="row justify-content-center">
-                                                                    <Button size="sm" variant="danger" onClick={() => this.handleMinus(prod.value)}><img src={minus} className="logo" style={{width:'20px', height:'20px'}}></img></Button>
+                                                                    <Button size="sm" variant="danger" onClick={() => this.handleMinus(prod.value)}><img alt="minus" src={minus} className="logo" style={{width:'20px', height:'20px'}}></img></Button>
                                                                     <h4 style={{marginLeft:'15px', marginRight:'15px'}}>x{prod.number}</h4>
-                                                                    <Button size="sm" variant="danger" onClick={() => this.handlePlus(prod.value)}><img src={plus} className="logo" style={{width:'20px', height:'20px'}}></img></Button>
+                                                                    <Button size="sm" variant="danger" onClick={() => this.handlePlus(prod.value)}><img alt="plus" src={plus} className="logo" style={{width:'20px', height:'20px'}}></img></Button>
                                                                 </div>
                                                             </div>
                                                         </div>

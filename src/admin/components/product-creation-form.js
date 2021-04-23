@@ -183,7 +183,7 @@ class PatientForm extends React.Component {
         formData.append('product', new Blob([prodJSON], {type: 'application/json'}));
         formData.append('specs', new Blob([specsJSON], {type: 'application/json'}));
         axios.post(HOST.backend_api + "/products/save", formData)
-        this.reloadHandler();
+        .then(window.location.reload());
     }
 
     fetchCategories() {

@@ -27,20 +27,55 @@ class CategoryPage extends React.Component {
 
     }
 
+    handleAddToCart(product) {
+        console.log(product);
+        fetch(HOST.backend_api + "/carts/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+        .then(response => response.json())
+        .then(data => {
+            data.products.push(product);
+
+            var price = 0;
+            data.products.map((p) => {
+                price += p.price
+            })
+            const putMethod = {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        'cartId': data.cartId,
+                        'customer': data.customer,
+                        'products': data.products,
+                        'fullPrice': price
+                    }
+                )
+            }
+
+            fetch(HOST.backend_api + '/carts', putMethod)
+                .then(response => {alert(product.name + " added to cart.")})
+                .catch(err => console.log(err));
+        })
+        .catch(error => console.log(error));
+    }
+
     fetchFavorites() {
         const username = JSON.parse(localStorage.getItem("loggedUser")).username;
-        FAV_PRODUCTS_API.getFavoriteProductsByUsername(username, (result, status, err) => {
-                if (result !== null && status === 200) {
-                    this.setState({
-                        favoriteList: result.products
-                    })
-                } else {
-                    this.setState(({
-                        errorStatus: status,
-                        error: err
-                    }));
-                }
-            })
+        if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER")
+            FAV_PRODUCTS_API.getFavoriteProductsByUsername(username, (result, status, err) => {
+                    if (result !== null && status === 200) {
+                        this.setState({
+                            favoriteList: result.products
+                        })
+                    } else {
+                        this.setState(({
+                            errorStatus: status,
+                            error: err
+                        }));
+                    }
+                })
     }
 
     handleAddToFavorites(product) {
@@ -249,13 +284,14 @@ class CategoryPage extends React.Component {
                                 <h4>${prod.price}</h4>
                                 
                             </Card.Text>
-                            <Button className="btn btn-danger">Add to cart</Button>
+                            {(JSON.parse(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
+                            <Button onClick={() => this.handleAddToCart(prod)} className="btn btn-danger">Add to cart</Button> : <div />)}
                             {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined
                             && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ?
                             ( (isFavorite[prod.productId] === 1) ?
-                            <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+                            <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img alt="fav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
                             :
-                            <Button onClick={() => this.handleAddToFavorites(prod)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-danger"><img className="logo" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+                            <Button onClick={() => this.handleAddToFavorites(prod)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-danger"><img className="logo" alt="unfav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
                             )
                             : <div />)}
                         </div>

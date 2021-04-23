@@ -3,12 +3,8 @@ import Select from "react-select";
 import validate from "../admin/components/validator";
 import {FormGroup, Input, Label} from "reactstrap";
 import * as API_USERS from "../user/user-api"
-import * as CUSTOMER_API from "../user/customer-api"
-import * as ADMIN_API from "../user/admin-api"
-import * as DELIVERY_GUY_API from "../user/delivery-guy-api"
-import * as CART_API from "../user/cart-api"
-import * as FAVORITE_PRODUCTS_API from "../product/api/favorite-products-api"
 import { Button } from "react-bootstrap";
+import {HOST} from "../commons/hosts"
 
 function isEmpty(item) {
     for(const p in item) {
@@ -161,7 +157,7 @@ class RegisterContainer extends React.Component {
     }
 
     registerCustomer(customer) {
-        CUSTOMER_API.postCustomer(customer, (result, status, error) => {
+        /*CUSTOMER_API.postCustomer(customer, (result, status, error) => {
             if (result !== null && (status === 200 || status === 201)) {
                 console.log("Successfully inserted customer with id: " + result);
             } else {
@@ -212,11 +208,75 @@ class RegisterContainer extends React.Component {
                     error: err
                 }));
             }
-        });
+        });*/
+        const postMethod = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    'username': customer.username,
+                    'password': customer.password,
+                    'role': 'CUSTOMER',
+                    'CNP': customer.CNP,
+                    'birthDate': customer.birthDate,
+                    'firstName': customer.firstName,
+                    'lastName': customer.lastName,
+                    'gender': customer.gender,
+                    'dateJoined': customer.dateJoined
+                }
+            )
+        }
+
+        fetch(HOST.backend_api + '/customers', postMethod)
+            .then(response => {
+                fetch(HOST.backend_api + '/customers/' + customer.username)
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log(data);
+                    const postCartMethod = {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(
+                            {
+                                'products': [],
+                                'customer': data,
+                                'fullPrice': 0
+                            }
+                        )
+                    }
+                    fetch(HOST.backend_api + '/carts', postCartMethod)
+                    .then(r => {
+                        const postFavProdsMethod = {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    'customer': data,
+                                    'products': []
+                                }
+                            )
+                        }
+                        fetch(HOST.backend_api + '/favorite_products', postFavProdsMethod)
+                        .then(rs => {window.location.href = '/login'})
+                        .catch(e => console.log(e));
+                })
+            })
+                .catch(er => console.log(er));
+            })
+            .catch(err => console.log(err));
     }
     
     registerAdmin(admin) {
-        return ADMIN_API.postAdmin(admin, (result, status, error) => {
+        /*return ADMIN_API.postAdmin(admin, (result, status, error) => {
             if (result !== null && (status === 200 || status === 201)) {
                 console.log("Successfully inserted admin with id: " + result);
             } else {
@@ -225,11 +285,35 @@ class RegisterContainer extends React.Component {
                     error: error
                 }));
             }
-        });
+        });*/
+        const postMethod = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    'username': admin.username,
+                    'password': admin.password,
+                    'role': 'ADMIN',
+                    'CNP': admin.CNP,
+                    'birthDate': admin.birthDate,
+                    'firstName': admin.firstName,
+                    'lastName': admin.lastName,
+                    'gender': admin.gender,
+                    'dateHired': admin.dateHired,
+                    'salary': 1
+                }
+            )
+        }
+        fetch(HOST.backend_api + '/admins', postMethod)
+            .then(rs => {window.location.href = '/login'})
+            .catch(e => console.log(e));
     }
 
     registerDeliveryGuy(delivery_guy) {
-        return DELIVERY_GUY_API.postDeliveryGuy(delivery_guy, (result, status, error) => {
+        /*return DELIVERY_GUY_API.postDeliveryGuy(delivery_guy, (result, status, error) => {
             if (result !== null && (status === 200 || status === 201)) {
                 console.log("Successfully inserted delivery guy with id: " + result);
             } else {
@@ -238,7 +322,32 @@ class RegisterContainer extends React.Component {
                     error: error
                 }));
             }
-        });
+        });*/
+
+        const postMethod = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    'username': delivery_guy.username,
+                    'password': delivery_guy.password,
+                    'role': 'DELIVERY_GUY',
+                    'CNP': delivery_guy.CNP,
+                    'birthDate': delivery_guy.birthDate,
+                    'firstName': delivery_guy.firstName,
+                    'lastName': delivery_guy.lastName,
+                    'gender': delivery_guy.gender,
+                    'dateHired': delivery_guy.dateHired,
+                    'salary': 1
+                }
+            )
+        }
+        fetch(HOST.backend_api + '/delivery_guys', postMethod)
+            .then(rs => {window.location.href = '/login'})
+            .catch(e => console.log(e));
     }
 
 
@@ -251,7 +360,7 @@ class RegisterContainer extends React.Component {
                 break;
             }
         }
-        const dateHired = this.state.formControls.dateHired.value;
+        var dateHired = this.state.formControls.dateHired.value;
         if (!unique) {
             alert("Username is taken. Try again.");
         } else {
