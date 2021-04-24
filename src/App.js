@@ -17,6 +17,8 @@ import UserPage from './user/component/user-page';
 import CategoryPage from './product/component/category-page';
 import FavoritesPage from './user/component/favorites-page';
 import CartPage from './user/component/cart-page';
+import OrderPage from './user/component/order-page';
+import ThankYou from "./thank-you-page"
 
 function App() {
   return (
@@ -57,6 +59,12 @@ function App() {
                             render={() => <Register /> }
                         />
 
+                        <Route 
+                            exact 
+                            path='/thank_you'
+                            render={() => <ThankYou /> }
+                        />
+
                     <Route path="/user_page/:username" render={(props) => <UserPage {...props} key={Date.now()}/>}/>
 
                     <Route path="/product_page/:id" render={(props) => <ProductPage {...props} key={Date.now()}/>}/>
@@ -66,6 +74,8 @@ function App() {
                     <Route path="/fav_products/:username" render={(props) => <FavoritesPage {...props} key={Date.now()}/>}/>
 
                     <Route path="/cart/:username" render={(props) => <CartPage {...props} key={Date.now()}/>}/>
+
+                    <Route path="/order/:username/:date" render={(props) => <OrderPage {...props} key={Date.now()}/>}/>
 
                         <Route render={() =><ErrorPage />} />
                     </Switch>

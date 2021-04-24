@@ -1,5 +1,5 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import * as CART_API from "../cart-api"
 
 
@@ -248,7 +248,10 @@ class CartPage extends React.Component {
                 }}/>
                 {((price !== 0) ? 
                     <div><h4 className="text-muted">Final price</h4><h4> ${price}</h4></div>   : <div />)  
-                }          
+                }        
+                <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/order/${JSON.parse(localStorage.getItem("loggedUser")).username}/${Date.now()}`, state: { cart: cart } }}>
+                    <Button disabled={productList.length === 0} style={{marginBottom:'20px'}} size="lg" variant="danger">Proceed to checkout</Button>  
+                </Link>
             </div>
         );
     }

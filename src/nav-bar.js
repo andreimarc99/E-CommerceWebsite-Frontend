@@ -11,7 +11,8 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-import {Form, FormControl, Button} from "react-bootstrap"
+import Select from "react-select";
+import {Form, Button} from "react-bootstrap"
 
 import "./styles.css"
 import account from "./img/account.png"
@@ -22,6 +23,7 @@ import bear from "./img/bear.png"
 
 import {Link} from 'react-router-dom'
 import * as CATEGORY_API from "./product/api/category-api"
+import * as API_PRODUCT from "./product/api/product-api"
 
 class NavbarPage extends React.Component {
 
@@ -31,16 +33,41 @@ class NavbarPage extends React.Component {
     this.state = {
       categoryList: [],
       areCategoriesLoaded: false,
+      productList: [],
       errorStatus: 0,
-      error: ''
+      error: '',
+      product: {label: 'Search products...', value: {}},
+      productId: 0
     }
 
     this.handleAccountClick = this.handleAccountClick.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleProductPick = this.handleProductPick.bind(this);
   }
+
+  fetchProducts() {
+    return API_PRODUCT.getProductsWithImages((result, status, err) => {
+        if (result !== null && status === 200) {
+            this.setState({
+                productList: result
+            });
+        } else {
+            this.setState(({
+                errorStatus: status,
+                error: err
+            }));
+        }
+    })
+}
   
   componentDidMount() {
+    this.fetchProducts();
     this.fetchCategories();
+  }
+
+  handleProductPick = product => 
+  {
+    this.setState({product:product, productId: product.value.productId});
   }
 
   fetchCategories() {
@@ -63,16 +90,20 @@ class NavbarPage extends React.Component {
     window.location.href="/login";
   }
 
-  handleFavoritesClick() {
-  }
-
   handleLogout() {
     localStorage.removeItem('loggedUser');
     window.location.href = "/";
   }
 
   render() {
-    const {categoryList} = this.state;
+    const {categoryList, productList, product, productId} = this.state;
+    var productOptions = [];
+    if (productList.length > 0) {
+      productOptions = productList.map( (p) => ({
+        value: p,
+        label: p.name
+    }));
+    }
     return (
       <div>
         <Navbar color="danger" light expand="md">
@@ -80,7 +111,7 @@ class NavbarPage extends React.Component {
               <img className="logo" src={bear} height="33" alt="logo"></img>
           </a>
           <NavbarBrand href="/" style={{color:"white"}}>
-            bearMAG
+            eComSystem
           </NavbarBrand>
             <Nav className="mr-auto" navbar>
               {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
@@ -106,8 +137,12 @@ class NavbarPage extends React.Component {
               </UncontrolledDropdown>
             </Nav>
             <Form inline>
-            <FormControl type="search" placeholder="Search product..." className="mr-sm-2" />
-            <Button variant="outline-light">Search</Button>
+            <div style={{width:'250px'}}>
+              <Select placeholder="Search products..." options={productOptions} value={this.state.product} onChange={this.handleProductPick}/>
+            </div>
+            <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/product_page/${productId}`, state: { product: product.value } }}>
+            <Button disabled={JSON.stringify(product) === JSON.stringify({})} style={{marginLeft:'10px'}} variant="outline-light"> Go to product's page </Button>
+            </Link>
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/user_page/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { user: localStorage.getItem("loggedUser") } }}>
