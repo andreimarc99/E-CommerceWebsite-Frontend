@@ -230,7 +230,7 @@ class Home extends React.Component {
                                         
                                       </Card.Text>
                                       {(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
-                                      <Button onClick={() => this.handleAddToCart(prod.product)} style={{marginRight:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" alt="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
+                                      <Button onClick={() => this.handleAddToCart(prod.product)} style={{marginRight:'5px', width:'100px', height:'60px'}} variant="danger"><img className="logo" alt="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
                                       :<div/>)}
                                     </Card.Body>
                                   </Card>
@@ -245,7 +245,7 @@ class Home extends React.Component {
         );
    
     } else {
-        return (<div>No products registered yet.</div>)
+        return (<div className="text-muted">No products registered yet.</div>)
     }
          
 }

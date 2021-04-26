@@ -112,12 +112,12 @@ class ProductStockPage extends React.Component {
             </CardBody>
 
             <Modal isOpen={this.state.selected_create_product} toggle={this.toggleCreateProductForm}
-                           className={this.props.className} size="lg">
-                        <ModalHeader toggle={this.toggleCreateProductForm}><p style={{color:"red"}}> Add product: </p></ModalHeader>
-                        <ModalBody>
-                            <ProductCreationForm reloadHandler={this.reloadProducts}/>
-                        </ModalBody>
-                    </Modal>
+                    className={this.props.className} size="lg">
+                <ModalHeader toggle={this.toggleCreateProductForm}><p style={{color:"red"}}> Add product: </p></ModalHeader>
+                <ModalBody>
+                    <ProductCreationForm reloadHandler={this.reloadProducts}/>
+                </ModalBody>
+            </Modal>
         </div>);
     }
 }

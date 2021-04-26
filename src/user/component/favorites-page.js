@@ -190,7 +190,7 @@ class FavoritesPage extends React.Component {
                                 <h4>${prod.price}</h4>
                                 
                             </Card.Text>
-                            <Button onClick={() => this.handleAddToCart(prod)} className="btn btn-danger">Add to cart</Button>
+                            <Button onClick={() => this.handleAddToCart(prod)} variant="outline-danger">Add to cart</Button>
                             <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img alt="unfav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
                         </div>
                     </div>

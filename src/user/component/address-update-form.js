@@ -110,7 +110,6 @@ class AddressUpdateForm extends React.Component {
             formControls: updatedControls,
             formIsValid: formIsValid
         });
-        console.log(this.state.formControls);
     };
 
     updateAddress(address) {

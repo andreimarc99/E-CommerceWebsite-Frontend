@@ -19,6 +19,8 @@ import FavoritesPage from './user/component/favorites-page';
 import CartPage from './user/component/cart-page';
 import OrderPage from './user/component/order-page';
 import ThankYou from "./thank-you-page"
+import ComplaintCustomerPage from "./complaint/component/complaint-customer-page"
+import { Button } from 'react-bootstrap';
 
 function App() {
   return (
@@ -63,6 +65,12 @@ function App() {
                             exact 
                             path='/thank_you'
                             render={() => <ThankYou /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/complaints'
+                            render={() => <ComplaintCustomerPage /> }
                         />
 
                     <Route path="/user_page/:username" render={(props) => <UserPage {...props} key={Date.now()}/>}/>
@@ -136,7 +144,9 @@ function App() {
                     ></img>
                   </span>
                 </a>
-                
+                <br />
+                {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
+                <Button onClick={() => {window.location.href="/complaints"}} style={{marginTop:'10px', marginBottom:'10px'}} variant="outline-light">File a complaint</Button> : <div />)}
               </footer>
             </div>
     </div>

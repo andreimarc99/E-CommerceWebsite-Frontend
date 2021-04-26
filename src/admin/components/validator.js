@@ -2,6 +2,14 @@ const minLengthValidator = (value, minLength) => {
     return value.length >= minLength;
 };
 
+const minValueValidator = (value) => {
+    return value >= 0;
+};
+
+const maxValueValidator = (value) => {
+    return value <= 5;
+};
+
 const requiredValidator = value => {
     return value.trim() !== '';
 };
@@ -16,6 +24,12 @@ const validate = (value, rules) => {
                 break;
 
             case 'isRequired': isValid = isValid && requiredValidator(value);
+                break;
+
+            case 'minValue': isValid = isValid && minValueValidator(value);
+                break;
+
+            case 'maxValue': isValid = isValid && maxValueValidator(value);
                 break;
 
             default: isValid = true;

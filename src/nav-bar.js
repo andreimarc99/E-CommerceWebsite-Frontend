@@ -126,7 +126,7 @@ class NavbarPage extends React.Component {
                   Products
                 </DropdownToggle>
                 <DropdownMenu right>
-                <DropdownItem><b>Categories</b></DropdownItem>
+                <DropdownItem header>Categories</DropdownItem>
                 <DropdownItem divider />
                   {((categoryList.length > 0) ? categoryList.map((category) => 
                   <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/category/${category.name}`, state: { categoryName: category.name } }}>
@@ -141,7 +141,7 @@ class NavbarPage extends React.Component {
               <Select placeholder="Search products..." options={productOptions} value={this.state.product} onChange={this.handleProductPick}/>
             </div>
             <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/product_page/${productId}`, state: { product: product.value } }}>
-            <Button disabled={JSON.stringify(product) === JSON.stringify({})} style={{marginLeft:'10px'}} variant="outline-light"> Go to product's page </Button>
+            <Button disabled={product.label === "Search products..."} style={{marginLeft:'10px'}} variant="outline-light"> Go to product's page </Button>
             </Link>
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 

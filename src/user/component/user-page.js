@@ -204,13 +204,13 @@ class UserPage extends React.Component {
             <p style={{textAlign:'center'}}>{JSON.parse(user).role}</p>
             </div>
 
-            <Button style={{marginBottom:'20px'}} size="lg" variant="danger" disabled={!this.state.valid} onClick={this.handleSave}>Save</Button>
+            <Button style={{marginBottom:'20px'}} size="lg" variant="outline-danger" disabled={!this.state.valid} onClick={this.handleSave}>Save</Button>
           
             <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered addresses
             </h3>
             
-            <Button onClick={this.toggleAddForm} variant="danger"> Add new address </Button>
-            <br /><br />
+            <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddForm} variant="outline-danger"> Add new address </Button>
+            
             {
                 ((addresses.length > 0 && addresses !== undefined) ? 
                      addresses.map((address) => {

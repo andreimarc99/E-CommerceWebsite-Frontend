@@ -10,6 +10,13 @@ import {Link} from "react-router-dom";
 import logo from "../../img/logo.png"
 import heart from "../../img/heart.png"
 import {HOST} from "../../commons/hosts"
+import ReviewUpdateForm from '../../review/review-update-form'
+import ReviewCreationForm from '../../review/review-creation-form'
+import {
+    Modal,
+    ModalBody,
+    ModalHeader
+} from 'reactstrap';
 
 class ProductPage extends React.Component {
 
@@ -23,13 +30,20 @@ class ProductPage extends React.Component {
             error: "",
             relatedProducts: [],
             isRelatedProductsLoaded: false,
-            isFavorite: false
+            isFavorite: false,
+            selected_update_review: false,
+            selected_create_review: false
         }
         this.handleAddToFavorites = this.handleAddToFavorites.bind(this);
         this.handleAddToCart = this.handleAddToCart.bind(this);
 
         this.handleRemoveFromFavorites = this.handleRemoveFromFavorites.bind(this);
         this.isAFavorite = this.isAFavorite.bind(this);
+
+        this.toggleUpdateReview = this.toggleUpdateReview.bind(this);
+        this.reloadReviews = this.reloadReviews.bind(this);
+        this.toggleCreateReview = this.toggleCreateReview.bind(this);
+        this.reloadReviewsAfterCreation = this.reloadReviewsAfterCreation.bind(this);
     }
 
     isAFavorite() {
@@ -216,10 +230,43 @@ class ProductPage extends React.Component {
         this.isAFavorite();
     }
 
+    handleDeleteReview(reviewId) { 
+        fetch(HOST.backend_api + '/reviews/' + reviewId, {
+        method: 'DELETE',
+        })
+        .then(res => res.text()) 
+        .then(res => window.location.reload());
+    }
+
+    toggleUpdateReview() {
+        this.setState({selected_update_review: !this.state.selected_update_review});
+    }
+
+    toggleCreateReview() {
+        this.setState({selected_create_review: !this.state.selected_create_review});
+    }
+    
+    reloadReviewsAfterCreation() {
+        this.setState({
+            isReviewListLoaded: false
+        });
+        this.toggleCreateReview();
+        this.fetchReviews();
+    }
+
+    reloadReviews() {
+        this.setState({
+            isReviewListLoaded: false
+        });
+        this.toggleUpdateReview();
+        this.fetchReviews();
+    }
+
     render() {
         const {product} = this.state;
         const {reviewList} = this.state;
         const {isFavorite} = this.state;
+        var reviewedAlready = false;
         let rating = 0;
         let reviewNumber = 0;
         var {relatedProducts} = this.state;
@@ -227,6 +274,9 @@ class ProductPage extends React.Component {
             reviewList.map((review) => {
                 rating += parseInt(review.rating);
                 reviewNumber++;
+                if (review.customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username) {
+                    reviewedAlready = true;
+                }
             });
         }
         rating /= reviewNumber;
@@ -296,8 +346,12 @@ class ProductPage extends React.Component {
             />
            <h5><b>Technical specs</b>
            </h5>
-           <p><b>Size:</b> {product.specs.size}</p>
-           <p><b>Weight:</b> {product.specs.weight}g</p>
+           <div className="container fluid">
+               <div>
+                    <p><b>Size:</b> {product.specs.size}</p>
+                    <p><b>Weight:</b> {product.specs.weight}g</p>
+                </div>
+           </div>
            <hr
             style={{
                 color: 'rgb(255, 81, 81)',
@@ -328,7 +382,14 @@ class ProductPage extends React.Component {
             />
             <h5><b>Reviews</b></h5>
             {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {rating}</p>}
-
+            {(reviewedAlready ? <div /> : <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button>)}
+            <Modal isOpen={this.state.selected_create_review} toggle={this.toggleCreateReview}
+                 className={this.props.className} size="lg">
+                <ModalHeader toggle={this.toggleCreateReview}><p style={{color:"red"}}> Post a review </p></ModalHeader>
+                <ModalBody>
+                    <ReviewCreationForm product={product} reloadHandler={this.reloadReviewsAfterCreation}/>
+                </ModalBody>
+            </Modal>
             <div> {
             reviewList.map((review) => {return(
                 <div>
@@ -345,11 +406,31 @@ class ProductPage extends React.Component {
                     starDimension="25px"
                     starSpacing="5px"
                     starRatedColor="red"
-                /></p> 
+                />
+                </p> 
                 <h5 style={{marginLeft:"20px"}} className="text-left"><b> {review.customer.user.firstName} {review.customer.user.lastName}</b> </h5>
                 <p  style={{marginLeft:"20px"}} className="text-left text-muted" >@{review.customer.user.username}</p>
-                <h4 style={{marginLeft:"20px"}} className="text-left">{review.message}</h4>                
-                </div>)
+                <h4 style={{marginLeft:"20px"}} className="text-left">{review.message}</h4>    
+                <div style={{textAlign:'right', marginRight:'20px'}}>
+                    {(review.customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username ? 
+                    <div>
+                        <Button onClick={this.toggleUpdateReview} variant="outline-danger">Edit</Button>
+                        <Button style={{marginLeft:'10px'}} variant="danger" onClick={() => this.handleDeleteReview(review.reviewId)}>Delete</Button>
+                    </div> 
+                    : <div />)}
+                </div>
+                
+                <Modal isOpen={this.state.selected_update_review} toggle={this.toggleUpdateReview}
+                 className={this.props.className} size="lg">
+                    <ModalHeader toggle={this.toggleUpdateReview}><p style={{color:"red"}}> Update review </p></ModalHeader>
+                    <ModalBody>
+                        <ReviewUpdateForm review={review} reloadHandler={this.reloadReviews}/>
+                    </ModalBody>
+                </Modal>
+
+                
+                </div>
+                )
             })
 
             }</div>
@@ -397,6 +478,8 @@ class ProductPage extends React.Component {
                         </Card.Body>
                     </Card></div> );
             }) }</div></div>: <div style={{textAlign:'center'}} className="text-muted">No related products</div> }
+
+           
 
         </div>
         );
