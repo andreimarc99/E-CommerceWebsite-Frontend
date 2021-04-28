@@ -7,6 +7,7 @@ import order from "../../img/logo.png"
 import {Button} from 'react-bootstrap'
 import Select from "react-select";
 import {HOST} from '../../commons/hosts'
+import axios from "axios"
 
 
 class OrderPage extends React.Component {
@@ -137,7 +138,8 @@ class OrderPage extends React.Component {
                 },
                 body: JSON.stringify(
                     {
-                        'cart': cart,
+                        'products': cart.products,
+                        'customer': cart.customer,
                         'finalPrice': cartPrice,
                         'address': address.value,
                         'delivered': false,
@@ -147,8 +149,39 @@ class OrderPage extends React.Component {
             }
 
             fetch(HOST.backend_api + '/orders', postMethod)
-                .then(response => response.json())
-                .then(data => window.location.href = '/thank_you')
+                .then(response => {})
+                .then(data => {
+                    
+                    cart.products.map((product) => {
+            
+                        product.stock = product.stock - 1;
+                        product.numberSold = product.numberSold + 1;
+                        const putProductMethod = {
+                            method: 'PUT',
+                            headers: {
+                                'Content-type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    'productId': product.productId,
+                                    'specs': product.specs,
+                                    'name': product.name,
+                                    'price': product.price,
+                                    'description': product.description,
+                                    'stock': product.stock,
+                                    'numberSold': product.numberSold,
+                                    'image': product.image
+                                }
+                            )
+                        }
+                
+                        fetch(HOST.backend_api + '/products/update', putProductMethod)
+                            .then(response => {})
+                            .then(data => window.location.href = '/thank_you')
+                            .catch(err => console.log(err));
+                    })
+                })
                 .catch(err => console.log(err));
         } else {
             const postMethod = {
@@ -159,6 +192,8 @@ class OrderPage extends React.Component {
                 },
                 body: JSON.stringify(
                     {
+                        'products': cart.products,
+                        'customer': cart.customer,
                         'voucher': voucher,
                         'cart': cart,
                         'finalPrice': cartPrice,
@@ -169,7 +204,7 @@ class OrderPage extends React.Component {
             }
 
             fetch(HOST.backend_api + '/orders', postMethod)
-                .then(response => response.json())
+                .then(response => {})
                 .then(data => {
                     const putMethod = {
                         method: 'PUT',
@@ -188,8 +223,38 @@ class OrderPage extends React.Component {
                     }
             
                     fetch(HOST.backend_api + '/carts', putMethod)
-                        .then(response => response.json())
-                        .then(data => window.location.href = '/thank_you')
+                        .then(response => {})
+                        .then(data => {
+                             
+                            cart.products.map((product) => {
+                                product.stock = product.stock - 1;
+                                product.numberSold = product.numberSold + 1;
+                                const putProductMethod = {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-type': 'application/json',
+                                        'Accept': 'application/json'
+                                    },
+                                    body: JSON.stringify(
+                                        {
+                                            'productId': product.productId,
+                                            'specs': product.specs,
+                                            'name': product.name,
+                                            'price': product.price,
+                                            'description': product.description,
+                                            'stock': product.stock,
+                                            'numberSold': product.numberSold,
+                                            'image':product.image
+                                        }
+                                    )
+                                }
+                        
+                                fetch(HOST.backend_api + '/products/update', putProductMethod)
+                                    .then(response => {})
+                                    .then(data => window.location.href = '/thank_you')
+                                    .catch(err => console.log(err));
+                            })
+                        })
                         .catch(err => console.log(err));
                 })
                 .catch(err => console.log(err));

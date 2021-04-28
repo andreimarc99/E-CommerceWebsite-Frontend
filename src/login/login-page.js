@@ -70,7 +70,7 @@ class LoginPage extends React.Component {
                 _user= result;
                 localStorage.setItem('loggedUser', JSON.stringify(_user));
                 const path = this.getPath(_user.role);
-                window.location.href = path.path;
+                return window.location.href = path.path;
             } else {
                 this.setState(({
                     errorStatus: status,

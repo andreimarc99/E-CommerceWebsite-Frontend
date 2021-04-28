@@ -199,13 +199,13 @@ class UserPage extends React.Component {
             <h4 style={{marginTop:'10px'}}>CNP</h4>
             <input id='cnp' name='cnp' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(255,81,81)'}} defaultValue={JSON.parse(user).cnp}></input>
             <h4 style={{marginTop:'10px'}}>Birth Date</h4>
-            <Input id='birthDate' name='birthDate' onChange={this.handleChange} type="date" style={{margin:'auto', width:'20%'}} defaultValue={JSON.parse(user).birthDate.substring(0,10)}></Input>
+            <Input id='birthDate' name='birthDate' onChange={this.handleChange} type="date" style={{textAlign:'center', margin:'auto', width:'18%'}} defaultValue={JSON.parse(user).birthDate.substring(0,10)}></Input>
             <h4 style={{marginTop:'10px'}}>Role</h4>
             <p style={{textAlign:'center'}}>{JSON.parse(user).role}</p>
             </div>
 
             <Button style={{marginBottom:'20px'}} size="lg" variant="outline-danger" disabled={!this.state.valid} onClick={this.handleSave}>Save</Button>
-          
+          {(JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ?  <div>
             <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered addresses
             </h3>
             
@@ -235,7 +235,7 @@ class UserPage extends React.Component {
                                         backgroundColor: 'rgb(255, 81, 81)',
                                         height: 2
                                     }} />
-                                    <p>{address.country}</p>
+                                    <p className="text-muted">{address.country}</p>
                                     </div>
                                     <div style={{display:'inline'}}>
                                     <p style={{marginTop:'10px'}}><b>County</b></p>
@@ -245,7 +245,7 @@ class UserPage extends React.Component {
                                         backgroundColor: 'rgb(255, 81, 81)',
                                         height: 2
                                     }} />
-                                    <p>{address.county}</p>
+                                    <p className="text-muted">{address.county}</p>
                                     </div>
 
                                     <div style={{display:'inline'}}>
@@ -256,7 +256,7 @@ class UserPage extends React.Component {
                                         backgroundColor: 'rgb(255, 81, 81)',
                                         height: 2
                                     }} />
-                                    <p>{address.town}</p>
+                                    <p className="text-muted">{address.town}</p>
                                     </div>
                                     
                                     <div style={{display:'inline'}}>
@@ -267,7 +267,7 @@ class UserPage extends React.Component {
                                         backgroundColor: 'rgb(255, 81, 81)',
                                         height: 2
                                     }} />
-                                    <p>{address.streetNr}</p>
+                                    <p className="text-muted">{address.streetNr}</p>
                                     </div>
                                     
                                     <div style={{display:'inline'}}>
@@ -278,7 +278,7 @@ class UserPage extends React.Component {
                                         backgroundColor: 'rgb(255, 81, 81)',
                                         height: 2
                                     }} />
-                                    <p>{address.countryCode}</p>
+                                    <p className="text-muted">{address.countryCode}</p>
                                     </div>
                                 </div>
                                 <br /><br />
@@ -289,8 +289,8 @@ class UserPage extends React.Component {
                 : 
                 <p className="text-muted"> No addresses found </p>
                 )
-            }
-
+            }</div> :<div />)
+        }
 
             <br /><br />
             <Modal isOpen={this.state.selected_update_address} toggle={this.toggleUpdateForm}

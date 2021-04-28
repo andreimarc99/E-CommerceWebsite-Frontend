@@ -57,7 +57,7 @@ class FavoritesPage extends React.Component {
                 
                         fetch(HOST.backend_api + '/favorite_products', putMethod)
                             .then(response => response.json())
-                            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+                            .then(data => window.location.reload())
                             .catch(err => console.log(err));
                     }
                 })
@@ -65,10 +65,6 @@ class FavoritesPage extends React.Component {
                 
             }
         })
-
-        setTimeout( function() {
-            window.location.reload();
-        }, 500)
     }
 
     fetchProducts() {

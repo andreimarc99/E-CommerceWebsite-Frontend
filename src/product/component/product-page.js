@@ -382,7 +382,7 @@ class ProductPage extends React.Component {
             />
             <h5><b>Reviews</b></h5>
             {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {rating}</p>}
-            {(reviewedAlready ? <div /> : <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button>)}
+            {(!reviewedAlready && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button> : <div /> )}
             <Modal isOpen={this.state.selected_create_review} toggle={this.toggleCreateReview}
                  className={this.props.className} size="lg">
                 <ModalHeader toggle={this.toggleCreateReview}><p style={{color:"red"}}> Post a review </p></ModalHeader>

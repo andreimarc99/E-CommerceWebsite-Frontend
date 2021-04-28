@@ -1,4 +1,3 @@
-
 import React from 'react'
 import * as API_PRODUCT from "../product/api/product-api"
 import * as CATEGORY_API from "../product/api/category-api"
@@ -104,11 +103,11 @@ class Home extends React.Component {
 
     render() {
         const {products} = this.state;
+
         const {categories} = this.state;
         products.sort(compare);
 
         if (products !== "undefined" && products.length >0) {
-
           var imageElems = [];
           for (let i = 0; i < products.length; ++i) {
               var buf1 = products[i].image.data;

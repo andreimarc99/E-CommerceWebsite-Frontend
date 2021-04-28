@@ -21,6 +21,7 @@ import OrderPage from './user/component/order-page';
 import ThankYou from "./thank-you-page"
 import ComplaintCustomerPage from "./complaint/component/complaint-customer-page"
 import { Button } from 'react-bootstrap';
+import OrderHistoryPage from './user/component/order-history-page';
 
 function App() {
   return (
@@ -85,6 +86,7 @@ function App() {
 
                     <Route path="/order/:username/:date" render={(props) => <OrderPage {...props} key={Date.now()}/>}/>
 
+                    <Route path="/order_history/:username" render={(props) => <OrderHistoryPage {...props} key={Date.now()}/>}/>
                         <Route render={() =><ErrorPage />} />
                     </Switch>
             </Router>
