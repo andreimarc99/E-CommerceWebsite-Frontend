@@ -22,6 +22,9 @@ import ThankYou from "./thank-you-page"
 import ComplaintCustomerPage from "./complaint/component/complaint-customer-page"
 import { Button } from 'react-bootstrap';
 import OrderHistoryPage from './user/component/order-history-page';
+import OrdersAdminPage from './admin/components/orders-admin-page';
+import StatisticsPage from './admin/components/statistics-page';
+import ComplaintsAdminPage from './admin/components/complaints-admin-page';
 
 function App() {
   return (
@@ -72,6 +75,24 @@ function App() {
                             exact 
                             path='/complaints'
                             render={() => <ComplaintCustomerPage /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/orders_admin_page'
+                            render={() => <OrdersAdminPage /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/stats_admin_page'
+                            render={() => <StatisticsPage /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/complaints_admin_page'
+                            render={() => <ComplaintsAdminPage /> }
                         />
 
                     <Route path="/user_page/:username" render={(props) => <UserPage {...props} key={Date.now()}/>}/>

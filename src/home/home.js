@@ -12,6 +12,7 @@ import logo from "../img/logo.png"
 import {Link} from "react-router-dom";
 
 import {HOST} from "../commons/hosts"
+import axios from 'axios';
 
 class Home extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class Home extends React.Component {
     }
 
     fetchCategories() {
-      return CATEGORY_API.getCategories((result, status, err) => {
+      /*return CATEGORY_API.getCategories((result, status, err) => {
         if (result !== null && (status === 200 || status === 201)) {
             this.setState({
               categories: result
@@ -41,12 +42,15 @@ class Home extends React.Component {
               error: err
             }));
         }
-    })
+      })*/
+      return axios.get(HOST.backend_api + '/categories')
+        .then (response => {
+          this.setState({categories: response.data})
+        })   
     }
 
     fetchProducts() {
-        return API_PRODUCT.getProductsWithImages((result, status, err) => {
-
+        /*return API_PRODUCT.getProductsWithImages((result, status, err) => {
             if (result !== null && status === 200) {
                 this.setState({
                     products: result,
@@ -58,8 +62,11 @@ class Home extends React.Component {
                     error: err
                 }));
             }
-        });
-        
+        });     */
+        return axios.get(HOST.backend_api + '/products/get')
+        .then (response => {
+          this.setState({products: response.data})
+        })   
     }
 
     handleAddToCart(product) {

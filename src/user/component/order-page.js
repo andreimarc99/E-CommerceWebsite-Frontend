@@ -310,7 +310,7 @@ class OrderPage extends React.Component {
                 {
                     (customer !== undefined) ? <h2>{customer.user.firstName} {customer.user.lastName}'s order</h2> : <div />
                 }
-                 <hr
+                <hr
                 style={{
                     color: 'rgb(255, 81, 81)',
                     backgroundColor: 'rgb(255, 81, 81)',

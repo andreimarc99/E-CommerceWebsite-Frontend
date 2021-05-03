@@ -121,8 +121,25 @@ class NavbarPage extends React.Component {
               </NavItem> : <div />) : <div />)
               }
 
+              {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
+              <NavItem>
+                <NavLink href="/orders_admin_page" style={{color:"white"}}>Orders</NavLink>
+              </NavItem> : <div />) : <div />)
+              }
+
+            {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
+              <NavItem>
+                <NavLink href="/stats_admin_page" style={{color:"white"}}>Statistics</NavLink>
+              </NavItem> : <div />) : <div />)
+              }
+
+              {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
+              <NavItem>
+                <NavLink href="/complaints_admin_page" style={{color:"white"}}>Complaints</NavLink>
+              </NavItem> : <div />) : <div />)
+              }
               
-            <UncontrolledDropdown nav inNavbar>
+              <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle style={{color:'white'}} nav caret>
                   Products
                 </DropdownToggle>
@@ -136,13 +153,14 @@ class NavbarPage extends React.Component {
                   : <div />)}
                 </DropdownMenu>
               </UncontrolledDropdown>
+                  
             </Nav>
             <Form inline>
-            <div style={{width:'250px'}}>
+            <div style={{width:'200px'}}>
               <Select placeholder="Search products..." options={productOptions} value={this.state.product} onChange={this.handleProductPick}/>
             </div>
             <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/product_page/${productId}`, state: { product: product.value } }}>
-            <Button disabled={product.label === "Search products..."} style={{marginLeft:'10px'}} variant="outline-light"> Go to product's page </Button>
+            <Button disabled={product.label === "Search products..."} style={{marginLeft:'10px'}} variant="outline-light"> GO </Button>
             </Link>
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 

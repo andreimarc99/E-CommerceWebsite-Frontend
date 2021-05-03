@@ -2,6 +2,7 @@ import React from 'react';
 import * as API_USERS from "../user/user-api"
 import {Button} from "react-bootstrap"
 import Home from '../home/home';
+import ProductStockPage from '../admin/components/product-stock-page';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -33,8 +34,8 @@ class LoginPage extends React.Component {
                 break;
             case 'ADMIN':
                 path_comp = {
-                    path: '/',
-                    comp: Home
+                    path: '/product_stock_page',
+                    comp: ProductStockPage
                 }
                 break;
             case 'DELIVERY_GUY':
