@@ -24,13 +24,23 @@ class OrderPage extends React.Component {
             voucher: {},
             cartPrice: 0,
             address: {},
-            addressList: []
+            addressList: [],
+            usedVouchers: []
         }
         this.fetchProducts = this.fetchProducts.bind(this);
         this.fetchAddresses = this.fetchAddresses.bind(this);
+        this.fetchUsedVouchers = this.fetchUsedVouchers.bind(this);
         this.fetchVouchers = this.fetchVouchers.bind(this);
         this.handleAddVoucher = this.handleAddVoucher.bind(this);
         this.handlePlaceOrder = this.handlePlaceOrder.bind(this);
+    }
+
+    fetchUsedVouchers() {
+        const {username} = this.state;
+        axios.get(HOST.backend_api + "/used_vouchers/" + username)
+        .then(response => {
+            this.setState({usedVouchers: response.data});
+        })
     }
 
     fetchProducts() {
@@ -88,26 +98,53 @@ class OrderPage extends React.Component {
 
     handleAddVoucher() {
         //console.log(document.getElementById('voucherInput').value)
-        const {voucherList, cart} = this.state;
+        const {usedVouchers} = this.state;
+        var uniqueAndUsed = false;
         const code = document.getElementById('voucherInput').value;
-        var found = false;
-        if (cart !== undefined) {
-            var price = cart.fullPrice;
-            if (voucherList.length > 0) {
-                for (let i = 0; i < voucherList.length; ++i) {
-                    if (code === voucherList[i].code) {
-                        price = price - (voucherList[i].discount / 100) * price;
-                        this.setState({cartPrice: price, voucher: voucherList[i]});
-                        var s = document.getElementById("orderPrice");
-                        s.value = price;
-                        found = true;
+        if (usedVouchers.length > 0) {
+            for (let i = 0; i < usedVouchers.length; ++i) {
+                if (usedVouchers[i].code === code) {
+                    if (usedVouchers[i].oneTimeOnly === true) {
+                        uniqueAndUsed = true;
                         break;
                     }
                 }
             }
         }
-        if (!found) {
-            alert("Voucher with code \"" + code + "\" not found. Try again")
+        if (uniqueAndUsed === false) {
+            const {voucherList, cart} = this.state;
+            var found = false;
+            if (cart !== undefined) {
+                var price = cart.fullPrice;
+                if (voucherList.length > 0) {
+                    for (let i = 0; i < voucherList.length; ++i) {
+                        if (code === voucherList[i].code) {
+                            const start = voucherList[i].startDate;
+                            const end = voucherList[i].endDate;
+
+                            const startDate = new Date(start.substring(0,10));
+                            const endDate = new Date(end.substring(0,10));
+                            const today = new Date();
+
+                            if (startDate < today && endDate > today) {
+                                price = price - (voucherList[i].discount / 100) * price;
+                                this.setState({cartPrice: price, voucher: voucherList[i]});
+                                var s = document.getElementById("orderPrice");
+                                s.value = price;
+                                found = true;
+                                break;
+                            } else {
+                                alert("Can't apply voucher with code \"" + code + "\". It's either unusable yet, or expired.")
+                            }
+                        }
+                    }
+                }
+            }
+            if (!found) {
+                alert("Voucher with code \"" + code + "\" not found. Try again")
+            }
+        } else {
+            alert("You've already used voucher with code \"" + code + "\". Please note this is a one-time-only voucher.")
         }
     }
 
@@ -116,47 +153,136 @@ class OrderPage extends React.Component {
         this.setState({address})
     }
 
+    isCartValid(cart) {
+        var productsWithNumber = [];
+        for (let i = 0; i < cart.products.length; ++i) {
+            if (productsWithNumber[cart.products[i].productId] !== undefined) {
+                productsWithNumber[cart.products[i].productId] += 1;
+            } else {
+                productsWithNumber[cart.products[i].productId] = 1;
+            }
+        }
+
+        for (let i = 0; i < cart.products.length; ++i) {
+            if (productsWithNumber[cart.products[i].productId] !== undefined) {
+                if (productsWithNumber[cart.products[i].productId] > cart.products[i].stock) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     handlePlaceOrder() {
         const {voucher, voucherList, address, cartPrice} = this.state;
         var cart = this.state.cart;
-        console.log(cart);
-        var noVoucher = {};
-        if (JSON.stringify(voucher) === JSON.stringify({})) {
-            var exists = false;
-            for (let i = 0; i < voucherList.length; ++i) {
-                if (voucherList[i].code === "NONE") {
-                    noVoucher = voucherList[i];
-                    exists = true; break;
-                }
-            }
-
-            const postMethod = {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        'products': cart.products,
-                        'customer': cart.customer,
-                        'finalPrice': cartPrice,
-                        'address': address.value,
-                        'delivered': false,
-                        'voucher': noVoucher
+        if (this.isCartValid(cart) === true) {
+            console.log(cart);
+            var noVoucher = {};
+            if (JSON.stringify(voucher) === JSON.stringify({})) {
+                var exists = false;
+                for (let i = 0; i < voucherList.length; ++i) {
+                    if (voucherList[i].code === "NONE") {
+                        noVoucher = voucherList[i];
+                        exists = true; break;
                     }
-                )
-            }
+                }
 
-            fetch(HOST.backend_api + '/orders', postMethod)
-                .then(response => {})
-                .then(data => {
+                const postMethod = {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            'products': cart.products,
+                            'customer': cart.customer,
+                            'finalPrice': cartPrice,
+                            'address': address.value,
+                            'delivered': false,
+                            'voucher': noVoucher
+                        }
+                    )
+                }
+
+                fetch(HOST.backend_api + '/orders', postMethod)
+                    .then(response => {})
+                    .then(data => {
+                        
+                        cart.products.map((product) => {
+                
+                            product.stock = product.stock - 1;
+                            product.numberSold = product.numberSold + 1;
+                            const putProductMethod = {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify(
+                                    {
+                                        'productId': product.productId,
+                                        'specs': product.specs,
+                                        'name': product.name,
+                                        'price': product.price,
+                                        'description': product.description,
+                                        'stock': product.stock,
+                                        'numberSold': product.numberSold,
+                                        'image': product.image
+                                    }
+                                )
+                            }
                     
-                    cart.products.map((product) => {
-            
-                        product.stock = product.stock - 1;
-                        product.numberSold = product.numberSold + 1;
-                        const putProductMethod = {
+                            fetch(HOST.backend_api + '/products/update', putProductMethod)
+                                .then(response => {})
+                                .then(data => {
+                                
+                                    const postUsedVoucherMethod = {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-type': 'application/json',
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify(
+                                            {
+                                                'voucher': noVoucher,
+                                                'customer': cart.customer
+                                            }
+                                        )
+                                    }
+
+                                    fetch(HOST.backend_api + "/used_vouchers", postUsedVoucherMethod)
+                                    .then(response => {window.location.href = "/thank_you"})
+                                })
+                                .catch(err => console.log(err));
+                        })
+                    })
+                    .catch(err => console.log(err));
+            } else {
+                const postMethod = {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            'products': cart.products,
+                            'customer': cart.customer,
+                            'voucher': voucher,
+                            'cart': cart,
+                            'finalPrice': cartPrice,
+                            'address': address.value,
+                            'delivered': false
+                        }
+                    )
+                }
+
+                fetch(HOST.backend_api + '/orders', postMethod)
+                    .then(response => {})
+                    .then(data => {
+                        const putMethod = {
                             method: 'PUT',
                             headers: {
                                 'Content-type': 'application/json',
@@ -164,100 +290,71 @@ class OrderPage extends React.Component {
                             },
                             body: JSON.stringify(
                                 {
-                                    'productId': product.productId,
-                                    'specs': product.specs,
-                                    'name': product.name,
-                                    'price': product.price,
-                                    'description': product.description,
-                                    'stock': product.stock,
-                                    'numberSold': product.numberSold,
-                                    'image': product.image
+                                    'cartId': cart.cartId,
+                                    'customer': cart.customer,
+                                    'products': [],
+                                    'fullPrice': 0
                                 }
                             )
                         }
                 
-                        fetch(HOST.backend_api + '/products/update', putProductMethod)
+                        fetch(HOST.backend_api + '/carts', putMethod)
                             .then(response => {})
-                            .then(data => window.location.href = '/thank_you')
+                            .then(data => {
+                                
+                                cart.products.map((product) => {
+                                    product.stock = product.stock - 1;
+                                    product.numberSold = product.numberSold + 1;
+                                    const putProductMethod = {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-type': 'application/json',
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify(
+                                            {
+                                                'productId': product.productId,
+                                                'specs': product.specs,
+                                                'name': product.name,
+                                                'price': product.price,
+                                                'description': product.description,
+                                                'stock': product.stock,
+                                                'numberSold': product.numberSold,
+                                                'image':product.image
+                                            }
+                                        )
+                                    }
+                            
+                                    fetch(HOST.backend_api + '/products/update', putProductMethod)
+                                        .then(response => {})
+                                        .then(data => {
+                                
+                                            const postUsedVoucherMethod = {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-type': 'application/json',
+                                                    'Accept': 'application/json'
+                                                },
+                                                body: JSON.stringify(
+                                                    {
+                                                        'voucher': voucher,
+                                                        'customer': cart.customer
+                                                    }
+                                                )
+                                            }
+            
+                                            fetch(HOST.backend_api + "/used_vouchers", postUsedVoucherMethod)
+                                            .then(response => {window.location.href = "/thank_you"})
+                                        })
+                                        .catch(err => console.log(err));
+                                })
+                            })
                             .catch(err => console.log(err));
                     })
-                })
-                .catch(err => console.log(err));
-        } else {
-            const postMethod = {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        'products': cart.products,
-                        'customer': cart.customer,
-                        'voucher': voucher,
-                        'cart': cart,
-                        'finalPrice': cartPrice,
-                        'address': address.value,
-                        'delivered': false
-                    }
-                )
+                    .catch(err => console.log(err));
             }
-
-            fetch(HOST.backend_api + '/orders', postMethod)
-                .then(response => {})
-                .then(data => {
-                    const putMethod = {
-                        method: 'PUT',
-                        headers: {
-                            'Content-type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(
-                            {
-                                'cartId': cart.cartId,
-                                'customer': cart.customer,
-                                'products': [],
-                                'fullPrice': 0
-                            }
-                        )
-                    }
-            
-                    fetch(HOST.backend_api + '/carts', putMethod)
-                        .then(response => {})
-                        .then(data => {
-                             
-                            cart.products.map((product) => {
-                                product.stock = product.stock - 1;
-                                product.numberSold = product.numberSold + 1;
-                                const putProductMethod = {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-type': 'application/json',
-                                        'Accept': 'application/json'
-                                    },
-                                    body: JSON.stringify(
-                                        {
-                                            'productId': product.productId,
-                                            'specs': product.specs,
-                                            'name': product.name,
-                                            'price': product.price,
-                                            'description': product.description,
-                                            'stock': product.stock,
-                                            'numberSold': product.numberSold,
-                                            'image':product.image
-                                        }
-                                    )
-                                }
-                        
-                                fetch(HOST.backend_api + '/products/update', putProductMethod)
-                                    .then(response => {})
-                                    .then(data => window.location.href = '/thank_you')
-                                    .catch(err => console.log(err));
-                            })
-                        })
-                        .catch(err => console.log(err));
-                })
-                .catch(err => console.log(err));
+        } else {
+            alert("Stock insufficient for one of the products.");
         }
     }
 
@@ -265,6 +362,7 @@ class OrderPage extends React.Component {
         this.fetchProducts();
         this.fetchVouchers();
         this.fetchAddresses();
+        this.fetchUsedVouchers();
     }
 
     render() {

@@ -191,37 +191,42 @@ class ProductPage extends React.Component {
 
     handleAddToCart() {
         const {product} = this.state;
+
         console.log(product);
-        fetch(HOST.backend_api + "/carts/" + JSON.parse(localStorage.getItem("loggedUser")).username)
-        .then(response => response.json())
-        .then(data => {
-            data.products.push(product);
+        if (product.stock > 0) {
+            fetch(HOST.backend_api + "/carts/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+            .then(response => response.json())
+            .then(data => {
+                data.products.push(product);
 
-            var price = 0;
-            data.products.map((p) => {
-                price += p.price
+                var price = 0;
+                data.products.map((p) => {
+                    price += p.price
+                })
+                const putMethod = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            'cartId': data.cartId,
+                            'customer': data.customer,
+                            'products': data.products,
+                            'fullPrice': price
+                        }
+                    )
+                }
+
+                fetch(HOST.backend_api + '/carts', putMethod)
+                    .then(response => {alert(product.name + " added to cart.")})
+                    .catch(err => console.log(err));
             })
-            const putMethod = {
-                method: 'PUT',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        'cartId': data.cartId,
-                        'customer': data.customer,
-                        'products': data.products,
-                        'fullPrice': price
-                    }
-                )
-            }
-
-            fetch(HOST.backend_api + '/carts', putMethod)
-                .then(response => {alert(product.name + " added to cart.")})
-                .catch(err => console.log(err));
-        })
-        .catch(error => console.log(error));
+            .catch(error => console.log(error));
+        } else {
+            alert("Stock insufficient");
+        }
     }
 
     componentDidMount() {
@@ -470,11 +475,14 @@ class ProductPage extends React.Component {
                         }} />
                         <Card.Text>
                             <h4>${prod.price}</h4>
-                            
+                            <hr
+                            style={{
+                                color: 'rgb(255, 81, 81)',
+                                backgroundColor: 'rgb(255, 81, 81)',
+                                height: 1
+                            }} />
+                            <textarea readOnly='true' style={{width:'101%', border:'none'}} value={prod.description} className="txtarea text-muted"></textarea>
                         </Card.Text>
-                        {(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
-                    <Button style={{marginRight:'5px', width:'100px', height:'60px'}} className="btn btn-danger"><img className="logo" alt="logo" src={logo} style={{width:'50px', height:'50px'}}></img></Button>
-                    :<div/>)}
                         </Card.Body>
                     </Card></div> );
             }) }</div></div>: <div style={{textAlign:'center'}} className="text-muted">No related products</div> }

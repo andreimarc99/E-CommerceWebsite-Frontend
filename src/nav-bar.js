@@ -138,6 +138,12 @@ class NavbarPage extends React.Component {
                 <NavLink href="/complaints_admin_page" style={{color:"white"}}>Complaints</NavLink>
               </NavItem> : <div />) : <div />)
               }
+
+              {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
+              <NavItem>
+                <NavLink href="/vouchers_admin_page" style={{color:"white"}}>Vouchers</NavLink>
+              </NavItem> : <div />) : <div />)
+              }
               
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle style={{color:'white'}} nav caret>

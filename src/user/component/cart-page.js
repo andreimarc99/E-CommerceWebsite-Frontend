@@ -46,31 +46,42 @@ class CartPage extends React.Component {
 
     handlePlus(product) {
         const {cart} = this.state;
-        cart.products.push(product);
-
-        var price = 0;
-        cart.products.map((p) => {
-            price += p.price
-        })
-        const putMethod = {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    'cartId': cart.cartId,
-                    'customer': cart.customer,
-                    'products': cart.products,
-                    'fullPrice': price
-                }
-            )
+        var counter = 0;
+        for (let i = 0; i < cart.products.length; ++i) {
+            if (cart.products[i].productId === product.productId) {
+                counter += 1;
+            }
         }
+        counter += 1;
+        if (product.stock - counter >= 0) {
+            cart.products.push(product);
 
-        fetch(HOST.backend_api + '/carts', putMethod)
-            .then(response => {response.json(); window.location.reload()})
-            .catch(err => console.log(err));
+            var price = 0;
+            cart.products.map((p) => {
+                price += p.price
+            })
+            const putMethod = {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        'cartId': cart.cartId,
+                        'customer': cart.customer,
+                        'products': cart.products,
+                        'fullPrice': price
+                    }
+                )
+            }
+
+            fetch(HOST.backend_api + '/carts', putMethod)
+                .then(response => {response.json(); window.location.reload()})
+                .catch(err => console.log(err));
+        } else {
+            alert("Stock insufficient. Can't add another " + product.name);
+        }
     }
 
     handleMinus(product) {

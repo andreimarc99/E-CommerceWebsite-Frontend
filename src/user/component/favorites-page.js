@@ -88,36 +88,40 @@ class FavoritesPage extends React.Component {
 
     handleAddToCart(product) {
         console.log(product);
-        fetch(HOST.backend_api + "/carts/" + JSON.parse(localStorage.getItem("loggedUser")).username)
-        .then(response => response.json())
-        .then(data => {
-            data.products.push(product);
+        if (product.stock > 0) {
+            fetch(HOST.backend_api + "/carts/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+            .then(response => response.json())
+            .then(data => {
+                data.products.push(product);
 
-            var price = 0;
-            data.products.map((p) => {
-                price += p.price
+                var price = 0;
+                data.products.map((p) => {
+                    price += p.price
+                })
+                const putMethod = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            'cartId': data.cartId,
+                            'customer': data.customer,
+                            'products': data.products,
+                            'fullPrice': price
+                        }
+                    )
+                }
+
+                fetch(HOST.backend_api + '/carts', putMethod)
+                    .then(response => {alert(product.name + " added to cart.")})
+                    .catch(err => console.log(err));
             })
-            const putMethod = {
-                method: 'PUT',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        'cartId': data.cartId,
-                        'customer': data.customer,
-                        'products': data.products,
-                        'fullPrice': price
-                    }
-                )
-            }
-
-            fetch(HOST.backend_api + '/carts', putMethod)
-                .then(response => {alert(product.name + " added to cart.")})
-                .catch(err => console.log(err));
-        })
-        .catch(error => console.log(error));
+            .catch(error => console.log(error));
+        } else {
+            alert("Stock insufficient for " + product.name);
+        }
     }
 
     componentDidMount() {
