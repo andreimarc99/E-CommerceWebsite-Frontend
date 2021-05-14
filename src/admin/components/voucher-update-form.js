@@ -1,29 +1,29 @@
 import React from 'react';
-import validate from "../admin/components/validator";
+import validate from "./validator";
 import Button from "react-bootstrap/Button";
 import {Col, Row} from "reactstrap";
 import { FormGroup, Input, Label} from 'reactstrap';
-import {HOST} from "../commons/hosts"
-
+import {HOST} from "../../commons/hosts"
+import Select from 'react-select';
 
 class VoucherUpdateForm extends React.Component {
 
     constructor(props) {
         super(props);
         this.reloadHandler = this.props.reloadHandler;
-        this.voucher = this.props.vocuher;
         this.state = {
 
             errorStatus: 0,
             error: null,
 
             formIsValid: true,
+            oneTimeOnly: 'NO',
 
             formControls: {
                 code: {
                     value: '',
                     placeholder: 'Voucher\'s code...',
-                    valid: false,
+                    valid: true,
                     touched: true,
                     validationRules: {
                         minLength: 3,
@@ -33,7 +33,7 @@ class VoucherUpdateForm extends React.Component {
                 discount: {
                     value: '',
                     placeholder: 'Voucher\'s discount...',
-                    valid: false,
+                    valid: true,
                     touched: true,
                     validationRules: {
                         isRequired: true
@@ -42,7 +42,7 @@ class VoucherUpdateForm extends React.Component {
                 startDate: {
                     value: '',
                     placeholder: 'Voucher\'s start date...',
-                    valid: false,
+                    valid: true,
                     touched: true,
                     validationRules: {
                         isRequired: true
@@ -51,7 +51,7 @@ class VoucherUpdateForm extends React.Component {
                 endDate: {
                     value: '',
                     placeholder: 'Voucher\'s end date...',
-                    valid: false,
+                    valid: true,
                     touched: true,
                     validationRules: {
                         isRequired: true
@@ -60,6 +60,7 @@ class VoucherUpdateForm extends React.Component {
             }
         };
 
+        this.voucher = this.props.voucher;
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -89,7 +90,7 @@ class VoucherUpdateForm extends React.Component {
         });
     };
 
-    updateReview(review) {
+    updateVoucher(voucher) {
         const putMethod = {
             method: 'PUT',
             headers: {
@@ -103,13 +104,13 @@ class VoucherUpdateForm extends React.Component {
                     'discount': voucher.discount,
                     'startDate': voucher.startDate,
                     'endDate': voucher.endDate,
-                    'oneTimeOnly': isOneTimeOnly
+                    'oneTimeOnly': voucher.oneTimeOnly
                 }
             )
         }
 
         fetch(HOST.backend_api + '/vouchers', putMethod)
-            .then(response => response.json())
+            .then(response => console.log(response))
             .catch(err => console.log(err));
         this.reloadHandler();
     }
@@ -117,62 +118,134 @@ class VoucherUpdateForm extends React.Component {
     handleSubmit() {
         let voucherId = 0, code = null, discount = null, startDate = null, endDate = null;
         voucherId = this.voucher.voucherId;
-        let user = this.review.customer;
-        let product = this.review.product;
-
-        if (this.state.formControls.message.value === undefined || this.state.formControls.message.value === '') {
-            message = this.review.message;
+        const {oneTimeOnly} = this.state;
+        let isOneTimeOnly = false;
+        if (oneTimeOnly === "NO") {
+            isOneTimeOnly = false;
         } else {
-            message = this.state.formControls.message.value;
-        }
-        if (this.state.formControls.rating.value === undefined || this.state.formControls.rating.value === '') {
-            rating = this.review.rating;
-        } else {
-            rating = this.state.formControls.rating.value;
+            isOneTimeOnly = true;
         }
 
-        let review = {
-            voucherId: voucher.voucherId,
-            code: voucher.code,
-            discount: voucher.discount,
-            startDate: voucher.startDate,
-            endDate: voucher.endDate,
+        if (this.state.formControls.code.value === undefined || this.state.formControls.code.value === '') {
+            code = this.voucher.code;
+        } else {
+            code = this.state.formControls.code.value;
+        }
+        if (this.state.formControls.discount.value === undefined || this.state.formControls.discount.value === '') {
+            discount = this.voucher.discount;
+        } else {
+            discount = this.state.formControls.discount.value;
+        }
+        if (this.state.formControls.startDate.value === undefined || this.state.formControls.startDate.value === '') {
+            startDate = this.voucher.startDate;
+        } else {
+            startDate = this.state.formControls.startDate.value;
+        }
+        if (this.state.formControls.endDate.value === undefined || this.state.formControls.endDate.value === '') {
+            endDate = this.voucher.endDate;
+        } else {
+            endDate = this.state.formControls.endDate.value;
+        }
+
+        let v = {
+            voucherId: voucherId,
+            code: code,
+            discount: discount,
+            startDate: startDate,
+            endDate: endDate,
             oneTimeOnly: isOneTimeOnly
         };
 
-        this.updateReview(review);
+        console.log(v);
+
+        this.updateVoucher(v);
     }
 
     render() {
+        const {oneTimeOnly} = this.state;
+        const optionsUseOnly = [];
+        optionsUseOnly.push({value: 'YES', label: 'Yes'});
+        optionsUseOnly.push({value: 'NO', label: 'No'});
+
+        const voucher = this.voucher;
+        console.log(voucher);
+        var defaultUse;
+        if (voucher.oneTimeOnly === false) {
+            defaultUse = optionsUseOnly[1];
+        } else {
+            defaultUse = optionsUseOnly[0];
+        }
 
         return (
             <div>
-                <FormGroup id='message'>
-                    <Label for='messageField'> Message </Label>
-                    <Input name='message' id='messageField' placeholder={this.state.formControls.message.placeholder}
+                <FormGroup id='code'>
+                    <Label for='codeField'> Code </Label>
+                    <Input name='code' id='codeField' placeholder={this.state.formControls.code.placeholder}
                            onChange={this.handleChange}
-                           defaultValue={this.review.message}
-                           touched={this.state.formControls.message.touched? 1 : 0}
-                           valid={this.state.formControls.message.valid}
+                           defaultValue={this.voucher.code}
+                           touched={this.state.formControls.code.touched? 1 : 0}
+                           valid={this.state.formControls.code.valid}
                            required
                     />
-                    {this.state.formControls.message.touched && !this.state.formControls.message.valid &&
-                    <div className={"error-message"}> * Message not valid </div>}
+                    {this.state.formControls.code.touched && !this.state.formControls.code.valid &&
+                    <div className={"error-message"}> * Code not valid </div>}
                 </FormGroup>
 
-                <FormGroup id='rating'>
-                    <Label for='ratingField'> Rating </Label>
-                    <Input name='rating' id='ratingField' placeholder={this.state.formControls.rating.placeholder}
+                <FormGroup id='discount'>
+                    <Label for='discountField'> Discount </Label>
+                    <Input name='discount' id='discountField' placeholder={this.state.formControls.discount.placeholder}
                            onChange={this.handleChange}
                            type="number"
-                           defaultValue={this.review.rating}
-                           touched={this.state.formControls.rating.touched? 1 : 0}
-                           valid={this.state.formControls.rating.valid}
+                           defaultValue={this.voucher.discount}
+                           touched={this.state.formControls.discount.touched? 1 : 0}
+                           valid={this.state.formControls.discount.valid}
                            required
                     />
-                    {this.state.formControls.rating.touched && !this.state.formControls.rating.valid &&
-                    <div className={"error-message"}> * Rating not valid </div>}
+                    {this.state.formControls.discount.touched && !this.state.formControls.discount.valid &&
+                    <div className={"error-message"}> * Discount not valid </div>}
                 </FormGroup>
+
+                <FormGroup id='startDate'>
+                    <Label for='startDateField'> Start Date </Label>
+                    <Input name='startDate' id='startDateField' placeholder={this.state.formControls.startDate.placeholder}
+                           type="date"
+                           onChange={this.handleChange}
+                           defaultValue={this.voucher.startDate.substring(0,10)}
+                           touched={this.state.formControls.startDate.touched? 1 : 0}
+                           valid={this.state.formControls.startDate.valid}
+                           required
+                    />
+                    {this.state.formControls.startDate.touched && !this.state.formControls.startDate.valid &&
+                    <div className={"error-message"}> * Start date not valid </div>}
+                </FormGroup>
+
+                <FormGroup id='endDate'>
+                    <Label for='endDateField'> End Date </Label>
+                    <Input name='endDate' id='endDateField' placeholder={this.state.formControls.endDate.placeholder}
+                           type="date"
+                           onChange={this.handleChange}
+                           defaultValue={this.voucher.endDate.substring(0,10)}
+                           touched={this.state.formControls.endDate.touched? 1 : 0}
+                           valid={this.state.formControls.endDate.valid}
+                           required
+                    />
+                    {this.state.formControls.endDate.touched && !this.state.formControls.endDate.valid &&
+                    <div className={"error-message"}> * End date not valid </div>}
+                </FormGroup>
+
+                <div className="form-group" style={{marginLeft: "auto", marginRight:"auto"}}>
+                    <label>One Use Only?</label>
+                    <Select theme={(theme) => ({
+                                                ...theme,
+                                                colors: {
+                                                ...theme.colors,
+                                                    text: 'white',
+                                                    primary25: 'rgb(255,81,81)',
+                                                    primary: 'rgb(255,81,81)',
+                                                },})} options={optionsUseOnly} defaultValue={defaultUse} onChange={this.handleOneUseOnlySelection}/>
+                    {isEmpty(oneTimeOnly) &&
+                    <div className="help">This field is required</div>}
+                </div>
 
                 <Row>
                     <Col>
@@ -186,3 +259,14 @@ class VoucherUpdateForm extends React.Component {
 }
 
 export default VoucherUpdateForm;
+
+
+function isEmpty(item) {
+    for(const p in item) {
+        if(item.hasOwnProperty(p)) {
+            return false;
+        }
+    }
+
+    return JSON.stringify(item) === JSON.stringify({});
+}

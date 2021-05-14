@@ -27,11 +27,13 @@ class StatisticsPage extends React.Component {
             errorStatus: 0,
             error: '',
             productList: [],
-            userList: []
+            userList: [],
+            voucherList: []
         }
         this.fetchOrders = this.fetchOrders.bind(this);
         this.fetchProducts = this.fetchProducts.bind(this);
         this.fetchUsers = this.fetchUsers.bind(this);
+        this.fetchVouchers = this.fetchVouchers.bind(this);
     }
 
     fetchOrders() {
@@ -55,14 +57,22 @@ class StatisticsPage extends React.Component {
         });
     }
 
+    fetchVouchers() {
+        axios.get(HOST.backend_api + "/vouchers")
+        .then(response => {
+            this.setState({voucherList: response.data})
+        });
+    }
+
     componentDidMount() {
         this.fetchProducts();
         this.fetchOrders();
         this.fetchUsers();
+        this.fetchVouchers();
     }
 
     render() {
-        const {orderList, productList, userList} = this.state;
+        const {orderList, productList, userList, voucherList} = this.state;
         var delivered = 0;
         var undelivered = 0;
         var products = [];
@@ -72,6 +82,7 @@ class StatisticsPage extends React.Component {
         var between25and40 = 0;
         var between40and65 = 0;
         var over65 = 0;
+        var voucherUsage = [];
         
         if (orderList.length > 0) {
             for (let i = 0; i < orderList.length; ++i) {
@@ -80,8 +91,35 @@ class StatisticsPage extends React.Component {
                 } else {
                     undelivered += 1;
                 }
+                if (voucherUsage[orderList[i].voucher.voucherId] === undefined) {
+                    voucherUsage[orderList[i].voucher.voucherId] = {label: orderList[i].voucher.code, y: 1};
+                } else {
+                    voucherUsage[orderList[i].voucher.voucherId] = {label: orderList[i].voucher.code, y: voucherUsage[orderList[i].voucher.voucherId].y + 1};
+                }
             }
+            voucherUsage = voucherUsage.filter(function (el) {
+                return el != null;
+            });
+            if (voucherList.length > 0) {
+                for (let i = 0; i < voucherList.length; ++i) {
+                    let v = voucherList[i];
+                    let found = false;
+                    if (voucherUsage.length > 0) {
+                        for (let j = 0; j < voucherUsage.length; ++j) {
+                            if (voucherUsage[j].label === v.code) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        voucherUsage.push({label: v.code, y: 0});
+                    }
+                }
+            }     
         }
+
+        console.log(voucherUsage);
 
         if (productList.length > 0) {
             for (let i = 0; i < productList.length; ++i) {
@@ -170,6 +208,20 @@ class StatisticsPage extends React.Component {
              }]
         }
 
+        const vouchersChartOptions = {
+            title: {
+              text: "Vouchers statistics"
+            },
+            theme: 'light2',
+            subtitles: [{
+                text: "Statistics about the vouchers registered in the system and how many times they have been used"
+            }],
+            data: [{				
+                      type: "column",
+                      dataPoints: voucherUsage
+             }]
+        }
+
         const userAgesChartOptions = {
             title: {
               text: "Customer age group statistics"
@@ -214,7 +266,15 @@ class StatisticsPage extends React.Component {
                     backgroundColor: 'rgb(255, 81, 81)',
                     height: 10
                 }}/>
+                <CanvasJSChart options = {vouchersChartOptions} />
+                <hr
+                style={{
+                    color: 'rgb(255, 81, 81)',
+                    backgroundColor: 'rgb(255, 81, 81)',
+                    height: 10
+                }}/>
                 <CanvasJSChart options = {orderChartOptions} />
+
             </div>
         );
     }

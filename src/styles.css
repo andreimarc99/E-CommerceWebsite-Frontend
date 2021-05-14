@@ -80,7 +80,6 @@ textarea::-webkit-scrollbar {
   height: 0.15em;
 }
 
-
 textarea::-webkit-scrollbar-thumb {
 background-color: rgb(255, 81, 81);
 outline: 1px solid rgb(255, 81, 81);
@@ -88,4 +87,20 @@ outline: 1px solid rgb(255, 81, 81);
 
 .order-img {
   filter: invert(100%) drop-shadow(5px 5px 10px rgb(255, 81, 81)) ;
+}
+
+.modal-content {
+  animation-name: animatetop;
+  animation-duration: 1s;
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
 }
