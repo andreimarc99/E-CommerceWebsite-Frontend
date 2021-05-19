@@ -13,6 +13,7 @@ import axios from 'axios';
 import ComplaintResponseForm from './complaint-response-form';
 import VoucherCreationForm from './voucher-creation-form';
 import VoucherUpdateForm from "./voucher-update-form"
+import ReactSpinner from 'react-bootstrap-spinner'
 
 const columns = [
     {
@@ -42,7 +43,8 @@ class VouchersAdminPage extends React.Component {
             error: '',
             selected_create_voucher: false,
             selected_update_voucher: false,
-            selected_voucher: {}
+            selected_voucher: {},
+            done: false
         }
         this.fetchVouchers = this.fetchVouchers.bind(this);
         this.toggleAddVoucher = this.toggleAddVoucher.bind(this);
@@ -52,7 +54,7 @@ class VouchersAdminPage extends React.Component {
     fetchVouchers() {
         return axios.get(HOST.backend_api + "/vouchers")
             .then(resp => {
-                this.setState({voucherList: resp.data})
+                this.setState({voucherList: resp.data, done: true})
             });
     }
 
@@ -90,6 +92,7 @@ class VouchersAdminPage extends React.Component {
     }
 
     render() {
+        const {done} = this.state;
         var {voucherList} = this.state;
         if (voucherList.length > 0) {
             voucherList = voucherList.filter(function(item) {
@@ -107,36 +110,39 @@ class VouchersAdminPage extends React.Component {
                 }}/>
                 
                 <Button onClick={this.toggleAddVoucher} style={{marginBottom:'20px'}} variant="danger">Create new voucher</Button>
-                {(voucherList.length > 0 ? 
-                <div className="row" style={{marginLeft:'30px', marginRight:'30px'}}>
-                <table className="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th className="text-center" width='50px'> ID</th>
-                        <th className="text-center"> Code </th>
-                        <th className="text-center"> Discount </th>
-                        <th className="text-center"> Availability </th>
-                        <th className="text-center"> One Use Only </th>
-                        <th className="text-center"> Actions </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        voucherList.map(
-                            voucher => 
-                                <tr key={voucher.productId}>
-                                    <td className="text-center"> {voucher.voucherId}</td>
-                                    <td className="text-center"> {voucher.code}</td>
-                                    <td className="text-center"> {voucher.discount}%</td>
-                                    <td className="text-center"> {new Date(voucher.startDate.substring(0,10)).toDateString()} - {new Date(voucher.endDate.substring(0,10)).toDateString()}</td>
-                                    <td className="text-center"> {(voucher.oneTimeOnly === true ? "Yes" : "No")}</td>
-                                    <td className="text-center"> <Button onClick={() => this.toggleUpdateVoucher(voucher)} style={{margin:'5px'}} variant='outline-danger' size='sm'>Update</Button></td>
-                                </tr>)
-                    }
-                    </tbody>
-                </table>
-            </div>
-                : <div />)
+
+                {(done === true ?  
+                    (voucherList.length > 0 ? 
+                    <div className="row" style={{marginLeft:'30px', marginRight:'30px'}}>
+                        <table className="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th className="text-center" width='50px'> ID</th>
+                                <th className="text-center"> Code </th>
+                                <th className="text-center"> Discount </th>
+                                <th className="text-center"> Availability </th>
+                                <th className="text-center"> One Use Only </th>
+                                <th className="text-center"> Actions </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                voucherList.map(
+                                    voucher => 
+                                        <tr key={voucher.productId}>
+                                            <td className="text-center"> {voucher.voucherId}</td>
+                                            <td className="text-center"> {voucher.code}</td>
+                                            <td className="text-center"> {voucher.discount}%</td>
+                                            <td className="text-center"> {new Date(voucher.startDate.substring(0,10)).toDateString()} - {new Date(voucher.endDate.substring(0,10)).toDateString()}</td>
+                                            <td className="text-center"> {(voucher.oneTimeOnly === true ? "Yes" : "No")}</td>
+                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateVoucher(voucher)} style={{margin:'5px'}} variant='outline-danger' size='sm'>Update</Button></td>
+                                        </tr>)
+                            }
+                            </tbody>
+                        </table>
+                    </div> : <div >No vouchers</div>)
+                
+                : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)
                 }
                 <Modal isOpen={this.state.selected_create_voucher} toggle={this.toggleAddVoucher}
                     className={this.props.className} size="lg">

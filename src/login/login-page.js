@@ -40,7 +40,7 @@ class LoginPage extends React.Component {
                 break;
             case 'DELIVERY_GUY':
                 path_comp = {
-                    path: '/',
+                    path: '/orders_delivery_page',
                     comp: Home
                 }
                 break;

@@ -10,6 +10,8 @@ import heart from "../../img/heart.png"
 
 import {Card, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import ReactSpinner from 'react-bootstrap-spinner'
+
 
 class CategoryPage extends React.Component {
 
@@ -21,7 +23,9 @@ class CategoryPage extends React.Component {
             productList: [],
             errorStatus: 0,
             error: '',
-            favoriteList: []
+            favoriteList: [],
+            favDone: false,
+            prodDone: false
         }
         this.fetchCategoryAndProducts = this.fetchCategoryAndProducts.bind(this);
 
@@ -71,12 +75,14 @@ class CategoryPage extends React.Component {
             FAV_PRODUCTS_API.getFavoriteProductsByUsername(username, (result, status, err) => {
                     if (result !== null && status === 200) {
                         this.setState({
-                            favoriteList: result.products
+                            favoriteList: result.products,
+                            favDone: true
                         })
                     } else {
                         this.setState(({
                             errorStatus: status,
-                            error: err
+                            error: err,
+                            favDone: true
                         }));
                     }
                 })
@@ -112,7 +118,7 @@ class CategoryPage extends React.Component {
                 
                         fetch(HOST.backend_api + '/favorite_products', putMethod)
                             .then(response => response.json())
-                            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+                            .then(data => window.location.reload())
                             .catch(err => console.log(err));
                     }
                 })
@@ -157,7 +163,7 @@ class CategoryPage extends React.Component {
                 
                         fetch(HOST.backend_api + '/favorite_products', putMethod)
                             .then(response => response.json())
-                            .then(data => data ? JSON.parse(JSON.stringify(data)) : {})
+                            .then(data => window.location.reload())
                             .catch(err => console.log(err));
                     }
                 })
@@ -165,9 +171,6 @@ class CategoryPage extends React.Component {
                 
             }
         })
-        setTimeout( function() {
-            window.location.reload();
-        }, 500)
     }
 
     fetchCategoryAndProducts() {
@@ -183,21 +186,24 @@ class CategoryPage extends React.Component {
                 PRODUCT_API.getProductsByCategoryId(category.categoryId, (result, status, err) => {
                     if (result !== null && status === 200) {
                         this.setState({
-                            productList: result
+                            productList: result,
+                            prodDone: true
                         });
 
                         
                     } else {
                         this.setState(({
                             errorStatus: status,
-                            error: err
+                            error: err,
+                            prodDone: true
                         }));
                     }
                 })
             } else {
                 this.setState(({
                     errorStatus: status,
-                    error: err
+                    error: err,
+                    prodDone: true
                 }));
             }
         })
@@ -213,9 +219,15 @@ class CategoryPage extends React.Component {
        
         const {categoryName} = this.state;
         const {productList} = this.state;
-        const {favoriteList} = this.state;
+        const {favoriteList, prodDone, favDone} = this.state;
         var imageElems = [];
         var isFavorite = [];
+        var done = false;
+        if (prodDone === true) {
+            done = true;
+        }
+        console.log(productList);
+        console.log(favoriteList);
 
         if (productList !== "undefined" && productList.length > 0) {
             for (let i = 0; i < productList.length; ++i) {
@@ -241,71 +253,77 @@ class CategoryPage extends React.Component {
 
         return (
             <div>   
-                <br />
-                <h1>{categoryName}</h1>       
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
-                <div className="container fluid">
-            {(productList !== "undefined" && imageElems.length > 0) ? productList.map((prod) => { 
-                return(
-                    <div className="row">
-                <div className="col">
 
-                <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
-                    
-                <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
-                <Card.Header className="red-card-header"><h4>{prod.name}</h4></Card.Header></Link>
-                <Card.Body>
-                    <div className="container fluid">
-                    <div className="row">
-                        <div className="col">
+                {(done === true ? (productList.length > 0 ? 
+                    <div style={{marginTop:'20px'}} className="container fluid">
+                        
+                    <h1>{categoryName}</h1>       
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                        {
+                        productList.map((prod) => { 
+                            return(
+                                <div className="row">
+                            <div className="col">
 
-                            <img
-                            style={{width:'60%'}}
-                            src={imageElems[prod.productId]}
-                            alt="First slide"
-                            />
-                        </div>
-                            <hr
-                                style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
-                                    height: 3
-                                }} />
-                        <div className="col">
-                            <Card.Text>
-                                <p className="text-muted">{prod.description}</p>
-                                <hr
-                                style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
-                                    height: 3
-                                }}/>
-                                <h4>${prod.price}</h4>
+                            <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
                                 
-                            </Card.Text>
-                            {(JSON.parse(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
-                            <Button onClick={() => this.handleAddToCart(prod)} className="btn btn-danger">Add to cart</Button> : <div />)}
-                            {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined
-                            && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ?
-                            ( (isFavorite[prod.productId] === 1) ?
-                            <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img alt="fav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
-                            :
-                            <Button onClick={() => this.handleAddToFavorites(prod)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-danger"><img className="logo" alt="unfav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
-                            )
-                            : <div />)}
-                        </div>
+                            <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
+                            <Card.Header className="red-card-header"><h4>{prod.name}</h4></Card.Header></Link>
+                            <Card.Body>
+                                <div className="container fluid">
+                                <div className="row">
+                                    <div className="col">
+
+                                        <img
+                                        style={{width:'60%'}}
+                                        src={imageElems[prod.productId]}
+                                        alt="First slide"
+                                        />
+                                    </div>
+                                        <hr
+                                            style={{
+                                                color: 'rgb(255, 81, 81)',
+                                                backgroundColor: 'rgb(255, 81, 81)',
+                                                height: 3
+                                            }} />
+                                    <div className="col">
+                                        <Card.Text>
+                                            <p className="text-muted">{prod.description}</p>
+                                            <hr
+                                            style={{
+                                                color: 'rgb(255, 81, 81)',
+                                                backgroundColor: 'rgb(255, 81, 81)',
+                                                height: 3
+                                            }}/>
+                                            <h4>${prod.price}</h4>
+                                            
+                                        </Card.Text>
+                                        {(JSON.parse(localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
+                                        <Button onClick={() => this.handleAddToCart(prod)} className="btn btn-danger">Add to cart</Button> : <div />)}
+                                        {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined
+                                        && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ?
+                                        ( (isFavorite[prod.productId] === 1) ?
+                                        <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img alt="fav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+                                        :
+                                        <Button onClick={() => this.handleAddToFavorites(prod)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-danger"><img className="logo" alt="unfav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+                                        )
+                                        : <div />)}
+                                    </div>
+                                </div>
+                            </div>
+                            </Card.Body>
+                        </Card></div></div> );
+                        })}
                     </div>
-                  </div>
-                </Card.Body>
-              </Card></div></div> );
-            }) : <div className="text-muted">No related products</div> }</div>
-            </div>
-        );
+                    : <h2>No products for "{categoryName}" category.</h2>) 
+                    : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
+
+        </div>);
     }
 
 

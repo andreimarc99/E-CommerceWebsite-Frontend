@@ -1,9 +1,10 @@
 import React from 'react';
 import {HOST} from "../../commons/hosts"
-import {Button} from "react-bootstrap" 
 import axios from 'axios';
 import CanvasJSReact from "./canvasjs.react";
+import ReactSpinner from 'react-bootstrap-spinner'
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
 
 function getAge(dateString) 
 {
@@ -28,7 +29,11 @@ class StatisticsPage extends React.Component {
             error: '',
             productList: [],
             userList: [],
-            voucherList: []
+            voucherList: [],
+            orderListDone:false,
+            productListDone:false,
+            userListDone:false,
+            voucherListDone:false
         }
         this.fetchOrders = this.fetchOrders.bind(this);
         this.fetchProducts = this.fetchProducts.bind(this);
@@ -39,28 +44,28 @@ class StatisticsPage extends React.Component {
     fetchOrders() {
         axios.get(HOST.backend_api + "/orders")
         .then(response => {
-            this.setState({orderList: response.data})
+            this.setState({orderList: response.data, orderListDone: true})
         });
     }
 
     fetchProducts() {
         axios.get(HOST.backend_api + "/products")
         .then(response => {
-            this.setState({productList: response.data})
+            this.setState({productList: response.data, productListDone: true})
         });
     }
 
     fetchUsers() {
         axios.get(HOST.backend_api + "/users")
         .then(response => {
-            this.setState({userList: response.data})
+            this.setState({userList: response.data, userListDone: true})
         });
     }
 
     fetchVouchers() {
         axios.get(HOST.backend_api + "/vouchers")
         .then(response => {
-            this.setState({voucherList: response.data})
+            this.setState({voucherList: response.data, voucherListDone: true})
         });
     }
 
@@ -73,6 +78,11 @@ class StatisticsPage extends React.Component {
 
     render() {
         const {orderList, productList, userList, voucherList} = this.state;
+        const {orderListDone, productListDone, userListDone, voucherListDone} = this.state;
+        var done = false;
+        if (orderListDone === true && productListDone === true && userListDone === true && voucherListDone === true) {
+            done = true;
+        }
         var delivered = 0;
         var undelivered = 0;
         var products = [];
@@ -243,38 +253,44 @@ class StatisticsPage extends React.Component {
 
     
         return (
-            <div style={{marginBottom:'20px', marginTop:'20px'}}>  
-               
-                <CanvasJSChart options = {productChartOptions} />
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
-                <CanvasJSChart options = {categoriesChartOptions} />
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
-                <CanvasJSChart options = {userAgesChartOptions} />
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
-                <CanvasJSChart options = {vouchersChartOptions} />
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
-                <CanvasJSChart options = {orderChartOptions} />
+            <div>  
+               {(done === false ? <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div> : 
+               <div style={{marginBottom:'20px', marginTop:'20px', marginLeft: '150px', marginRight: '150px'}}>
+                   <CanvasJSChart options = {productChartOptions} />
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <CanvasJSChart options = {categoriesChartOptions} />
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <CanvasJSChart options = {userAgesChartOptions} />
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <CanvasJSChart options = {vouchersChartOptions} />
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <CanvasJSChart options = {orderChartOptions} />
 
+
+               </div> 
+               
+               )}
+                
             </div>
         );
     }

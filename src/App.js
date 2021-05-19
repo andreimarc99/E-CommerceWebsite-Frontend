@@ -26,6 +26,7 @@ import OrdersAdminPage from './admin/components/orders-admin-page';
 import StatisticsPage from './admin/components/statistics-page';
 import ComplaintsAdminPage from './admin/components/complaints-admin-page';
 import VouchersAdminPage from './admin/components/vouchers-admin-page';
+import OrdersDeliveryPage from './delivery/components/orders-delivery-page';
 
 function App() {
   return (
@@ -100,6 +101,12 @@ function App() {
                             exact 
                             path='/vouchers_admin_page'
                             render={() => <VouchersAdminPage /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/orders_delivery_page'
+                            render={() => <OrdersDeliveryPage /> }
                         />
 
                     <Route path="/user_page/:username" render={(props) => <UserPage {...props} key={Date.now()}/>}/>

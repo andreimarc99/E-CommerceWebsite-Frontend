@@ -160,6 +160,12 @@ class NavbarPage extends React.Component {
                 </DropdownMenu>
               </UncontrolledDropdown>
                   
+              {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "DELIVERY_GUY" ?
+              <NavItem>
+                <NavLink href="/orders_delivery_page" style={{color:"white"}}>Orders</NavLink>
+              </NavItem> : <div />) : <div />)
+              }
+
             </Nav>
             <Form inline>
             <div style={{width:'200px'}}>

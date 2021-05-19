@@ -1,6 +1,5 @@
 import React from 'react'
-import * as API_PRODUCT from "../product/api/product-api"
-import * as CATEGORY_API from "../product/api/category-api"
+import ReactSpinner from 'react-bootstrap-spinner'
 import "../styles.css"
 import {
     Col,
@@ -25,7 +24,9 @@ class Home extends React.Component {
             imageElem: {
                 src: ""
             },
-            categories: []
+            categories: [],
+            productsDone: false,
+            categoriesDone: false
         }
         this.handleAddToCart = this.handleAddToCart.bind(this);
     }
@@ -45,7 +46,7 @@ class Home extends React.Component {
       })*/
       return axios.get(HOST.backend_api + '/categories')
         .then (response => {
-          this.setState({categories: response.data})
+          this.setState({categories: response.data, categoriesDone: true})
         })   
     }
 
@@ -65,7 +66,7 @@ class Home extends React.Component {
         });     */
         return axios.get(HOST.backend_api + '/products/get')
         .then (response => {
-          this.setState({products: response.data})
+          this.setState({products: response.data, productsDone: true})
         })   
     }
 
@@ -113,10 +114,14 @@ class Home extends React.Component {
     }
 
     render() {
-        const {products} = this.state;
+        const {products, productsDone} = this.state;
 
-        const {categories} = this.state;
+        const {categories, categoriesDone} = this.state;
         products.sort(compare);
+        var done = false;
+        if (categoriesDone === true && productsDone === true) {
+          done = true;
+        }
 
         if (products !== "undefined" && products.length >0) {
           var imageElems = [];
@@ -132,8 +137,12 @@ class Home extends React.Component {
               productsCategories.push({category: categ.name, product: prod})
           )})
         return(
-        <div>
-          <br />
+        <div style={{marginTop:'20px', marginBottom:'20px'}}>
+
+          {(done === true ? 
+          
+            <div> 
+              
           <h1 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Featured products</h1>
         <br />
             {
@@ -249,13 +258,21 @@ class Home extends React.Component {
                                 </div></div>)
                   })
                     : 
-                    <p className="text-muted"> No products found. </p>) 
+                    <div> No products found. </div> 
+                    ) 
                   } </div>
+            </div>
+          : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
+
         </div>
         );
    
     } else {
-        return (<div className="text-muted">No products registered yet.</div>)
+      if (done === false) {
+        return (<div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)
+      } else {
+        return <h2>No products found</h2>
+      }
     }
          
 }
