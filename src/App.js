@@ -27,6 +27,7 @@ import StatisticsPage from './admin/components/statistics-page';
 import ComplaintsAdminPage from './admin/components/complaints-admin-page';
 import VouchersAdminPage from './admin/components/vouchers-admin-page';
 import OrdersDeliveryPage from './delivery/components/orders-delivery-page';
+import {EmailTest} from './email-test';
 
 function App() {
   return (
@@ -107,6 +108,12 @@ function App() {
                             exact 
                             path='/orders_delivery_page'
                             render={() => <OrdersDeliveryPage /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/email_test'
+                            render={() => <EmailTest /> }
                         />
 
                     <Route path="/user_page/:username" render={(props) => <UserPage {...props} key={Date.now()}/>}/>

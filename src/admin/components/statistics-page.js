@@ -42,7 +42,7 @@ class StatisticsPage extends React.Component {
     }
 
     fetchOrders() {
-        axios.get(HOST.backend_api + "/orders")
+        axios.get(HOST.backend_api + "/orders/no_images")
         .then(response => {
             this.setState({orderList: response.data, orderListDone: true})
         });

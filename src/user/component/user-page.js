@@ -14,6 +14,9 @@ import {
     ModalHeader
 } from 'reactstrap';
 import AddressCreationForm from './address-creation-form';
+import axios from 'axios';
+import EmailCreationForm from './email-creation-form';
+import EmailUpdateForm from './email-update-form';
 
 class UserPage extends React.Component {
 
@@ -27,17 +30,23 @@ class UserPage extends React.Component {
             error: '',
             selected_update_address: false,
             selected_address: {},
-            selected_add_address: false
+            selected_add_address: false,
+            emails: [],
+            selected_add_email: false,
+            selected_update_email: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.toggleUpdateForm = this.toggleUpdateForm.bind(this);
+        this.toggleUpdateEmailForm = this.toggleUpdateEmailForm.bind(this);
         this.toggleAddForm = this.toggleAddForm.bind(this);
+        this.toggleAddEmailForm = this.toggleAddEmailForm.bind(this);
         this.fetchAddresses = this.fetchAddresses.bind(this);
     }
 
     componentDidMount() {
         this.fetchAddresses();
+        this.fetchEmails();
     }
 
     fetchAddresses() {
@@ -59,9 +68,14 @@ class UserPage extends React.Component {
         
     }
 
+    fetchEmails() {
+        const {user} = this.state;
+        axios.get(HOST.backend_api + "/emails/" + JSON.parse(user).username)
+        .then(response => this.setState({emails: response.data}))
+    }
+
     handleSave() {
         const {user} = this.state;
-
         const username = JSON.parse(user).username;
         const role = JSON.parse(user).role;
         const gender = JSON.parse(user).gender;
@@ -149,11 +163,36 @@ class UserPage extends React.Component {
             )
         }
     }
+   
+    toggleUpdateEmailForm(e) {
+        if (this.state.selected_update_email === true) {
+            this.setState(
+                {
+                    selected_update_email: !this.state.selected_update_email
+                }
+            )
+        } else {
+            this.setState(
+                {
+                    selected_update_email: !this.state.selected_update_email,
+                    selected_email: JSON.parse(JSON.stringify(e))
+                }
+            )
+        }
+    }
 
     toggleAddForm() {
         this.setState(
             {
                 selected_add_address: !this.state.selected_add_address
+            }
+        )
+    }
+
+    toggleAddEmailForm() {
+        this.setState(
+            {
+                selected_add_email: !this.state.selected_add_email
             }
         )
     }
@@ -179,7 +218,8 @@ class UserPage extends React.Component {
 
     render() {
         const {user} = this.state;
-        const {addresses} = this.state;
+        const {addresses, emails} = this.state;
+        console.log(emails);
         return (
         <div>
             <br />
@@ -291,7 +331,27 @@ class UserPage extends React.Component {
                 )
             }</div> :<div />)
         }
-
+            <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered emails
+            </h3>
+            <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddEmailForm} variant="outline-danger"> Add new email </Button>
+            <table style={{margin:'auto',width:'60%'}} className="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th className="text-center"> Email Address</th>
+                                <th className="text-center"> Actions </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                emails.map(
+                                    email => 
+                                        <tr key={email.emailId}>
+                                            <td className="text-center"> {email.email}</td>
+                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>Update</Button></td>
+                                        </tr>)
+                            }
+                            </tbody>
+                        </table>
             <br /><br />
             <Modal isOpen={this.state.selected_update_address} toggle={this.toggleUpdateForm}
                     className={this.props.className} size="lg">
@@ -306,6 +366,22 @@ class UserPage extends React.Component {
                 <ModalHeader toggle={this.toggleAddForm} style={{color:'rgb(255,81,81)'}}> Create new address </ModalHeader>
                 <ModalBody>
                     <AddressCreationForm reloadHandler={this.refresh}/>
+                </ModalBody>
+            </Modal>
+
+            <Modal isOpen={this.state.selected_update_email} toggle={this.toggleUpdateEmailForm}
+                    className={this.props.className} size="lg">
+                <ModalHeader toggle={this.toggleUpdateEmailForm} style={{color:'rgb(255,81,81)'}}> Update email </ModalHeader>
+                <ModalBody>
+                    <EmailUpdateForm email={this.state.selected_email} reloadHandler={this.refresh}/>
+                </ModalBody>
+            </Modal>
+
+            <Modal isOpen={this.state.selected_add_email} toggle={this.toggleAddEmailForm}
+                    className={this.props.className} size="lg">
+                <ModalHeader toggle={this.toggleAddEmailForm} style={{color:'rgb(255,81,81)'}}> Create new email </ModalHeader>
+                <ModalBody>
+                    <EmailCreationForm reloadHandler={this.refresh}/>
                 </ModalBody>
             </Modal>
         </div>

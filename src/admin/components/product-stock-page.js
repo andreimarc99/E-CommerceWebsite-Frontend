@@ -12,12 +12,15 @@ import ProductCreationForm from './product-creation-form'
 import {Link} from "react-router-dom"
 import {HOST} from '../../commons/hosts'
 import ReactSpinner from 'react-bootstrap-spinner'
+import axios from 'axios';
+import CategoryCreationForm from './category-creation-page';
 
 class ProductStockPage extends React.Component {
 
     constructor(props) {
         super(props);
         this.toggleCreateProductForm = this.toggleCreateProductForm.bind(this);
+        this.toggleCreateCategoryForm = this.toggleCreateCategoryForm.bind(this);
         this.fetchProducts = this.fetchProducts.bind(this);
         this.reloadProducts = this.reloadProducts.bind(this);
         this.state = {
@@ -26,6 +29,7 @@ class ProductStockPage extends React.Component {
             errorStatus: 0,
             error: '',
             selected_create_product: false,
+            selected_create_category: false,
             done: false
         }
     }
@@ -38,6 +42,10 @@ class ProductStockPage extends React.Component {
         this.setState({selected_create_product: !this.state.selected_create_product});
     }
 
+    toggleCreateCategoryForm() {
+        this.setState({selected_create_category: !this.state.selected_create_category});
+    }
+
     reloadProducts() {
         this.setState({
             isProductLoaded: false
@@ -47,21 +55,13 @@ class ProductStockPage extends React.Component {
     }
 
     fetchProducts() {
-        return API_PRODUCT.getProductsWithImages((result, status, err) => {
-            if (result !== null && status === 200) {
-                this.setState({
-                    productList: result,
-                    isProductLoaded: true,
-                    done: true
-                });
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err,
-                    done: true
-                }));
-            }
-        })
+       axios.get(HOST.backend_api + '/products')
+       .then(response =>
+            this.setState({
+                productList: response.data,
+                isProductLoaded: true,
+                done: true
+            }));
     }
 
     handleDelete(id) {
@@ -77,6 +77,8 @@ class ProductStockPage extends React.Component {
                    <div>
                    <CardHeader>
                    <Button style = {{marginLeft:"20px"}} className="btn btn-danger" onClick={this.toggleCreateProductForm}>Add a new product</Button>
+                   <Button style = {{marginLeft:"20px"}} className="btn btn-danger" onClick={this.toggleCreateCategoryForm}>Create a new category</Button>
+
                    </CardHeader>
                    <CardBody>
                    <div className="row">
@@ -120,9 +122,17 @@ class ProductStockPage extends React.Component {
        
                    <Modal isOpen={this.state.selected_create_product} toggle={this.toggleCreateProductForm}
                            className={this.props.className} size="lg">
-                       <ModalHeader toggle={this.toggleCreateProductForm}><p style={{color:"red"}}> Add product: </p></ModalHeader>
+                       <ModalHeader toggle={this.toggleCreateProductForm}><p style={{color:"red"}}> Add product </p></ModalHeader>
                        <ModalBody>
                            <ProductCreationForm reloadHandler={this.reloadProducts}/>
+                       </ModalBody>
+                   </Modal>
+
+                   <Modal isOpen={this.state.selected_create_category} toggle={this.toggleCreateCategoryForm}
+                           className={this.props.className} size="lg">
+                       <ModalHeader toggle={this.toggleCreateCategoryForm}><p style={{color:"red"}}> Add category </p></ModalHeader>
+                       <ModalBody>
+                           <CategoryCreationForm reloadHandler={this.reloadProducts}/>
                        </ModalBody>
                    </Modal>
                    </div>  

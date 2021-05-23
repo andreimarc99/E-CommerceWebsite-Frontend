@@ -8,6 +8,7 @@ import * as CUSTOMER_API from "../customer-api"
 import {Card, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import heart from "../../img/heart.png"
+import ReactSpinner from 'react-bootstrap-spinner'
 
 
 class FavoritesPage extends React.Component {
@@ -19,7 +20,8 @@ class FavoritesPage extends React.Component {
             favorites: {},
             productList: [],
             errorStatus: 0,
-            error: ''
+            error: '',
+            done: false
         }
         this.fetchProducts = this.fetchProducts.bind(this);
         this.handleAddToCart = this.handleAddToCart.bind(this);
@@ -72,15 +74,18 @@ class FavoritesPage extends React.Component {
         FAVORITE_PRODUCTS_API.getFavoriteProductsByUsername(username, (result, status, err) => {
                 if (result !== null && status === 200) {
                     this.setState(({
-                        favorites: result
+                        favorites: result,
+                        done: true
                     }));
                     this.setState({
-                        productList: this.state.favorites.products
+                        productList: this.state.favorites.products,
+                        done: true
                     })
                 } else {
                     this.setState(({
                         errorStatus: status,
-                        error: err
+                        error: err,
+                        done: true
                     }));
                 }
             })
@@ -129,7 +134,7 @@ class FavoritesPage extends React.Component {
     }
 
     render() {
-        const {productList} = this.state;
+        const {productList, done} = this.state;
         var imageElems = [];
 
 
@@ -152,52 +157,56 @@ class FavoritesPage extends React.Component {
                     height: 5
                 }}/>
                 <div className="container fluid">
-            {(productList !== "undefined" && productList.length > 0) ? productList.map((prod) => { 
-                return(
-                    <div className="row">
-                <div className="col">
-
-                <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
-                    
-                <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
-                <Card.Header className="red-card-header"><h4>{prod.name}</h4></Card.Header></Link>
-                <Card.Body>
-                    <div className="container fluid">
-                    <div className="row">
-                        <div className="col">
-
-                            <img
-                            style={{width:'60%'}}
-                            src={imageElems[prod.productId]}
-                            alt="First slide"
-                            />
-                        </div>
-                            <hr
-                                style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
-                                    height: 3
-                                }} />
-                        <div className="col">
-                            <Card.Text>
-                                <p className="text-muted">{prod.description}</p>
+            {
+            (done === true ? 
+                ((productList !== "undefined" && productList.length > 0) ? productList.map((prod) => { 
+                    return(
+                        <div className="row">
+                    <div className="col">
+    
+                    <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
+                        
+                    <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
+                    <Card.Header className="red-card-header"><h4>{prod.name}</h4></Card.Header></Link>
+                    <Card.Body>
+                        <div className="container fluid">
+                        <div className="row">
+                            <div className="col">
+    
+                                <img
+                                style={{width:'60%'}}
+                                src={imageElems[prod.productId]}
+                                alt="First slide"
+                                />
+                            </div>
                                 <hr
-                                style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
-                                    height: 3
-                                }}/>
-                                <h4>${prod.price}</h4>
-                                
-                            </Card.Text>
-                            <Button onClick={() => this.handleAddToCart(prod)} variant="outline-danger">Add to cart</Button>
-                            <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img alt="unfav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+                                    style={{
+                                        color: 'rgb(255, 81, 81)',
+                                        backgroundColor: 'rgb(255, 81, 81)',
+                                        height: 3
+                                    }} />
+                            <div className="col">
+                                <Card.Text>
+                                    <p className="text-muted">{prod.description}</p>
+                                    <hr
+                                    style={{
+                                        color: 'rgb(255, 81, 81)',
+                                        backgroundColor: 'rgb(255, 81, 81)',
+                                        height: 3
+                                    }}/>
+                                    <h4>${prod.price}</h4>
+                                    
+                                </Card.Text>
+                                <Button onClick={() => this.handleAddToCart(prod)} variant="outline-danger">Add to cart</Button>
+                                <Button onClick={() => this.handleRemoveFromFavorites(prod.productId)} style={{marginLeft:'5px', width:'100px', height:'38px'}} className="btn btn-light"><img alt="unfav" src={heart} style={{width:'20px', height:'20px'}}></img></Button>
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                </Card.Body>
-                </Card></div></div> );
-            }) : <div className="text-muted">No favorite products found.</div> }</div>
+                        </div>
+                    </Card.Body>
+                    </Card></div></div> );
+                }) : <div className="text-muted">No favorite products found.</div> )
+                : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)
+            }</div>
             </div>
         );
     }

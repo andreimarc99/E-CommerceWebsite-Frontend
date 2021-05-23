@@ -25,14 +25,25 @@ class OrderPage extends React.Component {
             cartPrice: 0,
             address: {},
             addressList: [],
-            usedVouchers: []
+            usedVouchers: [],
+            emails: [],
+            email: {}
         }
         this.fetchProducts = this.fetchProducts.bind(this);
+        this.fetchEmails = this.fetchEmails.bind(this);
         this.fetchAddresses = this.fetchAddresses.bind(this);
         this.fetchUsedVouchers = this.fetchUsedVouchers.bind(this);
         this.fetchVouchers = this.fetchVouchers.bind(this);
         this.handleAddVoucher = this.handleAddVoucher.bind(this);
         this.handlePlaceOrder = this.handlePlaceOrder.bind(this);
+    }
+
+    fetchEmails() {
+        const {username} = this.state;
+        axios.get(HOST.backend_api + "/emails/" + username)
+        .then(response => {
+            this.setState({emails: response.data});
+        })
     }
 
     fetchUsedVouchers() {
@@ -153,6 +164,11 @@ class OrderPage extends React.Component {
         this.setState({address})
     }
 
+    handleEmailChange = email => 
+    {
+        this.setState({email})
+    }
+
     isCartValid(cart) {
         var productsWithNumber = [];
         for (let i = 0; i < cart.products.length; ++i) {
@@ -173,9 +189,21 @@ class OrderPage extends React.Component {
         return true;
     }
 
+    getProducts(prods) {
+        let products = "";
+        if (prods.length > 0) {
+            for (let i = 0; i < prods.length; ++i) {
+                products += prods[i].name + " - $" + prods[i].price + "; <br>";
+            }
+        }
+        return products;
+    }
+
     handlePlaceOrder() {
-        const {voucher, voucherList, address, cartPrice} = this.state;
+        const {voucher, voucherList, address, cartPrice, email, username} = this.state;
         var cart = this.state.cart;
+        console.log(address);
+
         if (this.isCartValid(cart) === true) {
             console.log(cart);
             var noVoucher = {};
@@ -253,7 +281,23 @@ class OrderPage extends React.Component {
                                     }
 
                                     fetch(HOST.backend_api + "/used_vouchers", postUsedVoucherMethod)
-                                    .then(response => {window.location.href = "/thank_you"})
+                                    .then(response => {
+                                        window.Email.send({
+                                            SecureToken: "b7984caf-9777-4117-a62a-300814cdd60e",
+                                            Host : "smtp.elasticemail.com",
+                                            Username : "proiectdaw2021@gmail.com",
+                                            Password : "83429559C55A73A820EF058BB3F6B3414E8C",
+                                            To : email.label,
+                                            From : "me.marc.andrei@gmail.com",
+                                            Subject : "Thank you for your order!",
+                                            Body : "Dear " + username + ",<br> <br>This is an electronic confirmation of us receiving your order. <br><br> <strong>Order summary</strong>: <br> " + 
+                                                this.getProducts(cart.products) + "<br>" + "<strong>Delivery address</strong>: <br>" + address.label + "<br> <br>"  + "<strong>PRICE</strong>: $" + cartPrice + "<br> <br>"
+                                        }).then(message => {
+                                            alert(message);
+                                            window.location.href = "/thank_you"
+                                        }
+                                        )
+                                    })
                                 })
                                 .catch(err => console.log(err));
                         })
@@ -344,7 +388,23 @@ class OrderPage extends React.Component {
                                             }
             
                                             fetch(HOST.backend_api + "/used_vouchers", postUsedVoucherMethod)
-                                            .then(response => {window.location.href = "/thank_you"})
+                                            .then(response => {
+                                                window.Email.send({
+                                                    SecureToken: "b7984caf-9777-4117-a62a-300814cdd60e",
+                                                    Host : "smtp.elasticemail.com",
+                                                    Username : "proiectdaw2021@gmail.com",
+                                                    Password : "83429559C55A73A820EF058BB3F6B3414E8C",
+                                                    To : email.label,
+                                                    From : "me.marc.andrei@gmail.com",
+                                                    Subject : "Thank you for your order!",
+                                                    Body : "Dear " + username + ",<br> <br>This is an electronic confirmation of us receiving your order. <br><br> <strong>Order summary</strong>: <br> " + 
+                                                    this.getProducts(cart.products) + "<br> <br>" + "Delivery address: <br>" + address.label + "<br> <br>"  + "PRICE: $" + cartPrice + "<br> <br>"
+                                                }).then(message => {
+                                                    alert(message);
+                                                    window.location.href = "/thank_you"
+                                                }
+                                                )
+                                            })
                                         })
                                         .catch(err => console.log(err));
                                 })
@@ -363,10 +423,13 @@ class OrderPage extends React.Component {
         this.fetchVouchers();
         this.fetchAddresses();
         this.fetchUsedVouchers();
+        this.fetchEmails();
     }
 
     render() {
-        const {cart, productList, voucherList, cartPrice, addressList, address} = this.state;
+        const {cart, productList, voucherList, cartPrice, addressList, address, emails, email} = this.state;
+        
+        console.log(emails);
         var customer;
         var numberOfProducts = [];
         var uniqueProductList = [];
@@ -376,6 +439,14 @@ class OrderPage extends React.Component {
             addressOptions = addressList.map( (addr) => ({
                 value: addr,
                 label: addr.alias + ": " + addr.streetNr + ", " + addr.town + ", " + addr.county + ", " + addr.country
+            }));
+        }
+
+        var emailOptions = [];
+        if (emails.length > 0) {
+            emailOptions = emails.map( (email) => ({
+                value: email,
+                label: email.email
             }));
         }
 
@@ -487,7 +558,12 @@ class OrderPage extends React.Component {
                     <Select options={addressOptions} value={address} onChange={this.handleAddressChange}/>
                 </div>
 
-                <Button onClick={this.handlePlaceOrder} style={{marginBottom:"30px"}} variant="danger" disabled={JSON.stringify(address) === JSON.stringify({})}>Place order</Button>
+                <div style={{marginLeft:'200px', marginRight:'200px', marginBottom:'40px'}}>
+                    <h5>Choose your email address</h5>
+                    <Select options={emailOptions} value={email} onChange={this.handleEmailChange}/>
+                </div>
+
+                <Button onClick={this.handlePlaceOrder} style={{marginBottom:"30px"}} variant="danger" disabled={JSON.stringify(address) === JSON.stringify({}) || JSON.stringify(email) === JSON.stringify({})}>Place order</Button>
             </div>
         );
     }

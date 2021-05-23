@@ -252,7 +252,7 @@ class CategoryPage extends React.Component {
         }
 
         return (
-            <div>   
+            <div style={{marginBottom:"40px"}}>   
 
                 {(done === true ? (productList.length > 0 ? 
                     <div style={{marginTop:'20px'}} className="container fluid">
