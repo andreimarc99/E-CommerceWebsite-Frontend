@@ -108,7 +108,7 @@ class NavbarPage extends React.Component {
     return (
       <div>
         <Navbar color="danger" light expand="md">
-        <a href="/" className="navbar-brand">
+        <a href="/" className="navbar-brand lower-zoom">
               <img className="logo" src={bear} height="33" alt="logo"></img>
           </a>
           <NavbarBrand href="/" style={{color:"white"}}>
@@ -177,17 +177,17 @@ class NavbarPage extends React.Component {
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/user_page/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { user: localStorage.getItem("loggedUser") } }}>
-                <img src={account} height="30" alt="account" style={{marginLeft:'10px'}}></img>
+                <img className="lower-zoom" src={account} height="30" alt="account" style={{marginLeft:'10px'}}></img>
               </Link>
               :
-              <img onClick={this.handleAccountClick} src={account} height="30" alt="account" style={{marginLeft:'30px'}}></img>
+              <img className="lower-zoom" onClick={this.handleAccountClick} src={account} height="30" alt="account" style={{marginLeft:'30px'}}></img>
               )
               }
                 
                 {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/fav_products/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
-                <img src={heart} className="logo" height="30" alt="account" style={{marginLeft:'10px'}}></img>
+                <img src={heart} className="logo lower-zoom" height="30" alt="account" style={{marginLeft:'10px'}}></img>
               </Link>
               :
                 <div />
@@ -196,7 +196,7 @@ class NavbarPage extends React.Component {
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/cart/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
-                <img src={cart} height="30" alt="cart" className="logo" style={{marginLeft:'10px'}}></img>
+                <img src={cart} height="30" alt="cart" className="logo lower-zoom" style={{marginLeft:'10px'}}></img>
               </Link>
               :
                 <div />
@@ -205,13 +205,13 @@ class NavbarPage extends React.Component {
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/order_history/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
-                <img src={history} height="30" alt="cart" className="logo" style={{marginLeft:'10px'}}></img>
+                <img src={history} height="30" alt="cart" className="logo lower-zoom" style={{marginLeft:'10px'}}></img>
               </Link>
               :
                 <div />
               )
               }
-                {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "") ? <img onClick={this.handleLogout} src={logout} height="30" alt="cart" className="logo" style={{marginLeft:'20px'}}></img> : <div />)}
+                {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "") ? <img onClick={this.handleLogout} src={logout} height="30" alt="cart" className="logo lower-zoom" style={{marginLeft:'20px'}}></img> : <div />)}
               </Form>
             </Navbar>
         </div>

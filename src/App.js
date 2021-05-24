@@ -136,61 +136,8 @@ function App() {
             <div>
               <footer className="bg-danger text-center text-lg-start" style={{color:"white"}}>
                   <p> © eCommerce System </p>
-                  <a target="_tab" href="https://www.instagram.com/ut.cluj/">
-                  <span
-                    id="edit-img"
-                    style={{ marginLeft: "2px", marginRight: "2px" }}
-                  >
-                    <img
-                      className="logo"
-                      src={instagram}
-                      style={{ width: "2%" }}
-                      alt="instagram"
-                    ></img>
-                  </span>
-                </a>
-                <a target="_tab" href="https://www.facebook.com/ac.utcluj.ro/">
-                  <span
-                    id="edit-img"
-                    style={{ marginLeft: "2px", marginRight: "2px" }}
-                  >
-                    <img
-                      className="logo"
-                      src={facebook}
-                      style={{ width: "2%" }}
-                      alt="facebook"
-                    ></img>
-                  </span>
-                </a>
-                <a target="_tab" href="https://mail.google.com">
-                  <span
-                    id="edit-img"
-                    style={{ marginLeft: "2px", marginRight: "2px" }}
-                  >
-                    <img
-                      className="logo"
-                      src={email}
-                      style={{ width: "2%" }}
-                      alt="email"
-                    ></img>
-                  </span>
-                </a>
-                <a target="_tab" href="https://twitter.com/utcluj">
-                  <span
-                    id="edit-img"
-                    style={{ marginLeft: "2px", marginRight: "2px" }}
-                  >
-                    <img
-                      className="logo"
-                      src={twitter}
-                      style={{ width: "2%" }}
-                      alt="twitter"
-                    ></img>
-                  </span>
-                </a>
-                <br />
                 {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
-                <Button onClick={() => {window.location.href="/complaints"}} style={{marginTop:'10px', marginBottom:'10px'}} variant="outline-light">File a complaint</Button> : <div />)}
+                <Button onClick={() => {window.location.href="/complaints"}} style={{marginTop:'5px', marginBottom:'10px'}} variant="outline-light">File a complaint</Button> : <div />)}
               </footer>
             </div>
     </div>

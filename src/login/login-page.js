@@ -3,6 +3,8 @@ import * as API_USERS from "../user/user-api"
 import {Button} from "react-bootstrap"
 import Home from '../home/home';
 import ProductStockPage from '../admin/components/product-stock-page';
+import axios from 'axios';
+import { HOST } from '../commons/hosts';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -62,25 +64,14 @@ class LoginPage extends React.Component {
             return;
         }
         let _user = {};
-        let wrong = true;
-        //let user = login(username, password, userList);
-        API_USERS.getUserById(username, (result, status, err) => {
-            console.log(result + " " + status + " " + err);
-            if (result !== null && status === 200) {
-                wrong = false;
-                _user= result;
-                localStorage.setItem('loggedUser', JSON.stringify(_user));
-                const path = this.getPath(_user.role);
-                return window.location.href = path.path;
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err
-                }));
-            }
+        axios.post(HOST.backend_api + '/users/login/' + username + '/' + password)
+        .then(response => {
+            _user = response.data;
+            localStorage.setItem('loggedUser', JSON.stringify(_user));
+            const path = this.getPath(_user.role);
+            return window.location.href = path.path;
         })
-        
-        setTimeout(function() {return (wrong === true ? alert("Wrong credentials. Please try again") : null)}, 500);
+        .catch(err => this.setState({error: 'wrong'}));
 
     }
 
@@ -92,8 +83,6 @@ class LoginPage extends React.Component {
     jumpToRegister() {
         window.location.href = "/register";
     }
-
-
 
     render() {
         const {username, password, completed} = this.state;
@@ -123,7 +112,7 @@ class LoginPage extends React.Component {
                         }
                     </div>
                     <div id={this.state.wrong}>
-                    {(this.state.wrong === true) ? <p style={{color:'red'}}> Incorrect credentials </p> : <div/>}
+                    {(this.state.error === "wrong") ? <p style={{color:'red'}}> Incorrect credentials. Please try again </p> : <div/>}
                     </div>
                         <br />
                     <div className={'form-group'}>

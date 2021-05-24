@@ -305,7 +305,7 @@ class ProductPage extends React.Component {
         <div>
             <br />
             <h1 >{product.name}</h1>
-            {(product.stock > 10 ? (<h5 style={{color: 'green'}}>{product.stock} left</h5>) : (<h5 style={{color: 'red'}}>{product.stock} left</h5>))}
+            {(product.stock > 10 ? (<h5 style={{color: 'green'}}>{product.stock} in stock</h5>) : (<h5 style={{color: 'red'}}>{product.stock} left</h5>))}
             <hr
             style={{
                 color: 'rgb(255, 81, 81)',
@@ -313,11 +313,12 @@ class ProductPage extends React.Component {
                 height: 10
             }}/>
             <br />
+            <div className="zoom-img">
             <img
                   className="d-block w-100 prod-img shadowed"
                   src={imageElem.src}
                   alt="First slide"
-            />
+            /></div>
             <br />
             <h3>Price: ${product.price}</h3>
 
@@ -339,9 +340,11 @@ class ProductPage extends React.Component {
             </div></div>
 
             <br /> <br />
+            {(isNaN(rating)) ? <div className="text-muted">No rating available</div> : <StarRatings rating={rating} starDimension="40px" starSpacing="10px" starRatedColor="red"/>}
+            <br /> <br />
+
            <h6 style={{marginLeft:'100px', marginRight:'100px'}}>{product.description}</h6>
               
-           {(isNaN(rating)) ? <div className="text-muted">No rating available</div> : <StarRatings rating={rating} starDimension="40px" starSpacing="10px" starRatedColor="red"/>}
            <hr
             style={{
                 color: 'rgb(255, 81, 81)',
@@ -349,8 +352,7 @@ class ProductPage extends React.Component {
                 height: 10
             }}
             />
-           <h5><b>Technical specs</b>
-           </h5>
+           <h3><b>Technical specs</b></h3>
            <div className="container fluid">
                <div>
                     <p><b>Size:</b> {product.specs.size}</p>
@@ -363,7 +365,7 @@ class ProductPage extends React.Component {
                 backgroundColor: 'rgb(255, 81, 81)',
                 height: 10
             }}/>
-            <h5><b>Categories</b></h5>
+            <h3><b>Categories</b></h3>
             <div className="container fluid">
                 <div className="row justify-content-center " style={{display:'inline-block', verticalAlign:'middle'}}>
                 {product.specs.categories.map((category) => 
@@ -385,7 +387,7 @@ class ProductPage extends React.Component {
                 height: 25
             }}
             />
-            <h5><b>Reviews</b></h5>
+            <h3><b>Reviews</b></h3>
             {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {rating}</p>}
             {(!reviewedAlready && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button> : <div /> )}
             <Modal isOpen={this.state.selected_create_review} toggle={this.toggleCreateReview}
@@ -397,7 +399,7 @@ class ProductPage extends React.Component {
             </Modal>
             <div> {
             reviewList.map((review) => {return(
-                <div>
+                <div >
                     <hr
                     style={{
                         color: 'rgb(255, 81, 81)',
@@ -447,7 +449,7 @@ class ProductPage extends React.Component {
                 height: 10
             }}
             />
-            <h5><b>Related products</b></h5>
+            <h3><b>Related products</b></h3>
             {(relatedProducts.length > 0) ? 
             
             <div className="container fluid">
@@ -467,6 +469,7 @@ class ProductPage extends React.Component {
                         src={imageElems[prod.productId]}
                         alt="First slide"
                         />
+                        
                         <hr
                         style={{
                             color: 'rgb(255, 81, 81)',
@@ -481,7 +484,7 @@ class ProductPage extends React.Component {
                                 backgroundColor: 'rgb(255, 81, 81)',
                                 height: 1
                             }} />
-                            <textarea readOnly='true' style={{width:'101%', border:'none'}} value={prod.description} className="txtarea text-muted"></textarea>
+                            <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={prod.description} className="txtarea text-muted"></textarea>
                         </Card.Text>
                         </Card.Body>
                     </Card></div> );

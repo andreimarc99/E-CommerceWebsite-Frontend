@@ -225,7 +225,7 @@ class UserPage extends React.Component {
             <br />
             {(JSON.parse(user).gender === "M" ? <img alt="male" src={male} style={{width:'20%'}}></img> : <img alt="female" src={female} style={{width:'20%'}}></img>)}
             
-            <h1 id="name" style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>{JSON.parse(user).firstName} {JSON.parse(user).lastName}</h1>
+            <h1 id="name" className="zoom-text" style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>{JSON.parse(user).firstName} {JSON.parse(user).lastName}</h1>
             <p id="username" className="text-muted">@{JSON.parse(user).username}</p>
 
             <div>
@@ -258,7 +258,8 @@ class UserPage extends React.Component {
                             <div style={{textAlign:'left', marginLeft: '30px', marginBottom:'20px'}}>
 
 
-                                <h4>    
+                                <h4>  
+                                      
                                     <b>{address.alias}</b>
                                     <Button style={{marginLeft:'10px'}} size="sm" variant="danger"  onClick={() => this.handleDeleteAddress(address.addressId)}>Delete</Button>
                                     <Button style={{marginRight:'10px', marginLeft:'10px'}} size="sm" variant="outline-danger"  onClick={() => this.toggleUpdateForm(address)}>Edit</Button>
@@ -267,7 +268,7 @@ class UserPage extends React.Component {
 
                                 
                                 <div style={{textAlign:'center', display:'flex', justifyContent:'space-between', marginLeft:'50px', marginRight:'50px'}}>
-                                    <div style={{display:'inline'}}>
+                                    <div className="zoom-text" style={{display:'inline'}}>
                                     <p style={{marginTop:'10px'}}><b>Country</b></p>
                                     <hr
                                     style={{
@@ -277,7 +278,7 @@ class UserPage extends React.Component {
                                     }} />
                                     <p className="text-muted">{address.country}</p>
                                     </div>
-                                    <div style={{display:'inline'}}>
+                                    <div className="zoom-text" style={{display:'inline'}}>
                                     <p style={{marginTop:'10px'}}><b>County</b></p>
                                     <hr
                                     style={{
@@ -288,7 +289,7 @@ class UserPage extends React.Component {
                                     <p className="text-muted">{address.county}</p>
                                     </div>
 
-                                    <div style={{display:'inline'}}>
+                                    <div className="zoom-text" style={{display:'inline'}}>
                                     <p style={{marginTop:'10px'}}><b>Town</b></p>
                                     <hr
                                     style={{
@@ -299,7 +300,7 @@ class UserPage extends React.Component {
                                     <p className="text-muted">{address.town}</p>
                                     </div>
                                     
-                                    <div style={{display:'inline'}}>
+                                    <div className="zoom-text" style={{display:'inline'}}>
                                     <p style={{marginTop:'10px'}}><b>Street Number</b></p>
                                     <hr
                                     style={{
@@ -310,7 +311,7 @@ class UserPage extends React.Component {
                                     <p className="text-muted">{address.streetNr}</p>
                                     </div>
                                     
-                                    <div style={{display:'inline'}}>
+                                    <div className="zoom-text" style={{display:'inline'}}>
                                     <p style={{marginTop:'10px'}}><b>Country Code</b></p>
                                     <hr
                                     style={{
@@ -334,7 +335,7 @@ class UserPage extends React.Component {
             <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered emails
             </h3>
             <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddEmailForm} variant="outline-danger"> Add new email </Button>
-            <table style={{margin:'auto',width:'60%'}} className="table table-striped table-bordered">
+            <table style={{margin:'auto',width:'60%'}} className="table">
                             <thead>
                             <tr>
                                 <th className="text-center"> Email Address</th>

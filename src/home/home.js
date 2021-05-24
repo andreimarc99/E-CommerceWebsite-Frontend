@@ -208,10 +208,12 @@ class Home extends React.Component {
                       temp = productsCategories.filter(function(item) {
                         return item.category === category.name
                       });
+                      console.log(temp);
                         return (
                         <div>
                         <div className="d-flex overflow-auto justify-content-center" style={{marginBottom:'20px'}}>
-                          <h4 style={{textAlign:'center'}}>{temp[0].category}</h4>
+                          {(temp.length > 0 ? 
+                          <h4 style={{textAlign:'center'}}>{temp[0].category}</h4> : <div />)}
                           </div>
                           <hr
                           style={{
@@ -243,7 +245,7 @@ class Home extends React.Component {
                                             backgroundColor: 'rgb(255, 81, 81)',
                                             height: 3
                                         }} />
-                                        <textarea readOnly='true' style={{width:'100%', border:'none'}} value={prod.product.description} className="txtarea text-muted"></textarea>
+                                        <textarea readOnly='true' style={{width:'100%', border:'none' , overflowX: 'hidden'}} value={prod.product.description} className="txtarea text-muted"></textarea>
                                       <Card.Text>
                                         <h4>${prod.product.price}</h4>
                                         
