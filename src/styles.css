@@ -1,7 +1,6 @@
 .App {
     font-family: "Roboto Condensed";
     text-align: center;
-    background-image: linear-gradient(to bottom right,  rgb(248, 248, 248), rgb(185, 185, 185));
   }
 
 #edit-img:hover img {

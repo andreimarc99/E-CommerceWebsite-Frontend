@@ -501,7 +501,7 @@ class ProductPage extends React.Component {
             (relatedProducts.length > 0) ? 
             
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left">
                     {relatedProducts.map((prod) => { 
 
                 return(
@@ -510,7 +510,7 @@ class ProductPage extends React.Component {
                             
                         <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
                         <Card.Header className="red-card-header">{prod.name}</Card.Header></Link>
-                        <Card.Body>
+                        <Card.Body style={{backgroundImage: 'linear-gradient(to bottom right, rgb(216, 216, 216),  rgb(255, 255, 255))'}}>
                             
                         <img
                         className="rel-img"
@@ -554,16 +554,16 @@ class ProductPage extends React.Component {
             (predictedProducts.length > 0) ? 
             
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left">
                     {predictedProducts.map((prod) => { 
 
                 return(
-                    <div className="col-lg-4 d-flex align-items-stretch ">
+                    <div className="col-lg-4 d-flex align-items-stretch">
                         <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
                             
                         <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
                         <Card.Header className="red-card-header">{prod.name}</Card.Header></Link>
-                        <Card.Body>
+                        <Card.Body style={{backgroundImage: 'linear-gradient(to bottom right, rgb(216, 216, 216),  rgb(255, 255, 255))'}}>
                             
                         <img
                         className="rel-img"

@@ -252,7 +252,6 @@ class StatisticsPage extends React.Component {
              }]
         }
 
-    
         return (
             <div>  
                {(done === false ? <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div> : 
@@ -286,8 +285,44 @@ class StatisticsPage extends React.Component {
                         height: 10
                     }}/>
                     <CanvasJSChart options = {orderChartOptions} />
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <h3>Top rated products</h3>
+                    <p className="text-muted">using IMDb's public product ranking formula</p>
+                    <img src={HOST.flask_api + "/popular_products"} alt="popular"/>
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <h3>Customer segmentation by gender</h3>
+                    <img src={HOST.flask_api + "/genders"} alt="gender_segm"/>
 
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <h3>Customer segmentation by performing k-means clustering</h3>
+                    <h5 className="text-muted">depending on age and total money spent on the platform</h5>
+                    <img src={HOST.flask_api + "/clustering/age"} alt="Age-Money Clustering"/>
 
+                    <hr
+                    style={{
+                        color: 'rgb(255, 81, 81)',
+                        backgroundColor: 'rgb(255, 81, 81)',
+                        height: 10
+                    }}/>
+                    <h3>Customer segmentation by performing k-means clustering</h3>
+                    <h5 className="text-muted">depending on gender and total money spent on the platform</h5>
+                    <img src={HOST.flask_api + "/clustering/gender"} alt="Gender-Money Clustering"/>
+                    
                </div> 
                
                )}
