@@ -102,9 +102,7 @@ class ProductStockPage extends React.Component {
                                    product => 
                                        <tr key={product.productId}>
                                            <td className="text-center"> {product.productId}</td>
-                                          <Link style={{textDecoration:"none", color: "black"}} to={{ pathname: `/product_page/${product.productId}`, state: { product: product } }}>
                                            <td className="text-center"> {product.name} </td>
-                                           </Link>
                                            <td className="text-center"> ${product.price}</td>
                                            <td className="text-center"> {product.description}</td>
                                            <td className="text-center"> {product.stock}</td>

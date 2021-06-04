@@ -17,6 +17,8 @@ import {
     ModalBody,
     ModalHeader
 } from 'reactstrap';
+import ReactSpinner from 'react-bootstrap-spinner'
+import axios from 'axios';
 
 class ProductPage extends React.Component {
 
@@ -32,7 +34,11 @@ class ProductPage extends React.Component {
             isRelatedProductsLoaded: false,
             isFavorite: false,
             selected_update_review: false,
-            selected_create_review: false
+            selected_create_review: false,
+            relatedDone: false,
+            reviewsDone: false,
+            predictedProducts: [],
+            predictedDone: false
         }
         this.handleAddToFavorites = this.handleAddToFavorites.bind(this);
         this.handleAddToCart = this.handleAddToCart.bind(this);
@@ -160,7 +166,8 @@ class ProductPage extends React.Component {
             if (result !== null && status === 200) {
                 this.setState({
                     reviewList: result,
-                    isReviewListLoaded: true
+                    isReviewListLoaded: true,
+                    reviewsDone: true
                 });
             } else {
                 this.setState(({
@@ -178,7 +185,7 @@ class ProductPage extends React.Component {
             PRODUCT_API.getProductsByCategoryId(category.categoryId, (result, status, err) => {
                 if (result !== null && status === 200) {
                     
-                    this.setState({relatedProducts : result});
+                    this.setState({relatedProducts : result, relatedDone: true});
                 } else {
                     this.setState(({
                         errorStatus: status,
@@ -229,10 +236,29 @@ class ProductPage extends React.Component {
         }
     }
 
+    fetchPredictions() {
+        const {product} = this.state;
+        axios.get(HOST.flask_api + "/predict?product=" + product.productId)
+        .then(response => {
+            var IDs = response.data.predictions.match(/\d+/g).map(Number);
+            if (IDs.length > 0) {
+                for (let i = 0; i < IDs.length; ++i) {
+                    var id = IDs[i];
+                    axios.get(HOST.backend_api + '/products/get/' + id)
+                    .then(response => this.setState(prevState => ({
+                        predictedProducts: [...prevState.predictedProducts, response.data]
+                      })))
+                }
+            }
+            this.setState({predictedDone : true});
+        })
+    }
+
     componentDidMount() {
         this.fetchReviews();
         this.fetchRelatedProducts();
         this.isAFavorite();
+        this.fetchPredictions();
     }
 
     handleDeleteReview(reviewId) { 
@@ -269,12 +295,13 @@ class ProductPage extends React.Component {
 
     render() {
         const {product} = this.state;
-        const {reviewList} = this.state;
+        const {reviewList, reviewsDone} = this.state;
         const {isFavorite} = this.state;
+        const {predictedProducts, predictedDone} = this.state;
         var reviewedAlready = false;
         let rating = 0;
         let reviewNumber = 0;
-        var {relatedProducts} = this.state;
+        var {relatedProducts, relatedDone} = this.state;
         if (reviewList !== "undefined" && reviewList.length > 0) {
             reviewList.map((review) => {
                 rating += parseInt(review.rating);
@@ -296,6 +323,16 @@ class ProductPage extends React.Component {
                 imageElem1.src = 'data:image/png;base64,' + buf1.toString('base64');
                 //imageElems.push({id: relatedProducts[i].productId, img: imageElem1});
                 imageElems[relatedProducts[i].productId] = imageElem1.src;
+            }
+        }
+
+        if (predictedProducts !== "undefined" && predictedProducts.length > 0) {
+            for (let i = 0; i < predictedProducts.length; ++i) {
+                var buf1 = predictedProducts[i].image.data;
+                var imageElem1 = document.createElement('img1');
+                imageElem1.src = 'data:image/png;base64,' + buf1.toString('base64');
+                //imageElems.push({id: relatedProducts[i].productId, img: imageElem1});
+                imageElems[predictedProducts[i].productId] = imageElem1.src;
             }
         }
         var buf = product.image.data;
@@ -343,7 +380,7 @@ class ProductPage extends React.Component {
             {(isNaN(rating)) ? <div className="text-muted">No rating available</div> : <StarRatings rating={rating} starDimension="40px" starSpacing="10px" starRatedColor="red"/>}
             <br /> <br />
 
-           <h6 style={{marginLeft:'100px', marginRight:'100px'}}>{product.description}</h6>
+           <h4 style={{marginLeft:'100px', marginRight:'100px'}}>{product.description}</h4>
               
            <hr
             style={{
@@ -355,8 +392,8 @@ class ProductPage extends React.Component {
            <h3><b>Technical specs</b></h3>
            <div className="container fluid">
                <div>
-                    <p><b>Size:</b> {product.specs.size}</p>
-                    <p><b>Weight:</b> {product.specs.weight}g</p>
+                    <h4><b>Size:</b> {product.specs.size}</h4>
+                    <h4><b>Weight:</b> {product.specs.weight}g</h4>
                 </div>
            </div>
            <hr
@@ -388,7 +425,12 @@ class ProductPage extends React.Component {
             }}
             />
             <h3><b>Reviews</b></h3>
-            {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {rating}</p>}
+
+            {reviewsDone === true ? 
+
+            <div>
+            {(reviewList.length > 0 ? <p>{reviewList.length} reviews found.</p> : <div />)}
+            {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {(Math.round(rating * 100) / 100).toFixed(1)}</p>}
             {(!reviewedAlready && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button> : <div /> )}
             <Modal isOpen={this.state.selected_create_review} toggle={this.toggleCreateReview}
                  className={this.props.className} size="lg">
@@ -397,7 +439,7 @@ class ProductPage extends React.Component {
                     <ReviewCreationForm product={product} reloadHandler={this.reloadReviewsAfterCreation}/>
                 </ModalBody>
             </Modal>
-            <div> {
+            {(reviewList.length > 0 ? <div className="scrollable-reviews"> {
             reviewList.map((review) => {return(
                 <div >
                     <hr
@@ -433,14 +475,17 @@ class ProductPage extends React.Component {
                     <ModalBody>
                         <ReviewUpdateForm review={review} reloadHandler={this.reloadReviews}/>
                     </ModalBody>
-                </Modal>
-
-                
+                </Modal>                
                 </div>
                 )
             })
+            }</div> : <div />)}
+            
+            </div>
+            
+            : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>}
 
-            }</div>
+            
 
             <hr
             style={{
@@ -450,10 +495,13 @@ class ProductPage extends React.Component {
             }}
             />
             <h3><b>Related products</b></h3>
-            {(relatedProducts.length > 0) ? 
+            
+            {(relatedDone === true ? 
+            
+            (relatedProducts.length > 0) ? 
             
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left">
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
                     {relatedProducts.map((prod) => { 
 
                 return(
@@ -467,7 +515,7 @@ class ProductPage extends React.Component {
                         <img
                         className="rel-img"
                         src={imageElems[prod.productId]}
-                        alt="First slide"
+                        alt={"related" + prod.productId}
                         />
                         
                         <hr
@@ -488,10 +536,63 @@ class ProductPage extends React.Component {
                         </Card.Text>
                         </Card.Body>
                     </Card></div> );
-            }) }</div></div>: <div style={{textAlign:'center'}} className="text-muted">No related products</div> }
+            }) }</div></div>: <div style={{textAlign:'center'}} className="text-muted">No related products</div>
 
-           
+            : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)
+             }
 
+            <hr
+            style={{
+                color: 'rgb(255, 81, 81)',
+                backgroundColor: 'rgb(255, 81, 81)',
+                height: 10
+            }}
+            />
+        <h3><h3 className="text-muted">If you're enjoying this product,</h3><b> we recommend:</b></h3>
+        {(predictedDone === false ?   <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div> :
+            
+            (predictedProducts.length > 0) ? 
+            
+            <div className="container fluid">
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
+                    {predictedProducts.map((prod) => { 
+
+                return(
+                    <div className="col-lg-4 d-flex align-items-stretch ">
+                        <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
+                            
+                        <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
+                        <Card.Header className="red-card-header">{prod.name}</Card.Header></Link>
+                        <Card.Body>
+                            
+                        <img
+                        className="rel-img"
+                        src={imageElems[prod.productId]}
+                        alt={"prediction" + prod.productId}
+                        />
+                        
+                        <hr
+                        style={{
+                            color: 'rgb(255, 81, 81)',
+                            backgroundColor: 'rgb(255, 81, 81)',
+                            height: 3
+                        }} />
+                        <Card.Text>
+                            <h4>${prod.price}</h4>
+                            <hr
+                            style={{
+                                color: 'rgb(255, 81, 81)',
+                                backgroundColor: 'rgb(255, 81, 81)',
+                                height: 1
+                            }} />
+                            <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={prod.description} className="txtarea text-muted"></textarea>
+                        </Card.Text>
+                        </Card.Body>
+                    </Card></div> );
+            }) }</div></div>: <div style={{textAlign:'center'}} className="text-muted">No predictions found.</div>
+
+        )
+             }
         </div>
         );
     }

@@ -129,8 +129,6 @@ class StatisticsPage extends React.Component {
             }     
         }
 
-        console.log(voucherUsage);
-
         if (productList.length > 0) {
             for (let i = 0; i < productList.length; ++i) {
                 products.push({label: productList[i].name, y: productList[i].numberSold})
@@ -144,6 +142,9 @@ class StatisticsPage extends React.Component {
             }
         }
         var filteredCategories = [];
+        products = products.filter(function (el) {
+            return el.y != 0;
+        });
 
         if (categories.length > 0) {
             filteredCategories = categories.filter(function (el) {
