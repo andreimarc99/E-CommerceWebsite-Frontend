@@ -3,6 +3,24 @@
     text-align: center;
   }
 
+.tbl-head {
+  background: rgb(255, 81, 81);
+  color: white;
+  position: sticky;
+  top: 0; 
+  box-shadow: 0 2px 2px -1px rgba(255, 81, 81, 0.4);
+}
+
+  
+.tbl-orders::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.tbl-orders::-webkit-scrollbar-thumb {
+background-color: rgb(255, 81, 81);
+outline: 1px solid rgb(255, 81, 81);
+}
+
 #edit-img:hover img {
   -webkit-filter: invert(100%);
 }
@@ -57,7 +75,7 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
 .red-card-header {
   color: white !important;
   background-color: rgb(255, 81, 81) !important;
-  height: 7vh;
+  height: 10vh;
   overflow: auto;
 }
 

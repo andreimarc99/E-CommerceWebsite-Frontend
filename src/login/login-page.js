@@ -1,6 +1,6 @@
 import React from 'react';
 import * as API_USERS from "../user/user-api"
-import {Button} from "react-bootstrap"
+import {Button, Form} from "react-bootstrap"
 import Home from '../home/home';
 import ProductStockPage from '../admin/components/product-stock-page';
 import axios from 'axios';
@@ -96,7 +96,7 @@ class LoginPage extends React.Component {
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group'}>
                         <label> Username </label>
-                        <input  type={'text'} className={'input-group input-group-sm'} name={'username'} value={username}
+                        <input style={{textAlign:'center'}} type={'text'} className={'input-group input-group-sm'} name={'username'} value={username}
                                onChange={this.handleChange}/>
                         {completed && !username &&
                         <div className="error-message">Username is required</div>
@@ -104,7 +104,7 @@ class LoginPage extends React.Component {
                     </div>
                     <div className={'form-group'}>
                         <label> Password </label>
-                        <input type='password' className={'input-group input-group-sm'} name={'password'} value={password}
+                        <input style={{textAlign:'center'}} type='password' className={'input-group input-group-sm'} name={'password'} value={password}
                                onChange={this.handleChange}/>
                         {
                             completed && !username &&

@@ -52,6 +52,16 @@ class OrdersAdminPage extends React.Component {
             .catch(err => console.log(err));
     }
 
+    getProductsForGivenOrder(o) {
+        var products = '';
+        for (let i = 0; i < o.products.length; ++i) {
+            products += "[" + o.products[i].name + "], "
+        }
+        products = products.substring(0, products.length - 2)
+        return products;
+    }
+
+
     componentDidMount() {
         this.fetchOrders();
     }
@@ -71,72 +81,85 @@ class OrdersAdminPage extends React.Component {
         return (
             <div style={{marginBottom:'20px', marginTop:'20px'}}>  
             {(done === true ? (orderList.length > 0 ? 
-            <div style={{justifyContent:'center', marginTop:'20px'}} className="container fluid">
-            <div className="row">
-                <div style={{marginRight:'5px'}} className="col">
-                    <div style={{marginLeft:'5px'}} className="row"><h5>Delivered orders</h5></div>
-                    <hr
-                    style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
-                        height: 3
-                    }}/>
-                        {
-                            delivered.map((order) => {
-                                return (
-                                    <div>
-                                        <div style={{color:'red'}} className="row"><b>Order #{order.orderId} summary</b></div>
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Customer</b></div>
-                                        <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Username </b> {order.customer.user.username}</div>
-                                        <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Name </b> {order.customer.user.firstName} {order.customer.user.lastName}</div>
-                                        <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>CNP </b> {order.customer.user.cnp}</div>
+            <div>
+                <h5>Undelivered orders</h5>
+                <hr
+                style={{
+                    color: 'rgb(255, 81, 81)',
+                    backgroundColor: 'rgb(255, 81, 81)',
+                    height: 3
+                }}/>
+                    <table className="table table-striped table-bordered tbl-orders" style={{display:'inline-block', overflow:'auto', height:'600px', width:'80%', marginBottom:'50px'}}>
+                    <thead className="tbl-head">
+                    <tr>
+                        <th className="text-center" width='50px'> ID</th>
+                        <th className="text-center"> Customer</th>
+                        <th className="text-center"> Products</th>
+                        <th className="text-center"> Delivery Address</th>
+                        <th className="text-center"> Voucher</th>
+                        <th className="text-center"> Price</th>
+                        <th className="text-center"> Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>{
+                    undelivered.map((order) => 
+                    (order.products.length > 0 ? 
+                             (
+                                <tr key={order.orderId}>
+                                    <td className="text-center"> {order.orderId}</td>
+                                    <td className="text-center"> <b>{order.customer.user.firstName} {order.customer.user.lastName}</b> <p className="text-muted">@{order.customer.user.username}</p></td>
+                                    <td className="text-center"> {this.getProductsForGivenOrder(order)}</td>
+                                    <td className="text-center"> {order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country}</td>
+                                    <td className="text-center"> [{order.voucher.code}] <p className="text-muted">{order.voucher.discount}% discount</p></td>
+                                    <td className="text-center"> ${order.finalPrice} </td>
+                                    <td className="text-center"><Button onClick={() => this.handleMarkAsDelivered(order)} style={{marginLeft:'10px'}} variant="outline-danger" size="sm">Mark as delivered</Button></td>
+    
+    
+                                </tr>)
+                        
+                        : <div />)
+                    )}
+                    </tbody>
+                       </table>
 
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Applied voucher </b> {order.voucher.code} ({order.voucher.discount}% discount)</div>
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Products</b></div>
-                                        {order.products.map((product) => {
-                                            return <div style={{marginLeft:'20px'}} className="row">{product.name} - ${product.price}</div>
-                                        })}
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Delivered to </b> {order.address.alias} ({order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country})</div>
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Final price</b>  ${order.finalPrice}</div>
-
-                                    </div>);
-                            })
-                        }
-                </div>
-                <div style={{marginLeft:'5px'}} className="col">
-                    <div style={{marginLeft:'5px'}} className="row"><h5>Undelivered orders</h5></div>
-                        <hr
-                        style={{
-                            color: 'rgb(255, 81, 81)',
-                            backgroundColor: 'rgb(255, 81, 81)',
-                            height: 3
-                        }}/>
-                        {
-                            undelivered.map((order) => {
-                                return (
-                                    <div>
-                                        <div style={{color:'red', marginTop:'10px'}} className="row"><b>Order #{order.orderId} summary</b>
-                                        <Button onClick={() => this.handleMarkAsDelivered(order)} style={{marginLeft:'10px'}} variant="outline-danger" size="sm">Mark as delivered</Button>
-                                        </div>
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Customer</b></div>
-                                        <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Username </b> {order.customer.user.username}</div>
-                                        <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Name </b> {order.customer.user.firstName} {order.customer.user.lastName}</div>
-                                        <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>CNP </b> {order.customer.user.cnp}</div>
-
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Applied voucher </b> {order.voucher.code} ({order.voucher.discount}% discount)</div>
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Products</b></div>
-                                        {order.products.map((product) => {
-                                            return <div style={{marginLeft:'20px'}} className="row">{product.name} - ${product.price}</div>
-                                        })}
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Delivery address </b> {order.address.alias} ({order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country})</div>
-                                        <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Final price</b> ${order.finalPrice}</div>
-
-                                    </div>);
-                            })
-                        }
-                </div>
+                       <h5>Delivered orders</h5>
+                <hr
+                style={{
+                    color: 'rgb(255, 81, 81)',
+                    backgroundColor: 'rgb(255, 81, 81)',
+                    height: 3
+                }}/>
+                    <table className="table table-striped table-bordered tbl-orders" style={{display:'inline-block', overflow:'auto', height:'600px', width:'80%', marginBottom:'50px'}}>
+                    <thead className="tbl-head">
+                    <tr>
+                        <th className="text-center" width='50px'> ID</th>
+                        <th className="text-center"> Customer</th>
+                        <th className="text-center"> Products</th>
+                        <th className="text-center"> Delivery Address</th>
+                        <th className="text-center"> Voucher</th>
+                        <th className="text-center"> Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>{
+                    delivered.map((order) => 
+                    (order.products.length > 0 ? 
+                             (
+                                <tr key={order.orderId}>
+                                    <td className="text-center"> {order.orderId}</td>
+                                    <td className="text-center"> <b>{order.customer.user.firstName} {order.customer.user.lastName}</b> <p className="text-muted">@{order.customer.user.username}</p></td>
+                                    <td className="text-center"> {this.getProductsForGivenOrder(order)}</td>
+                                    <td className="text-center"> {order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country}</td>
+                                    <td className="text-center"> [{order.voucher.code}] <p className="text-muted">{order.voucher.discount}% discount</p></td>
+                                    <td className="text-center"> ${order.finalPrice} </td>
+    
+                                </tr>)
+                        
+                        : <div />)
+                    )}
+                    </tbody>
+                       </table>
+                
             </div>
-        </div>
             : <h2>No orders.</h2>) : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
                 
             </div>

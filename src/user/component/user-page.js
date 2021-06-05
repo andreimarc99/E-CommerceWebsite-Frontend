@@ -17,6 +17,7 @@ import AddressCreationForm from './address-creation-form';
 import axios from 'axios';
 import EmailCreationForm from './email-creation-form';
 import EmailUpdateForm from './email-update-form';
+import ReactSpinner from 'react-bootstrap-spinner'
 
 class UserPage extends React.Component {
 
@@ -33,7 +34,9 @@ class UserPage extends React.Component {
             selected_add_address: false,
             emails: [],
             selected_add_email: false,
-            selected_update_email: false
+            selected_update_email: false,
+            doneAddresses: false,
+            doneEmails: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
@@ -55,7 +58,8 @@ class UserPage extends React.Component {
             API_ADDRESS.getAddressByUsername(username, (result, status, err) => {
                 if (result !== null && status === 200) {
                     this.setState(({
-                        addresses: result
+                        addresses: result,
+                        doneAddresses: true
                     }));
                     
                 } else {
@@ -71,7 +75,7 @@ class UserPage extends React.Component {
     fetchEmails() {
         const {user} = this.state;
         axios.get(HOST.backend_api + "/emails/" + JSON.parse(user).username)
-        .then(response => this.setState({emails: response.data}))
+        .then(response => this.setState({emails: response.data, doneEmails: true}))
     }
 
     handleSave() {
@@ -196,12 +200,6 @@ class UserPage extends React.Component {
             }
         )
     }
-    
-    handleDeleteAddress(id) {
-        fetch(HOST.backend_api + '/addresses/' + id, {method: 'DELETE'})
-        .then(response => {response.json(); 
-            this.refresh();});
-    }
 
     refresh() {
         window.location.reload(false);
@@ -218,7 +216,7 @@ class UserPage extends React.Component {
 
     render() {
         const {user} = this.state;
-        const {addresses, emails} = this.state;
+        const {addresses, emails, doneAddresses, doneEmails} = this.state;
         console.log(emails);
         return (
         <div>
@@ -246,95 +244,99 @@ class UserPage extends React.Component {
 
             <Button style={{marginBottom:'20px'}} size="lg" variant="outline-danger" disabled={!this.state.valid} onClick={this.handleSave}>Save</Button>
           {(JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ?  <div>
-            <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered addresses
-            </h3>
-            
-            <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddForm} variant="outline-danger"> Add new address </Button>
-            
-            {
-                ((addresses.length > 0 && addresses !== undefined) ? 
-                     addresses.map((address) => {
-                        return( 
-                            <div style={{textAlign:'left', marginLeft: '30px', marginBottom:'20px'}}>
-
-
-                                <h4>  
-                                      
-                                    <b>{address.alias}</b>
-                                    <Button style={{marginLeft:'10px'}} size="sm" variant="danger"  onClick={() => this.handleDeleteAddress(address.addressId)}>Delete</Button>
-                                    <Button style={{marginRight:'10px', marginLeft:'10px'}} size="sm" variant="outline-danger"  onClick={() => this.toggleUpdateForm(address)}>Edit</Button>
+              
+                <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered addresses
+                </h3>
+                {(doneAddresses === true ? <div>
+                <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddForm} variant="outline-danger"> Add new address </Button>
+                
+                {
+                    ((addresses.length > 0 && addresses !== undefined) ? 
+                         addresses.map((address) => {
+                            return( 
+                                <div style={{textAlign:'left', marginLeft: '30px', marginBottom:'20px'}}>
+    
+    
+                                    <h4>  
+                                          
+                                        <b>{address.alias}</b>
+                                        <Button style={{marginRight:'10px', marginLeft:'10px'}} size="sm" variant="outline-danger"  onClick={() => this.toggleUpdateForm(address)}>Edit</Button>
+                                        
+                                    </h4>                                 
+    
                                     
-                                </h4>                                 
-
-                                
-                                <div style={{textAlign:'center', display:'flex', justifyContent:'space-between', marginLeft:'50px', marginRight:'50px'}}>
-                                    <div className="zoom-text" style={{display:'inline'}}>
-                                    <p style={{marginTop:'10px'}}><b>Country</b></p>
-                                    <hr
-                                    style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
-                                        height: 2
-                                    }} />
-                                    <p className="text-muted">{address.country}</p>
+                                    <div style={{textAlign:'center', display:'flex', justifyContent:'space-between', marginLeft:'50px', marginRight:'50px'}}>
+                                        <div className="zoom-text" style={{display:'inline'}}>
+                                        <p style={{marginTop:'10px'}}><b>Country</b></p>
+                                        <hr
+                                        style={{
+                                            color: 'rgb(255, 81, 81)',
+                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            height: 2
+                                        }} />
+                                        <p className="text-muted">{address.country}</p>
+                                        </div>
+                                        <div className="zoom-text" style={{display:'inline'}}>
+                                        <p style={{marginTop:'10px'}}><b>County</b></p>
+                                        <hr
+                                        style={{
+                                            color: 'rgb(255, 81, 81)',
+                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            height: 2
+                                        }} />
+                                        <p className="text-muted">{address.county}</p>
+                                        </div>
+    
+                                        <div className="zoom-text" style={{display:'inline'}}>
+                                        <p style={{marginTop:'10px'}}><b>Town</b></p>
+                                        <hr
+                                        style={{
+                                            color: 'rgb(255, 81, 81)',
+                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            height: 2
+                                        }} />
+                                        <p className="text-muted">{address.town}</p>
+                                        </div>
+                                        
+                                        <div className="zoom-text" style={{display:'inline'}}>
+                                        <p style={{marginTop:'10px'}}><b>Street Number</b></p>
+                                        <hr
+                                        style={{
+                                            color: 'rgb(255, 81, 81)',
+                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            height: 2
+                                        }} />
+                                        <p className="text-muted">{address.streetNr}</p>
+                                        </div>
+                                        
+                                        <div className="zoom-text" style={{display:'inline'}}>
+                                        <p style={{marginTop:'10px'}}><b>Country Code</b></p>
+                                        <hr
+                                        style={{
+                                            color: 'rgb(255, 81, 81)',
+                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            height: 2
+                                        }} />
+                                        <p className="text-muted">{address.countryCode}</p>
+                                        </div>
                                     </div>
-                                    <div className="zoom-text" style={{display:'inline'}}>
-                                    <p style={{marginTop:'10px'}}><b>County</b></p>
-                                    <hr
-                                    style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
-                                        height: 2
-                                    }} />
-                                    <p className="text-muted">{address.county}</p>
-                                    </div>
-
-                                    <div className="zoom-text" style={{display:'inline'}}>
-                                    <p style={{marginTop:'10px'}}><b>Town</b></p>
-                                    <hr
-                                    style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
-                                        height: 2
-                                    }} />
-                                    <p className="text-muted">{address.town}</p>
-                                    </div>
-                                    
-                                    <div className="zoom-text" style={{display:'inline'}}>
-                                    <p style={{marginTop:'10px'}}><b>Street Number</b></p>
-                                    <hr
-                                    style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
-                                        height: 2
-                                    }} />
-                                    <p className="text-muted">{address.streetNr}</p>
-                                    </div>
-                                    
-                                    <div className="zoom-text" style={{display:'inline'}}>
-                                    <p style={{marginTop:'10px'}}><b>Country Code</b></p>
-                                    <hr
-                                    style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
-                                        height: 2
-                                    }} />
-                                    <p className="text-muted">{address.countryCode}</p>
-                                    </div>
+                                    <br /><br />
                                 </div>
-                                <br /><br />
-                            </div>
-                        )
-                    })
-                        
-                : 
-                <p className="text-muted"> No addresses found </p>
-                )
-            }</div> :<div />)
+                            )
+                        })
+                            
+                    : 
+                    <p className="text-muted"> No addresses found </p>
+                    )
+                }</div>
+                : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
+            </div> :<div />)
         }
             <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered emails
             </h3>
-            <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddEmailForm} variant="outline-danger"> Add new email </Button>
+            {(doneEmails === true ? 
+                <div> 
+        <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddEmailForm} variant="outline-danger"> Add new email </Button>
             <table style={{margin:'auto',width:'60%'}} className="table">
                             <thead>
                             <tr>
@@ -353,6 +355,10 @@ class UserPage extends React.Component {
                             }
                             </tbody>
                         </table>
+
+                </div>
+                : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
+            
             <br /><br />
             <Modal isOpen={this.state.selected_update_address} toggle={this.toggleUpdateForm}
                     className={this.props.className} size="lg">

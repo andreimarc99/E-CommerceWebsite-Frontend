@@ -2,10 +2,14 @@ import React from 'react';
 import {withRouter} from "react-router-dom";
 import {HOST} from "../../commons/hosts"
 import ReactSpinner from 'react-bootstrap-spinner'
-
+import OrderVisualizationForm from "./order-visualization-form"
 import {Card, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
-
+import {
+    Modal,
+    ModalBody,
+    ModalHeader
+} from 'reactstrap';
 
 class OrderHistoryPage extends React.Component {
 
@@ -16,9 +20,11 @@ class OrderHistoryPage extends React.Component {
             orderList: [],
             errorStatus: 0,
             error: '',
-            done: false
+            done: false,
+            selected_view_order: false
         }
         this.fetchOrders = this.fetchOrders.bind(this);
+        this.toggleForm = this.toggleForm.bind(this);
     }
 
     fetchOrders() {
@@ -28,6 +34,23 @@ class OrderHistoryPage extends React.Component {
         .then(data => {
             this.setState({orderList: data, done: true})
         });
+    }
+
+    getProductsForGivenOrder(o) {
+        var products = '';
+        for (let i = 0; i < o.products.length; ++i) {
+            products += o.products[i].name + "\n"
+        }
+        return products;
+    }
+
+    toggleForm(o) {
+        this.setState(
+            {
+                selected_view_order: !this.state.selected_view_order,
+                selected_order: o
+            }
+        )
     }
 
     componentDidMount() {
@@ -47,73 +70,103 @@ class OrderHistoryPage extends React.Component {
             })
         }
         return (
-            <div style={{marginBottom:'20px'}}>  
-                <h4 style={{marginTop:'10px'}}>{username}'s orders</h4> 
-                <hr
+            <div style={{marginBottom:'20px', marginTop:'20px', justifyContent:'center'}}>  
+               <h2>Undelivered orders</h2>
+               <hr
                 style={{
                     color: 'rgb(255, 81, 81)',
                     backgroundColor: 'rgb(255, 81, 81)',
-                    height: 5
+                    height: 10
                 }}/>
-                {(done === true ? 
-                    
-                    <div style={{justifyContent:'center', marginTop:'20px'}} className="container fluid">
-                    <div className="row">
-                        <div style={{marginRight:'5px'}} className="col">
-                            <div style={{marginLeft:'5px'}} className="row"><h5>Delivered orders</h5></div>
+               {(done === true ? <div>
+                 {(undelivered.length > 0 ? 
+                    <div className="row" style={{justifyItems:'center', alignItems:'center', flexWrap:'wrap'}}>
+                    {undelivered.map((o) => {
+                        {return (o.products.length > 0 ? 
+                            
+                        <div className="col">
+                        <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
+                             
+                      
+                        <Card.Header style={{backgroundColor:'rgb(255,81,81)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>
+                        
+                        <Card.Body className="text-center">
+                            <b>Products</b>
+                        <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={this.getProductsForGivenOrder(o)} className="txtarea text-muted"></textarea>
                             <hr
                             style={{
                                 color: 'rgb(255, 81, 81)',
                                 backgroundColor: 'rgb(255, 81, 81)',
-                                height: 3
+                                height: 3,
+                                width:'40%'
                             }}/>
-                                {
-                                    delivered.map((order) => {
-                                        return (
-                                            <div>
-                                                <div style={{color:'red'}} className="row"><b>Order #{order.orderId} summary</b></div>
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Applied voucher </b> - {order.voucher.code} ({order.voucher.discount}% discount)</div>
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Products</b></div>
-                                                {order.products.map((product) => {
-                                                    return <div style={{marginLeft:'20px'}} className="row">{product.name} - ${product.price}</div>
-                                                })}
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Delivered to: </b> {order.address.alias} ({order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country})</div>
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Final price</b> - ${order.finalPrice}</div>
-
-                                            </div>);
-                                    })
-                                }
+                            <h4 className="text-muted">${(Math.round(o.finalPrice * 100) / 100).toFixed(1)}</h4>
+                            <Button style={{marginBottom:'5px'}} variant="outline-danger" onClick={() => this.toggleForm(o)}>Details</Button>
+                        </Card.Body>
+                        </Card>
                         </div>
-                        <div style={{marginLeft:'5px'}} className="col">
-                            <div style={{marginLeft:'5px'}} className="row"><h5>Undelivered orders</h5></div>
-                                <hr
-                                style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
-                                    height: 3
-                                }}/>
-                                {
-                                    undelivered.map((order) => {
-                                        return (
-                                            <div>
-                                                <div style={{color:'red', marginTop:'10px'}} className="row"><b>Order #{order.orderId} summary</b></div>
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Applied voucher </b> - {order.voucher.code} ({order.voucher.discount}% discount)</div>
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Products</b></div>
-                                                {order.products.map((product) => {
-                                                    return <div style={{marginLeft:'20px'}} className="row">{product.name} - ${product.price}</div>
-                                                })}
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Delivered to: </b> {order.address.alias} ({order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country})</div>
-                                                <div style={{marginLeft:'10px'}} className="row"><b>Final price</b> - ${order.finalPrice}</div>
-
-                                            </div>);
-                                    })
-                                }
-                        </div>
+                            : <div />)}
+                   })}
+    
                     </div>
-                </div>
+    
+                    : <div className="text-muted">No undelivered orders found at the moment.</div>)}</div>
+                : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
+              
 
-                    : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
-                
+              <h2>Delivered orders</h2>
+               <hr
+                style={{
+                    color: 'rgb(255, 81, 81)',
+                    backgroundColor: 'rgb(255, 81, 81)',
+                    height: 10
+                }}/>
+               {(done === true ? <div>
+                 {(delivered.length > 0 ? 
+                    <div className="row" style={{justifyItems:'center', alignItems:'center', flexWrap:'wrap'}}>
+                    {delivered.map((o) => {
+                        {return (o.products.length > 0 ? 
+                            
+                        <div className="col">
+
+                        <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
+                             
+                      
+                        <Card.Header style={{backgroundColor:'rgb(255,81,81)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>
+                        
+                        <Card.Body className="text-center">
+                            <b>Products</b>
+                        <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={this.getProductsForGivenOrder(o)} className="txtarea text-muted"></textarea>
+                            <hr
+                            style={{
+                                color: 'rgb(255, 81, 81)',
+                                backgroundColor: 'rgb(255, 81, 81)',
+                                height: 3,
+                                width:'40%'
+                            }}/>
+                            <h4 className="text-muted">${(Math.round(o.finalPrice * 100) / 100).toFixed(1)}</h4>
+                            <Button style={{marginBottom:'5px'}} variant="outline-danger" onClick={() => this.toggleForm(o)}>Details</Button>
+                        </Card.Body>
+                        </Card>
+                        </div>
+                            : <div />)}
+                            
+                   })}
+    
+                    </div>
+    
+                    : <div className="text-muted">No delivered orders found.</div>)}</div>
+                : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
+              
+                            
+              <Modal isOpen={this.state.selected_view_order} toggle={this.toggleForm}
+                        className={this.props.className} size="lg">
+                    <ModalHeader toggle={this.toggleForm} style={{color:'rgb(255,81,81)'}}> Order details </ModalHeader>
+                    <ModalBody>
+                        <OrderVisualizationForm order={this.state.selected_order}/>
+                    </ModalBody>
+                </Modal>
+               
             </div>
         );
     }
