@@ -54,19 +54,20 @@ class ProductPage extends React.Component {
 
     isAFavorite() {
         let prods = {};
-        if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") {
-            FAV_PRODUCTS_API.getFavoriteProductsByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (result, status, err) => {
-                if (result !== null && status === 200) {
-                    prods = result;
-                    const {product} = this.state;
-                    for (let i = 0; i < prods.products.length; ++i) {
-                        if (product.productId === prods.products[i].productId) {
-                            this.setState({isFavorite: true});
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined)
+            if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") {
+                FAV_PRODUCTS_API.getFavoriteProductsByUsername(JSON.parse(localStorage.getItem("loggedUser")).username, (result, status, err) => {
+                    if (result !== null && status === 200) {
+                        prods = result;
+                        const {product} = this.state;
+                        for (let i = 0; i < prods.products.length; ++i) {
+                            if (product.productId === prods.products[i].productId) {
+                                this.setState({isFavorite: true});
+                            }
                         }
                     }
-                }
-            })
-        }
+                })
+            }
     }
 
     handleAddToFavorites() {
@@ -306,8 +307,11 @@ class ProductPage extends React.Component {
             reviewList.map((review) => {
                 rating += parseInt(review.rating);
                 reviewNumber++;
-                if (review.customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username) {
-                    reviewedAlready = true;
+                if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+
+                    if (review.customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username) {
+                        reviewedAlready = true;
+                    }
                 }
             });
         }
@@ -340,22 +344,16 @@ class ProductPage extends React.Component {
         imageElem.src = 'data:image/png;base64,' + buf.toString('base64');
         return (
         <div>
+            <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{product.name.toString().toUpperCase()}
+            <h5 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{product.stock} IN STOCK</h5></h1>
+           
+           
             <br />
-            <h1 >{product.name}</h1>
-            {(product.stock > 10 ? (<h5 style={{color: 'green'}}>{product.stock} in stock</h5>) : (<h5 style={{color: 'red'}}>{product.stock} left</h5>))}
-            <hr
-            style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
-                height: 10
-            }}/>
-            <br />
-            <div className="zoom-img">
             <img
                   className="d-block w-100 prod-img shadowed"
                   src={imageElem.src}
                   alt="First slide"
-            /></div>
+            />
             <br />
             <h3>Price: ${product.price}</h3>
 
@@ -384,8 +382,8 @@ class ProductPage extends React.Component {
               
            <hr
             style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
+                color: 'rgb(220,53,69)',
+                backgroundColor: 'rgb(220,53,69)',
                 height: 10
             }}
             />
@@ -398,15 +396,15 @@ class ProductPage extends React.Component {
            </div>
            <hr
             style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
+                color: 'rgb(220,53,69)',
+                backgroundColor: 'rgb(220,53,69)',
                 height: 10
             }}/>
             <h3><b>Categories</b></h3>
             <div className="container fluid">
                 <div className="row justify-content-center " style={{display:'inline-block', verticalAlign:'middle'}}>
                 {product.specs.categories.map((category) => 
-                <div className="col" style={{borderStyle:"solid", borderColor:'rgb(255,81,81)', borderRadius:'20px', backgroundColor:'rgb(255,81,81)', marginTop:'6px'}}>
+                <div className="col" style={{borderStyle:"solid", borderColor:'rgb(220,53,69)', borderRadius:'20px', backgroundColor:'rgb(220,53,69)', marginTop:'6px'}}>
                 <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/category/${category.name}`, state: { categoryName: category.name } }}>
 
                 <h4 style={{ width:'100%'}}> {category.name} </h4> 
@@ -419,8 +417,8 @@ class ProductPage extends React.Component {
             
             <hr
             style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
+                color: 'rgb(220,53,69)',
+                backgroundColor: 'rgb(220,53,69)',
                 height: 25
             }}
             />
@@ -431,7 +429,10 @@ class ProductPage extends React.Component {
             <div>
             {(reviewList.length > 0 ? <p>{reviewList.length} reviews found.</p> : <div />)}
             {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {(Math.round(rating * 100) / 100).toFixed(1)}</p>}
-            {(!reviewedAlready && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button> : <div /> )}
+            { (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) ?
+
+            (!reviewedAlready && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button> : <div /> )
+            :<div />}
             <Modal isOpen={this.state.selected_create_review} toggle={this.toggleCreateReview}
                  className={this.props.className} size="lg">
                 <ModalHeader toggle={this.toggleCreateReview}><p style={{color:"red"}}> Post a review </p></ModalHeader>
@@ -444,8 +445,8 @@ class ProductPage extends React.Component {
                 <div >
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 3
                     }}
                     />
@@ -461,12 +462,14 @@ class ProductPage extends React.Component {
                 <p  style={{marginLeft:"20px"}} className="text-left text-muted" >@{review.customer.user.username}</p>
                 <h4 style={{marginLeft:"20px"}} className="text-left">{review.message}</h4>    
                 <div style={{textAlign:'right', marginRight:'20px'}}>
-                    {(review.customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username ? 
+                    {
+                    (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) ?
+                    (review.customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username ? 
                     <div>
                         <Button onClick={this.toggleUpdateReview} variant="outline-danger">Edit</Button>
                         <Button style={{marginLeft:'10px'}} variant="danger" onClick={() => this.handleDeleteReview(review.reviewId)}>Delete</Button>
                     </div> 
-                    : <div />)}
+                    : <div />) : <div />}
                 </div>
                 
                 <Modal isOpen={this.state.selected_update_review} toggle={this.toggleUpdateReview}
@@ -489,8 +492,8 @@ class ProductPage extends React.Component {
 
             <hr
             style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
+                color: 'rgb(220,53,69)',
+                backgroundColor: 'rgb(220,53,69)',
                 height: 10
             }}
             />
@@ -520,16 +523,16 @@ class ProductPage extends React.Component {
                         
                         <hr
                         style={{
-                            color: 'rgb(255, 81, 81)',
-                            backgroundColor: 'rgb(255, 81, 81)',
+                            color: 'rgb(220,53,69)',
+                            backgroundColor: 'rgb(220,53,69)',
                             height: 3
                         }} />
                         <Card.Text>
                             <h4>${prod.price}</h4>
                             <hr
                             style={{
-                                color: 'rgb(255, 81, 81)',
-                                backgroundColor: 'rgb(255, 81, 81)',
+                                color: 'rgb(220,53,69)',
+                                backgroundColor: 'rgb(220,53,69)',
                                 height: 1
                             }} />
                             <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={prod.description} className="txtarea text-muted"></textarea>
@@ -543,8 +546,8 @@ class ProductPage extends React.Component {
 
             <hr
             style={{
-                color: 'rgb(255, 81, 81)',
-                backgroundColor: 'rgb(255, 81, 81)',
+                color: 'rgb(220,53,69)',
+                backgroundColor: 'rgb(220,53,69)',
                 height: 10
             }}
             />
@@ -554,7 +557,7 @@ class ProductPage extends React.Component {
             (predictedProducts.length > 0) ? 
             
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left">
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
                     {predictedProducts.map((prod) => { 
 
                 return(
@@ -573,16 +576,16 @@ class ProductPage extends React.Component {
                         
                         <hr
                         style={{
-                            color: 'rgb(255, 81, 81)',
-                            backgroundColor: 'rgb(255, 81, 81)',
+                            color: 'rgb(220,53,69)',
+                            backgroundColor: 'rgb(220,53,69)',
                             height: 3
                         }} />
                         <Card.Text>
                             <h4>${prod.price}</h4>
                             <hr
                             style={{
-                                color: 'rgb(255, 81, 81)',
-                                backgroundColor: 'rgb(255, 81, 81)',
+                                color: 'rgb(220,53,69)',
+                                backgroundColor: 'rgb(220,53,69)',
                                 height: 1
                             }} />
                             <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={prod.description} className="txtarea text-muted"></textarea>

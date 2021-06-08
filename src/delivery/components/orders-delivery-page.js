@@ -75,8 +75,8 @@ class OrdersDeliveryPage extends React.Component {
                 <h2>Active orders</h2>
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 10
                 }}/>
                 {
@@ -120,8 +120,8 @@ class OrdersDeliveryPage extends React.Component {
 
                                 <hr
                                 style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
+                                    color: 'rgb(220,53,69)',
+                                    backgroundColor: 'rgb(220,53,69)',
                                     height: 2
                                 }}/>
                                 <div className="row">
@@ -132,8 +132,8 @@ class OrdersDeliveryPage extends React.Component {
                                     <div>{order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country} <a style={{marginLeft:'5px'}} target="_tab" href={"https://www.google.ro/maps/place/"+order.address.streetNr+"+"+order.address.town+"+"+order.address.county+"+"+order.address.country}><img src={jump} style={{width:'2%'}} /></a></div>
                                     <hr
                                     style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
+                                        color: 'rgb(220,53,69)',
+                                        backgroundColor: 'rgb(220,53,69)',
                                         height: 2
                                     }}/>
                                     <h5><b>Price</b></h5>

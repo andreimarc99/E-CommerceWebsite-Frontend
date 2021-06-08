@@ -163,16 +163,9 @@ class CartPage extends React.Component {
 
         return (
             <div>   
-                <br />
                 {
-                    (customer !== undefined) ? <h2>{customer.user.firstName} {customer.user.lastName}'s cart</h2> : <div />
+                    (customer !== undefined) ?  <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{customer.user.firstName} {customer.user.lastName}'s cart</h1> : <div />
                 }
-                 <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
                 
                 {
                     (uniqueProductList.length > 0 ? 
@@ -183,8 +176,8 @@ class CartPage extends React.Component {
                                 <h4>{prod.value.name}</h4>
                                 <hr
                                 style={{
-                                    color: 'rgb(255, 81, 81)',
-                                    backgroundColor: 'rgb(255, 81, 81)',
+                                    color: 'rgb(220,53,69)',
+                                    backgroundColor: 'rgb(220,53,69)',
                                     height: 3,
                                     width:'50%'
                                 }}
@@ -213,8 +206,8 @@ class CartPage extends React.Component {
                                                 <h5 className="text-muted">Price</h5>
                                                 <hr
                                                 style={{
-                                                    color: 'rgb(255, 81, 81)',
-                                                    backgroundColor: 'rgb(255, 81, 81)',
+                                                    color: 'rgb(220,53,69)',
+                                                    backgroundColor: 'rgb(220,53,69)',
                                                     height: 1,
                                                     width:'15%'
                                                 }}
@@ -252,8 +245,8 @@ class CartPage extends React.Component {
                 <br />
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 2,
                     width:'20%'
                 }}/>

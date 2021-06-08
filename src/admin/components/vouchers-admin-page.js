@@ -100,16 +100,11 @@ class VouchersAdminPage extends React.Component {
             })
         }
         return (
+            <div>
+                <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>VOUCHERS</h1>
             <div style={{marginBottom:'20px', marginTop:'20px'}}>
-                <h3>Existing vouchers in the system</h3>
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
                 
-                <Button onClick={this.toggleAddVoucher} style={{marginBottom:'20px'}} variant="danger">Create new voucher</Button>
+                <Button onClick={this.toggleAddVoucher} style={{marginBottom:'20px'}} variant="danger">NEW VOUCHER</Button>
 
                 {(done === true ?  
                     (voucherList.length > 0 ? 
@@ -135,7 +130,7 @@ class VouchersAdminPage extends React.Component {
                                             <td className="text-center"> {voucher.discount}%</td>
                                             <td className="text-center"> {new Date(voucher.startDate.substring(0,10)).toDateString()} - {new Date(voucher.endDate.substring(0,10)).toDateString()}</td>
                                             <td className="text-center"> {(voucher.oneTimeOnly === true ? "Yes" : "No")}</td>
-                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateVoucher(voucher)} style={{margin:'5px'}} variant='outline-danger' size='sm'>Update</Button></td>
+                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateVoucher(voucher)} style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button></td>
                                         </tr>)
                             }
                             </tbody>
@@ -146,7 +141,7 @@ class VouchersAdminPage extends React.Component {
                 }
                 <Modal isOpen={this.state.selected_create_voucher} toggle={this.toggleAddVoucher}
                     className={this.props.className} size="lg">
-                <ModalHeader toggle={this.toggleAddVoucher} style={{color:'rgb(255,81,81)'}}> Create voucher </ModalHeader>
+                <ModalHeader toggle={this.toggleAddVoucher} style={{color:'rgb(220,53,69)'}}> Create voucher </ModalHeader>
                 <ModalBody>
                     <VoucherCreationForm reloadHandler={this.refresh}/>
                 </ModalBody>
@@ -154,12 +149,12 @@ class VouchersAdminPage extends React.Component {
 
                 <Modal isOpen={this.state.selected_update_voucher} toggle={this.toggleUpdateVoucher}
                     className={this.props.className} size="lg">
-                <ModalHeader toggle={this.toggleUpdateVoucher} style={{color:'rgb(255,81,81)'}}> Update voucher </ModalHeader>
+                <ModalHeader toggle={this.toggleUpdateVoucher} style={{color:'rgb(220,53,69)'}}> Update voucher </ModalHeader>
                 <ModalBody>
                     <VoucherUpdateForm voucher={this.state.selected_voucher} reloadHandler={this.refresh}/>
                 </ModalBody>
                 </Modal>
-            </div>
+            </div></div>
         );
     }
 

@@ -21,6 +21,12 @@ import logout from "./img/log-out.png"
 import heart from "./img/heart.png"
 import bear from "./img/bear.png"
 import history from "./img/history.png"
+import voucher from "./img/voucher.png"
+import complaint from "./img/complaint.png"
+import stats from "./img/stats.png"
+import orders from "./img/orders.png"
+import stock from "./img/stock.png"
+import product_search from "./img/product.png"
 
 import {Link} from 'react-router-dom'
 import * as CATEGORY_API from "./product/api/category-api"
@@ -117,40 +123,61 @@ class NavbarPage extends React.Component {
             <Nav className="mr-auto" navbar>
               {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
               <NavItem>
-                <NavLink href="/product_stock_page" style={{color:"white"}}>Products Stock</NavLink>
+                <NavLink href="/product_stock_page" style={{color:"white"}}>
+                  <div id="side-menu">
+                <img src={stock} className="logo" height="30" alt="stock" style={{marginRight:'3px'}}></img><span>PRODUCT STOCK</span>
+                </div></NavLink>
               </NavItem> : <div />) : <div />)
               }
 
               {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
               <NavItem>
-                <NavLink href="/orders_admin_page" style={{color:"white"}}>Orders</NavLink>
+                <NavLink href="/orders_admin_page" style={{color:"white"}}>
+                  
+                <div id="side-menu">
+                <img src={orders} className="logo" height="30" alt="orders" style={{marginRight:'3px'}}></img><span>ORDERS</span>
+                </div>
+                </NavLink>
               </NavItem> : <div />) : <div />)
               }
 
             {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
               <NavItem>
-                <NavLink href="/stats_admin_page" style={{color:"white"}}>Statistics</NavLink>
+                <NavLink href="/stats_admin_page" style={{color:"white"}}>
+                <div id="side-menu">
+                <img src={stats} className="logo" height="30" alt="stats" style={{marginRight:'3px'}}></img><span>STATISTICS</span>
+                </div>
+                </NavLink>
               </NavItem> : <div />) : <div />)
               }
 
               {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
               <NavItem>
-                <NavLink href="/complaints_admin_page" style={{color:"white"}}>Complaints</NavLink>
+                <NavLink href="/complaints_admin_page" style={{color:"white"}}>
+                <div id="side-menu">
+
+                <img src={complaint} className="logo" height="30" alt="complaints" style={{marginRight:'3px'}}></img><span>COMPLAINTS</span>
+                </div>
+                  </NavLink>
               </NavItem> : <div />) : <div />)
               }
 
               {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
               <NavItem>
-                <NavLink href="/vouchers_admin_page" style={{color:"white"}}>Vouchers</NavLink>
+                <NavLink href="/vouchers_admin_page" style={{color:"white"}}> 
+                <div id="side-menu">
+                <img src={voucher} className="logo" height="30" alt="vouchers" style={{marginRight:'3px'}}></img><span>VOUCHERS</span>
+                </div>
+                </NavLink>
               </NavItem> : <div />) : <div />)
               }
               
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle style={{color:'white'}} nav caret>
-                  Products
+                <img src={product_search} className="logo lower-zoom" height="30" alt="products" style={{marginRight:'3px'}}></img>
                 </DropdownToggle>
                 <DropdownMenu right>
-                <DropdownItem header>Categories</DropdownItem>
+                <DropdownItem header>CATEGORIES</DropdownItem>
                 <DropdownItem divider />
                   {((categoryList.length > 0) ? categoryList.map((category) => 
                   <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/category/${category.name}`, state: { categoryName: category.name } }}>
@@ -162,7 +189,12 @@ class NavbarPage extends React.Component {
                   
               {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "DELIVERY_GUY" ?
               <NavItem>
-                <NavLink href="/orders_delivery_page" style={{color:"white"}}>Orders</NavLink>
+                <NavLink href="/orders_delivery_page" style={{color:"white"}}>
+                <div id="side-menu">
+                <img src={orders} className="logo" height="30" alt="orders" style={{marginRight:'3px'}}></img><span>ORDERS</span>
+                </div>
+
+                </NavLink>
               </NavItem> : <div />) : <div />)
               }
 
@@ -177,17 +209,22 @@ class NavbarPage extends React.Component {
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined) ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/user_page/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { user: localStorage.getItem("loggedUser") } }}>
-                <img className="lower-zoom" src={account} height="30" alt="account" style={{marginLeft:'10px'}}></img>
+                 <div id="side-menu">
+                <img src={account} className="logo" height="30" alt="account" style={{marginLeft:'10px', marginRight:'3px'}}></img><span>ACCOUNT</span>
+                </div>
               </Link>
               :
-              <img className="lower-zoom" onClick={this.handleAccountClick} src={account} height="30" alt="account" style={{marginLeft:'30px'}}></img>
+              
+              <img className="lower-zoom logo" onClick={this.handleAccountClick} src={account} height="30" alt="account" style={{marginLeft:'20px', marginRight:'10px'}}></img>
               )
               }
                 
                 {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/fav_products/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
-                <img src={heart} className="logo lower-zoom" height="30" alt="account" style={{marginLeft:'10px'}}></img>
+                <div id="side-menu">
+                <img src={heart} className="logo" height="30" alt="heart" style={{marginLeft:'10px', marginRight:'3px'}}></img><span>FAVORITES</span>
+                </div>
               </Link>
               :
                 <div />
@@ -196,8 +233,10 @@ class NavbarPage extends React.Component {
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/cart/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
-                <img src={cart} height="30" alt="cart" className="logo lower-zoom" style={{marginLeft:'10px'}}></img>
-              </Link>
+                <div id="side-menu">
+                <img src={cart} className="logo" height="30" alt="cart" style={{marginLeft:'10px', marginRight:'3px'}}></img><span>CART</span>
+                </div>              
+                </Link>
               :
                 <div />
               )
@@ -205,7 +244,9 @@ class NavbarPage extends React.Component {
               {
               ((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
               <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/order_history/${JSON.parse(localStorage.getItem("loggedUser")).username}`, state: { username: JSON.parse(localStorage.getItem("loggedUser")).username } }}>
-                <img src={history} height="30" alt="cart" className="logo lower-zoom" style={{marginLeft:'10px'}}></img>
+                <div id="side-menu">
+                <img src={history} className="logo" height="30" alt="history" style={{marginLeft:'10px', marginRight:'3px'}}></img><span>HISTORY</span>
+                </div>  
               </Link>
               :
                 <div />

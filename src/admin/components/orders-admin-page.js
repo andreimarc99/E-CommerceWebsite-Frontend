@@ -79,14 +79,17 @@ class OrdersAdminPage extends React.Component {
             })
         }
         return (
+            <div>
+                <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>ORDERS</h1>
+
             <div style={{marginBottom:'20px', marginTop:'20px'}}>  
             {(done === true ? (orderList.length > 0 ? 
             <div>
-                <h5>Undelivered orders</h5>
+                <h5>UNDELIVERED</h5>
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 3
                 }}/>
                     <table className="table table-striped table-bordered tbl-orders" style={{display:'inline-block', overflow:'auto', height:'600px', width:'80%', marginBottom:'50px'}}>
@@ -112,7 +115,7 @@ class OrdersAdminPage extends React.Component {
                                     <td className="text-center"> {order.address.streetNr}, {order.address.town}, {order.address.county}, {order.address.country}</td>
                                     <td className="text-center"> [{order.voucher.code}] <p className="text-muted">{order.voucher.discount}% discount</p></td>
                                     <td className="text-center"> ${order.finalPrice} </td>
-                                    <td className="text-center"><Button onClick={() => this.handleMarkAsDelivered(order)} style={{marginLeft:'10px'}} variant="outline-danger" size="sm">Mark as delivered</Button></td>
+                                    <td className="text-center"><Button onClick={() => this.handleMarkAsDelivered(order)} style={{marginLeft:'10px'}} variant="outline-danger" size="sm">MARK AS DELIVERED</Button></td>
     
     
                                 </tr>)
@@ -121,12 +124,17 @@ class OrdersAdminPage extends React.Component {
                     )}
                     </tbody>
                        </table>
-
-                       <h5>Delivered orders</h5>
+                       <hr
+                style={{
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
+                    height: 10
+                }}/>
+                       <h5>DELIVERED</h5>
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 3
                 }}/>
                     <table className="table table-striped table-bordered tbl-orders" style={{display:'inline-block', overflow:'auto', height:'600px', width:'80%', marginBottom:'50px'}}>
@@ -162,7 +170,7 @@ class OrdersAdminPage extends React.Component {
             </div>
             : <h2>No orders.</h2>) : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
                 
-            </div>
+            </div></div>
         );
     }
 

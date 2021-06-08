@@ -441,12 +441,12 @@ class RegisterContainer extends React.Component {
         return (
             <div>
                 <br />
-                <h2 style={{margin:'auto', color:'rgb(255,81,81)'}}>Register
+                <h2 style={{margin:'auto', color:'rgb(220,53,69)'}}>Register
                 <small className="text-muted"> to continue.</small>
                 </h2><br />
                 <FormGroup id='username' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='usernameField'> Username </Label>
-                    <Input name='username' id='usernameField' placeholder={this.state.formControls.username.placeholder}
+                    <Label for='usernameField'> USERNAME </Label>
+                    <Input style={{textAlign:'center'}}  name='username' id='usernameField' placeholder={this.state.formControls.username.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.username.value}
                            touched={this.state.formControls.username.touched? 1 : 0}
@@ -458,8 +458,8 @@ class RegisterContainer extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='password' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='passwordField'> Password </Label>
-                    <Input name='password' id='passwordField' placeholder={this.state.formControls.password.placeholder}
+                    <Label for='passwordField'> PASSWORD </Label>
+                    <Input style={{textAlign:'center'}}  name='password' id='passwordField' placeholder={this.state.formControls.password.placeholder}
                            type="password"
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.password.value}
@@ -472,8 +472,8 @@ class RegisterContainer extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='firstName' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='firstNameField'> First Name </Label>
-                    <Input name='firstName' id='firstNameField' placeholder={this.state.formControls.firstName.placeholder}
+                    <Label for='firstNameField'> FIRST NAME </Label>
+                    <Input style={{textAlign:'center'}}  name='firstName' id='firstNameField' placeholder={this.state.formControls.firstName.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.firstName.value}
                            touched={this.state.formControls.firstName.touched? 1 : 0}
@@ -485,8 +485,8 @@ class RegisterContainer extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='lastName' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='lastNameField'> Last Name </Label>
-                    <Input name='lastName' id='lastNameField' placeholder={this.state.formControls.lastName.placeholder}
+                    <Label for='lastNameField'> LAST NAME </Label>
+                    <Input style={{textAlign:'center'}}  name='lastName' id='lastNameField' placeholder={this.state.formControls.lastName.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.lastName.value}
                            touched={this.state.formControls.lastName.touched? 1 : 0}
@@ -499,7 +499,7 @@ class RegisterContainer extends React.Component {
 
                 <FormGroup id='cnp' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
                     <Label for='cnpField'> CNP </Label>
-                    <Input name='cnp' id='cnpField' placeholder={this.state.formControls.cnp.placeholder}
+                    <Input style={{textAlign:'center'}}  name='cnp' id='cnpField' placeholder={this.state.formControls.cnp.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.cnp.value}
                            touched={this.state.formControls.cnp.touched? 1 : 0}
@@ -511,8 +511,8 @@ class RegisterContainer extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='birthDate' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <Label for='birthDateField'> Birth Date: </Label>
-                    <Input name='birthDate' id='birthDateField' placeholder={this.state.formControls.birthDate.placeholder}
+                    <Label for='birthDateField'> BIRTH DATE </Label>
+                    <Input style={{textAlign:'center'}}  name='birthDate' id='birthDateField' placeholder={this.state.formControls.birthDate.placeholder}
                            type="date"
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.birthDate.value}
@@ -525,28 +525,28 @@ class RegisterContainer extends React.Component {
                 </FormGroup>
 
                 <div className="form-group" style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <label>Gender</label>
+                    <label>GENDER</label>
                     <Select theme={(theme) => ({
                                                 ...theme,
                                                 colors: {
                                                 ...theme.colors,
                                                     text: 'white',
-                                                    primary25: 'rgb(255,81,81)',
-                                                    primary: 'rgb(255,81,81)',
+                                                    primary25: 'rgb(220,53,69)',
+                                                    primary: 'rgb(220,53,69)',
                                                 },})} options={genders} defaultValue={defaultGender} onChange={this.handleGenderChange}/>
                     {isEmpty(role) &&
                     <div className="help">Gender is required</div>}
                 </div>
 
                 <div className="form-group" style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                    <label>Role</label>
+                    <label>ROLE</label>
                     <Select theme={(theme) => ({
                                                 ...theme,
                                                 colors: {
                                                 ...theme.colors,
                                                     text: 'white',
-                                                    primary25: 'rgb(255,81,81)',
-                                                    primary: 'rgb(255,81,81)',
+                                                    primary25: 'rgb(220,53,69)',
+                                                    primary: 'rgb(220,53,69)',
                                                 },})} options={roles} defaultValue={defaultRole} onChange={this.handleSelectionChange}/>
                     {isEmpty(role) &&
                     <div className="help">Role is required</div>}
@@ -558,7 +558,7 @@ class RegisterContainer extends React.Component {
                     (role === "ADMIN" || role === "DELIVERY_GUY" ? 
                     <div>
                         <FormGroup id='dateHired' style={{marginLeft: "auto", marginRight:"auto", width:'300px'}}>
-                        <Label for='dateHiredField'> Date Hired </Label>
+                        <Label for='dateHiredField'> DATE HIRED </Label>
                         <Input name='dateHired' id='dateHiredField' placeholder={this.state.formControls.dateHired.placeholder}
                             type="date"
                             onChange={this.handleChange}
@@ -577,7 +577,7 @@ class RegisterContainer extends React.Component {
                 }
                 <br />
 
-                <Button variant="danger" onClick={this.handleSubmit} disabled={!this.state.formIsValid} style={{marginLeft: "auto", marginRight:"auto", width:'300px'}} type="submit" className="btn btn-dark btn-lg btn-block">Register</Button>
+                <Button variant="danger" onClick={this.handleSubmit} disabled={!this.state.formIsValid} style={{marginLeft: "auto", marginRight:"auto", width:'300px'}} type="submit" className="btn btn-dark btn-lg btn-block">REGISTER</Button>
                 <p className="forgot-password">
                     Already registered? <a style={{color:'red'}} href="/login">Log in.</a>
                 </p>

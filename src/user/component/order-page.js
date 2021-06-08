@@ -475,16 +475,9 @@ class OrderPage extends React.Component {
 
         return (
             <div>   
-                <br />
                 {
-                    (customer !== undefined) ? <h2>{customer.user.firstName} {customer.user.lastName}'s order</h2> : <div />
+                    (customer !== undefined) ?  <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{customer.user.firstName} {customer.user.lastName}'s order</h1> : <div />
                 }
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 10
-                }}/>
                 <div className="text-muted">Disclaimer: only cash on delivery payment method available at the moment.</div>
                 <div className="container fluid">
                     <div style={{display:'flex', alignItems:'center'}} className="row">
@@ -533,8 +526,8 @@ class OrderPage extends React.Component {
                 
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 2,
                     width:'20%'
                 }}/>
@@ -553,12 +546,12 @@ class OrderPage extends React.Component {
                     </div>    
                 </div>  : <div className="text-muted">No vouchers at the moment</div>)
                 }
-                <div style={{marginLeft:'200px', marginRight:'200px', marginBottom:'40px'}}>
+                <div style={{marginLeft:'400px', marginRight:'400px', marginBottom:'40px'}}>
                     <h5>Choose your address</h5>
                     <Select options={addressOptions} value={address} onChange={this.handleAddressChange}/>
                 </div>
 
-                <div style={{marginLeft:'200px', marginRight:'200px', marginBottom:'40px'}}>
+                <div style={{marginLeft:'400px', marginRight:'400px', marginBottom:'40px'}}>
                     <h5>Choose your email address</h5>
                     <Select options={emailOptions} value={email} onChange={this.handleEmailChange}/>
                 </div>

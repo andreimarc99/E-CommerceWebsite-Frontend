@@ -219,36 +219,37 @@ class UserPage extends React.Component {
         const {addresses, emails, doneAddresses, doneEmails} = this.state;
         console.log(emails);
         return (
-        <div>
+        <div style={{overflow:'hidden'}}>
+
             <br />
             {(JSON.parse(user).gender === "M" ? <img alt="male" src={male} style={{width:'20%'}}></img> : <img alt="female" src={female} style={{width:'20%'}}></img>)}
             
-            <h1 id="name" className="zoom-text" style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>{JSON.parse(user).firstName} {JSON.parse(user).lastName}</h1>
+            <h1 id="name" className="zoom-text" style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{JSON.parse(user).firstName} {JSON.parse(user).lastName}</h1>
             <p id="username" className="text-muted">@{JSON.parse(user).username}</p>
 
             <div>
-            <h4 style={{marginTop:'10px'}}>First Name</h4>
-            <input id='firstName' name='firstName' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(255,81,81)'}} defaultValue={JSON.parse(user).firstName}></input>
-            <h4 style={{marginTop:'10px'}}>Last Name</h4>
-            <input id='lastName' name='lastName' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(255,81,81)'}} defaultValue={JSON.parse(user).lastName}></input>
-            <h4 onClick={this.toggleVisibility} style={{marginTop:'10px'}}>Password</h4>     
-            <input id='password' type="password" name='password' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(255,81,81)'}} defaultValue={JSON.parse(user).password}></input>
+            <h4 style={{marginTop:'10px'}}>FIRST NAME</h4>
+            <input id='firstName' name='firstName' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).firstName}></input>
+            <h4 style={{marginTop:'10px'}}>LAST NAME</h4>
+            <input id='lastName' name='lastName' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).lastName}></input>
+            <h4 onClick={this.toggleVisibility} style={{marginTop:'10px'}}>PASSWORD</h4>     
+            <input id='password' type="password" name='password' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).password}></input>
        
             <h4 style={{marginTop:'10px'}}>CNP</h4>
-            <input id='cnp' name='cnp' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(255,81,81)'}} defaultValue={JSON.parse(user).cnp}></input>
-            <h4 style={{marginTop:'10px'}}>Birth Date</h4>
+            <input id='cnp' name='cnp' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).cnp}></input>
+            <h4 style={{marginTop:'10px'}}>BIRTH DATE</h4>
             <Input id='birthDate' name='birthDate' onChange={this.handleChange} type="date" style={{textAlign:'center', margin:'auto', width:'18%'}} defaultValue={JSON.parse(user).birthDate.substring(0,10)}></Input>
-            <h4 style={{marginTop:'10px'}}>Role</h4>
+            <h4 style={{marginTop:'10px'}}>ROLE</h4>
             <p style={{textAlign:'center'}}>{JSON.parse(user).role}</p>
             </div>
 
-            <Button style={{marginBottom:'20px'}} size="lg" variant="outline-danger" disabled={!this.state.valid} onClick={this.handleSave}>Save</Button>
+            <Button style={{marginBottom:'20px'}} size="lg" variant="outline-danger" disabled={!this.state.valid} onClick={this.handleSave}>SAVE</Button>
           {(JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ?  <div>
               
-                <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered addresses
+                <h3 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>REGISTERED ADDRESSES
                 </h3>
                 {(doneAddresses === true ? <div>
-                <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddForm} variant="outline-danger"> Add new address </Button>
+                <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddForm} variant="outline-danger"> NEW ADDRESS </Button>
                 
                 {
                     ((addresses.length > 0 && addresses !== undefined) ? 
@@ -259,62 +260,62 @@ class UserPage extends React.Component {
     
                                     <h4>  
                                           
-                                        <b>{address.alias}</b>
-                                        <Button style={{marginRight:'10px', marginLeft:'10px'}} size="sm" variant="outline-danger"  onClick={() => this.toggleUpdateForm(address)}>Edit</Button>
+                                        <b>{address.alias.toString().toUpperCase()}</b>
+                                        <Button style={{marginRight:'10px', marginLeft:'10px'}} size="sm" variant="outline-danger"  onClick={() => this.toggleUpdateForm(address)}>EDIT</Button>
                                         
                                     </h4>                                 
     
                                     
                                     <div style={{textAlign:'center', display:'flex', justifyContent:'space-between', marginLeft:'50px', marginRight:'50px'}}>
                                         <div className="zoom-text" style={{display:'inline'}}>
-                                        <p style={{marginTop:'10px'}}><b>Country</b></p>
+                                        <p style={{marginTop:'10px'}}><b>COUNTRY</b></p>
                                         <hr
                                         style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            color: 'rgb(220,53,69)',
+                                            backgroundColor: 'rgb(220,53,69)',
                                             height: 2
                                         }} />
                                         <p className="text-muted">{address.country}</p>
                                         </div>
                                         <div className="zoom-text" style={{display:'inline'}}>
-                                        <p style={{marginTop:'10px'}}><b>County</b></p>
+                                        <p style={{marginTop:'10px'}}><b>COUNTY</b></p>
                                         <hr
                                         style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            color: 'rgb(220,53,69)',
+                                            backgroundColor: 'rgb(220,53,69)',
                                             height: 2
                                         }} />
                                         <p className="text-muted">{address.county}</p>
                                         </div>
     
                                         <div className="zoom-text" style={{display:'inline'}}>
-                                        <p style={{marginTop:'10px'}}><b>Town</b></p>
+                                        <p style={{marginTop:'10px'}}><b>TOWN</b></p>
                                         <hr
                                         style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            color: 'rgb(220,53,69)',
+                                            backgroundColor: 'rgb(220,53,69)',
                                             height: 2
                                         }} />
                                         <p className="text-muted">{address.town}</p>
                                         </div>
                                         
                                         <div className="zoom-text" style={{display:'inline'}}>
-                                        <p style={{marginTop:'10px'}}><b>Street Number</b></p>
+                                        <p style={{marginTop:'10px'}}><b>STREET NUMBER</b></p>
                                         <hr
                                         style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            color: 'rgb(220,53,69)',
+                                            backgroundColor: 'rgb(220,53,69)',
                                             height: 2
                                         }} />
                                         <p className="text-muted">{address.streetNr}</p>
                                         </div>
                                         
                                         <div className="zoom-text" style={{display:'inline'}}>
-                                        <p style={{marginTop:'10px'}}><b>Country Code</b></p>
+                                        <p style={{marginTop:'10px'}}><b>COUNTRY CODE</b></p>
                                         <hr
                                         style={{
-                                            color: 'rgb(255, 81, 81)',
-                                            backgroundColor: 'rgb(255, 81, 81)',
+                                            color: 'rgb(220,53,69)',
+                                            backgroundColor: 'rgb(220,53,69)',
                                             height: 2
                                         }} />
                                         <p className="text-muted">{address.countryCode}</p>
@@ -332,16 +333,16 @@ class UserPage extends React.Component {
                 : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
             </div> :<div />)
         }
-            <h3 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Registered emails
+            <h3 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>REGISTERED EMAILS
             </h3>
             {(doneEmails === true ? 
                 <div> 
-        <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddEmailForm} variant="outline-danger"> Add new email </Button>
+        <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddEmailForm} variant="outline-danger"> NEW EMAIL </Button>
             <table style={{margin:'auto',width:'60%'}} className="table">
                             <thead>
                             <tr>
-                                <th className="text-center"> Email Address</th>
-                                <th className="text-center"> Actions </th>
+                                <th className="text-center">EMAIL ADDRESS</th>
+                                <th className="text-center"> ACTIONS </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -350,7 +351,7 @@ class UserPage extends React.Component {
                                     email => 
                                         <tr key={email.emailId}>
                                             <td className="text-center"> {email.email}</td>
-                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>Update</Button></td>
+                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button></td>
                                         </tr>)
                             }
                             </tbody>
@@ -362,7 +363,7 @@ class UserPage extends React.Component {
             <br /><br />
             <Modal isOpen={this.state.selected_update_address} toggle={this.toggleUpdateForm}
                     className={this.props.className} size="lg">
-                <ModalHeader toggle={this.toggleUpdateForm} style={{color:'rgb(255,81,81)'}}> Update address </ModalHeader>
+                <ModalHeader toggle={this.toggleUpdateForm} style={{color:'rgb(220,53,69)'}}> Update address </ModalHeader>
                 <ModalBody>
                     <AddressUpdateForm address={this.state.selected_address} reloadHandler={this.refresh}/>
                 </ModalBody>
@@ -370,7 +371,7 @@ class UserPage extends React.Component {
 
             <Modal isOpen={this.state.selected_add_address} toggle={this.toggleAddForm}
                     className={this.props.className} size="lg">
-                <ModalHeader toggle={this.toggleAddForm} style={{color:'rgb(255,81,81)'}}> Create new address </ModalHeader>
+                <ModalHeader toggle={this.toggleAddForm} style={{color:'rgb(220,53,69)'}}> Create new address </ModalHeader>
                 <ModalBody>
                     <AddressCreationForm reloadHandler={this.refresh}/>
                 </ModalBody>
@@ -378,7 +379,7 @@ class UserPage extends React.Component {
 
             <Modal isOpen={this.state.selected_update_email} toggle={this.toggleUpdateEmailForm}
                     className={this.props.className} size="lg">
-                <ModalHeader toggle={this.toggleUpdateEmailForm} style={{color:'rgb(255,81,81)'}}> Update email </ModalHeader>
+                <ModalHeader toggle={this.toggleUpdateEmailForm} style={{color:'rgb(220,53,69)'}}> Update email </ModalHeader>
                 <ModalBody>
                     <EmailUpdateForm email={this.state.selected_email} reloadHandler={this.refresh}/>
                 </ModalBody>
@@ -386,7 +387,7 @@ class UserPage extends React.Component {
 
             <Modal isOpen={this.state.selected_add_email} toggle={this.toggleAddEmailForm}
                     className={this.props.className} size="lg">
-                <ModalHeader toggle={this.toggleAddEmailForm} style={{color:'rgb(255,81,81)'}}> Create new email </ModalHeader>
+                <ModalHeader toggle={this.toggleAddEmailForm} style={{color:'rgb(220,53,69)'}}> Create new email </ModalHeader>
                 <ModalBody>
                     <EmailCreationForm reloadHandler={this.refresh}/>
                 </ModalBody>

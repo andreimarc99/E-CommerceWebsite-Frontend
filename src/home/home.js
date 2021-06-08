@@ -137,59 +137,69 @@ class Home extends React.Component {
               productsCategories.push({category: categ.name, product: prod})
           )})
         return(
-        <div style={{marginTop:'20px', marginBottom:'20px'}}>
+        <div style={{ marginBottom:'20px'}}>
 
           {(done === true ? 
           
             <div> 
               
-          <h1 style={{backgroundColor:'rgb(255,81,81)', color:'white'}}>Featured products</h1>
+          <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>Featured products</h1>
         <br />
             {
               (imageElems.length > 0 ?
               
-            <Col md={9} className="carousel-content" style = {{marginLeft: "auto", marginRight:"auto"}}>
+            <Col md={9}  style = {{marginLeft: "auto", marginRight:"auto"}}>
             <Carousel fade>
             
               <Carousel.Item>
-                <img
-                  className="d-block w-100 contain"
+                <div className="pic"><img
+                  className="contain"
                   src={imageElems[products[0].productId]}
                   alt="First slide"
                 />
+                <div className="imgtext">
+                  <h1>${products[0].price}</h1>
+                  <p>{products[0].description}</p>
+                </div></div>
+                
                 <Carousel.Caption>
                 <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/product_page/${products[0].productId}`, state: { product: products[0] } }}>
                   <h3>{products[0].name}</h3> 
                 </Link>
-                  <p>{products[0].price + "$"}</p>
                 </Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item>
-                <img
-                  className="d-block w-100 contain"
+              <div className="pic"><img
+                  className="contain"
                   src={imageElems[products[1].productId]}
                   alt="Second slide"
                 />
+                <div className="imgtext">
+                  <h1>${products[1].price}</h1>
+                  <p>{products[1].description}</p>
+                </div></div>
 
                 <Carousel.Caption>
                 <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/product_page/${products[1].productId}`, state: { product: products[1] } }}>
                   <h3>{products[1].name}</h3> 
                 </Link>
-                <p>{products[1].price + "$"}</p>
                 </Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item>
-                <img
-                  className="d-block w-100 contain"
+              <div className="pic"><img
+                  className="contain"
                   src={imageElems[products[2].productId]}
                   alt="Third slide"
                 />
+                <div className="imgtext">
+                  <h1>${products[2].price}</h1>
+                  <p>{products[2].description}</p>
+                </div></div>
 
                 <Carousel.Caption>
                 <Link style={{textDecoration:"none", color:"white"}} to={{ pathname: `/product_page/${products[2].productId}`, state: { product: products[2] } }}>
                   <h3>{products[2].name}</h3> 
                 </Link>
-                <p>{products[2].price + "$"}</p>
                 </Carousel.Caption>
               </Carousel.Item>
             </Carousel>

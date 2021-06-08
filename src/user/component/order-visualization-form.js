@@ -22,8 +22,8 @@ class OrderVisualizationForm extends React.Component {
                 <h3>Products ordered</h3>
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 3,
                     width:'30%'
                 }}/>
@@ -37,16 +37,16 @@ class OrderVisualizationForm extends React.Component {
                 <h4 style={{marginTop:'20px'}}>Address</h4>
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 3,
                     width:'30%'
                 }}/>
                 <div><b>[{o.address.alias}]</b> {o.address.streetNr}, {o.address.town}, {o.address.county}, {o.address.country}</div>
                 <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 4,
                     marginTop:'50px'
                 }}/>

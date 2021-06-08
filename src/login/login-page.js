@@ -90,12 +90,12 @@ class LoginPage extends React.Component {
             <div>
                 <br /><br />
             <div className="col-md-3 col-md-offset-3" style={{margin:'auto'}}>
-                <h2 style={{margin:'auto', color:'rgb(255,81,81)'}}>Login
+                <h2 style={{margin:'auto', color:'rgb(220,53,69)'}}>Login
                 <small className="text-muted"> to continue.</small>
                 </h2><br />
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group'}>
-                        <label> Username </label>
+                        <label> USERNAME </label>
                         <input style={{textAlign:'center'}} type={'text'} className={'input-group input-group-sm'} name={'username'} value={username}
                                onChange={this.handleChange}/>
                         {completed && !username &&
@@ -103,7 +103,7 @@ class LoginPage extends React.Component {
                         }
                     </div>
                     <div className={'form-group'}>
-                        <label> Password </label>
+                        <label> PASSWORD </label>
                         <input style={{textAlign:'center'}} type='password' className={'input-group input-group-sm'} name={'password'} value={password}
                                onChange={this.handleChange}/>
                         {
@@ -117,11 +117,11 @@ class LoginPage extends React.Component {
                         <br />
                     <div className={'form-group'}>
                         <Button onClick={this.handleSubmit} style={{margin:'auto', width:'50%'}} className={'btn btn-sm'} variant="outline-danger">
-                            Login
+                            LOGIN
                         </Button>
                     </div> <br />
                     <div className={'form-group'}>
-                        Don't have an account? <a style={{color:'rgb(255,81,81)'}} href="/register">Register</a>
+                        Don't have an account? <a style={{color:'rgb(220,53,69)'}} href="/register">Register</a>
                     </div>
                 </form>
 

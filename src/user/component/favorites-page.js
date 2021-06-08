@@ -148,14 +148,7 @@ class FavoritesPage extends React.Component {
         }
         return (
             <div>   
-                <br />
-                <h1>Favorite products</h1>
-                <hr
-                style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
-                    height: 5
-                }}/>
+                <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>FAVORITE PRODUCTS</h1>
                 <div className="container fluid">
             {
             (done === true ? 
@@ -181,8 +174,8 @@ class FavoritesPage extends React.Component {
                             </div>
                                 <hr
                                     style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
+                                        color: 'rgb(220,53,69)',
+                                        backgroundColor: 'rgb(220,53,69)',
                                         height: 3
                                     }} />
                             <div className="col">
@@ -190,8 +183,8 @@ class FavoritesPage extends React.Component {
                                     <p className="text-muted">{prod.description}</p>
                                     <hr
                                     style={{
-                                        color: 'rgb(255, 81, 81)',
-                                        backgroundColor: 'rgb(255, 81, 81)',
+                                        color: 'rgb(220,53,69)',
+                                        backgroundColor: 'rgb(220,53,69)',
                                         height: 3
                                     }}/>
                                     <h4>${prod.price}</h4>

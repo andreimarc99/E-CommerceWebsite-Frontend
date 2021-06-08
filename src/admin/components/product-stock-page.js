@@ -67,12 +67,16 @@ class ProductStockPage extends React.Component {
     render() {
         const {done, productList} = this.state;
         return(
-        <div style={{marginTop:'20px', marginBottom:'20px', marginLeft:"30px", marginRight:"30px"}}>
+            <div>
+            <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>PRODUCTS STOCK</h1>
+
+        <div style={{marginTop:'10px', marginBottom:'20px', marginLeft:"30px", marginRight:"30px"}}>
+
             {(done === true ? (productList.length > 0 ?
                    <div>
                    <CardHeader>
-                   <Button style = {{marginLeft:"20px"}} className="btn btn-danger" onClick={this.toggleCreateProductForm}>Add a new product</Button>
-                   <Button style = {{marginLeft:"20px"}} className="btn btn-danger" onClick={this.toggleCreateCategoryForm}>Create a new category</Button>
+                   <Button style = {{marginLeft:"20px"}} className="btn btn-danger" onClick={this.toggleCreateProductForm}>NEW PRODUCT</Button>
+                   <Button style = {{marginLeft:"20px"}} className="btn btn-danger" onClick={this.toggleCreateCategoryForm}>NEW CATEGORY</Button>
 
                    </CardHeader>
                    <CardBody>
@@ -104,7 +108,7 @@ class ProductStockPage extends React.Component {
                                            <td className="text-center"> {product.numberSold}</td>
                                            <td className="text-center"> <b>Size:</b> {product.specs.size}  <br /><b>Weight:</b> {product.specs.weight}</td>
                                            <td className="text-center"> {product.specs.categories.map((category) => <p style={{color:'white', backgroundColor:'rgb(255,81,81', borderStyle:"solid", borderRadius:'12px'}}> {category.name} </p> )}</td>
-                                           <td className="text-center"><Button style={{margin:'5px'}} variant='outline-danger' size='sm'>Update</Button></td>
+                                           <td className="text-center"><Button style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button></td>
                                        </tr>)
                            }
                            </tbody>
@@ -130,7 +134,7 @@ class ProductStockPage extends React.Component {
                    </div>  
                 : <h2>No products.</h2>) :  <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
              
-        </div>);
+        </div></div>);
     }
 }
 

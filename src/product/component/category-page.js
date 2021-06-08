@@ -70,22 +70,26 @@ class CategoryPage extends React.Component {
     }
 
     fetchFavorites() {
-        const username = JSON.parse(localStorage.getItem("loggedUser")).username;
-        if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER")
-            FAV_PRODUCTS_API.getFavoriteProductsByUsername(username, (result, status, err) => {
-                    if (result !== null && status === 200) {
-                        this.setState({
-                            favoriteList: result.products,
-                            favDone: true
-                        })
-                    } else {
-                        this.setState(({
-                            errorStatus: status,
-                            error: err,
-                            favDone: true
-                        }));
-                    }
-                })
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+            
+            const username = JSON.parse(localStorage.getItem("loggedUser")).username;
+            
+            if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER")
+                FAV_PRODUCTS_API.getFavoriteProductsByUsername(username, (result, status, err) => {
+                        if (result !== null && status === 200) {
+                            this.setState({
+                                favoriteList: result.products,
+                                favDone: true
+                            })
+                        } else {
+                            this.setState(({
+                                errorStatus: status,
+                                error: err,
+                                favDone: true
+                            }));
+                        }
+                    })
+            }
     }
 
     handleAddToFavorites(product) {
@@ -255,15 +259,11 @@ class CategoryPage extends React.Component {
             <div style={{marginBottom:"40px"}}>   
 
                 {(done === true ? (productList.length > 0 ? 
-                    <div style={{marginTop:'20px'}} className="container fluid">
+               <div>
+                    <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{categoryName.toString().toUpperCase()} CATEGORY</h1> 
+                    <div className="container fluid">
                         
-                    <h1>{categoryName}</h1>       
-                    <hr
-                    style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
-                        height: 10
-                    }}/>
+                          
                         {
                         productList.map((prod) => { 
                             return(
@@ -319,7 +319,7 @@ class CategoryPage extends React.Component {
                             </Card.Body>
                         </Card></div></div> );
                         })}
-                    </div>
+                    </div></div>
                     : <h2>No products for "{categoryName}" category.</h2>) 
                     : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
 

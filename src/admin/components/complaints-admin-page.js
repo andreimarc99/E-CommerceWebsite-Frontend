@@ -97,17 +97,20 @@ class ComplaintsAdminPage extends React.Component {
         }
 
         return (
+            <div>
+                <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>COMPLAINTS</h1>
+
             <div style={{marginBottom:'20px', marginTop:'20px'}}>  
             {(done === true ? (complaintList.length > 0 ? <div>
                <div style={{justifyContent:'center', marginTop:'20px'}} className="container fluid">
                <div className="row">
 
                <div style={{marginLeft:'5px'}} className="col">
-                       <div style={{marginLeft:'5px'}} className="row"><h5>Unanswered complaints</h5></div>
+                       <div style={{marginLeft:'5px'}} className="row"><h5>UNANSWERED</h5></div>
                            <hr
                            style={{
-                               color: 'rgb(255, 81, 81)',
-                               backgroundColor: 'rgb(255, 81, 81)',
+                               color: 'rgb(220,53,69)',
+                               backgroundColor: 'rgb(220,53,69)',
                                height: 3
                            }}/>
                            {
@@ -115,7 +118,7 @@ class ComplaintsAdminPage extends React.Component {
                                    return (
                                        <div style={{marginBottom:'20px'}}>
                                            <div style={{color:'red'}} className="row"><b>Complaint #{complaint.complaintId} </b>
-                                           <Button onClick={() => this.toggleRespondForm(complaint)} size="sm" variant="outline-danger" style={{marginLeft:'10px'}}>Respond</Button></div>
+                                           <Button onClick={() => this.toggleRespondForm(complaint)} size="sm" variant="outline-danger" style={{marginLeft:'10px'}}>REPLY</Button></div>
                                            <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Customer</b></div>
                                            <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Username </b> {complaint.customer.user.username}</div>
                                            <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Name </b> {complaint.customer.user.firstName} {complaint.customer.user.lastName}</div>
@@ -132,11 +135,11 @@ class ComplaintsAdminPage extends React.Component {
 
                    <div style={{marginRight:'5px'}} className="col">
 
-                       <div style={{marginLeft:'5px'}} className="row"><h5>Answered complaints</h5></div>
+                       <div style={{marginLeft:'5px'}} className="row"><h5>ANSWERED</h5></div>
                        <hr
                        style={{
-                           color: 'rgb(255, 81, 81)',
-                           backgroundColor: 'rgb(255, 81, 81)',
+                           color: 'rgb(220,53,69)',
+                           backgroundColor: 'rgb(220,53,69)',
                            height: 3
                        }}/>
                            {
@@ -165,7 +168,7 @@ class ComplaintsAdminPage extends React.Component {
            </div>
             <Modal isOpen={this.state.selected_complaint_response} toggle={this.toggleRespondForm}
             className={this.props.className} size="lg">
-        <ModalHeader toggle={this.toggleRespondForm} style={{color:'rgb(255,81,81)'}}> Respond to complaint </ModalHeader>
+        <ModalHeader toggle={this.toggleRespondForm} style={{color:'rgb(220,53,69)'}}> Respond to complaint </ModalHeader>
         <ModalBody>
             <ComplaintResponseForm complaint={this.state.selected_complaint} reloadHandler={this.refresh}/>
         </ModalBody>
@@ -176,6 +179,7 @@ class ComplaintsAdminPage extends React.Component {
             }
 
                
+            </div>            
             </div>
         );
     }

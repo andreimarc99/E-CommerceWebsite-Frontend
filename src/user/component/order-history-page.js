@@ -70,12 +70,15 @@ class OrderHistoryPage extends React.Component {
             })
         }
         return (
+            <div>
+                <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>ORDER HISTORY</h1>
+            
             <div style={{marginBottom:'20px', marginTop:'20px', justifyContent:'center'}}>  
                <h2>Undelivered orders</h2>
                <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 10
                 }}/>
                {(done === true ? <div>
@@ -88,15 +91,15 @@ class OrderHistoryPage extends React.Component {
                         <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
                              
                       
-                        <Card.Header style={{backgroundColor:'rgb(255,81,81)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>
+                        <Card.Header style={{backgroundColor:'rgb(220,53,69)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>
                         
                         <Card.Body className="text-center">
                             <b>Products</b>
                         <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={this.getProductsForGivenOrder(o)} className="txtarea text-muted"></textarea>
                             <hr
                             style={{
-                                color: 'rgb(255, 81, 81)',
-                                backgroundColor: 'rgb(255, 81, 81)',
+                                color: 'rgb(220,53,69)',
+                                backgroundColor: 'rgb(220,53,69)',
                                 height: 3,
                                 width:'40%'
                             }}/>
@@ -114,11 +117,11 @@ class OrderHistoryPage extends React.Component {
                 : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
               
 
-              <h2>Delivered orders</h2>
+              <h2 style={{marginTop:'40px'}}>Delivered orders</h2>
                <hr
                 style={{
-                    color: 'rgb(255, 81, 81)',
-                    backgroundColor: 'rgb(255, 81, 81)',
+                    color: 'rgb(220,53,69)',
+                    backgroundColor: 'rgb(220,53,69)',
                     height: 10
                 }}/>
                {(done === true ? <div>
@@ -132,15 +135,15 @@ class OrderHistoryPage extends React.Component {
                         <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
                              
                       
-                        <Card.Header style={{backgroundColor:'rgb(255,81,81)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>
+                        <Card.Header style={{backgroundColor:'rgb(220,53,69)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>
                         
                         <Card.Body className="text-center">
                             <b>Products</b>
                         <textarea readOnly='true' style={{width:'100%', border:'none', overflowX: 'hidden'}} value={this.getProductsForGivenOrder(o)} className="txtarea text-muted"></textarea>
                             <hr
                             style={{
-                                color: 'rgb(255, 81, 81)',
-                                backgroundColor: 'rgb(255, 81, 81)',
+                                color: 'rgb(220,53,69)',
+                                backgroundColor: 'rgb(220,53,69)',
                                 height: 3,
                                 width:'40%'
                             }}/>
@@ -161,13 +164,13 @@ class OrderHistoryPage extends React.Component {
                             
               <Modal isOpen={this.state.selected_view_order} toggle={this.toggleForm}
                         className={this.props.className} size="lg">
-                    <ModalHeader toggle={this.toggleForm} style={{color:'rgb(255,81,81)'}}> Order details </ModalHeader>
+                    <ModalHeader toggle={this.toggleForm} style={{color:'rgb(220,53,69)'}}> Order details </ModalHeader>
                     <ModalBody>
                         <OrderVisualizationForm order={this.state.selected_order}/>
                     </ModalBody>
                 </Modal>
                
-            </div>
+            </div></div>
         );
     }
 

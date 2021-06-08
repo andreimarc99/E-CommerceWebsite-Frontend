@@ -5,6 +5,9 @@ import CanvasJSReact from "./canvasjs.react";
 import ReactSpinner from 'react-bootstrap-spinner'
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
+function compareIds(a, b) {
+    return a.productId - b.productId;
+}
 
 function getAge(dateString) 
 {
@@ -93,6 +96,7 @@ class StatisticsPage extends React.Component {
         var between40and65 = 0;
         var over65 = 0;
         var voucherUsage = [];
+        var orderedProducts = [];
         
         if (orderList.length > 0) {
             for (let i = 0; i < orderList.length; ++i) {
@@ -130,6 +134,7 @@ class StatisticsPage extends React.Component {
         }
 
         if (productList.length > 0) {
+            orderedProducts = productList.sort(compareIds);
             for (let i = 0; i < productList.length; ++i) {
                 products.push({label: productList[i].name, y: productList[i].numberSold})
                 productList[i].specs.categories.map((category) => {
@@ -254,59 +259,80 @@ class StatisticsPage extends React.Component {
 
         return (
             <div>  
+                <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>STATISTICS</h1>
                {(done === false ? <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div> : 
                <div style={{marginBottom:'20px', marginTop:'20px', marginLeft: '150px', marginRight: '150px'}}>
                    <CanvasJSChart options = {productChartOptions} />
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <CanvasJSChart options = {categoriesChartOptions} />
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <CanvasJSChart options = {userAgesChartOptions} />
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <CanvasJSChart options = {vouchersChartOptions} />
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <CanvasJSChart options = {orderChartOptions} />
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <h3>Top rated products</h3>
-                    <p className="text-muted">using IMDb's public product ranking formula</p>
-                    <img src={HOST.flask_api + "/popular_products"} alt="popular"/>
+                    <p className="text-muted">using IMDb's product ranking formula</p>
+                    <div className="row">
+                        <div className="col"><img src={HOST.flask_api + "/popular_products"} alt="popular" /></div>
+                        <div className="col">
+                            <table className="table table-striped table-bordered tbl-orders" style={{display:'inline-block', overflow:'auto', height:'600px', width:'80%', marginBottom:'50px'}}>
+                                <thead className="tbl-head">
+                                    <tr>
+                                        <th className="text-center" width='50px'> ID</th>
+                                        <th className="text-center"> Product</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{
+                                orderedProducts.map((product) => 
+                                    <tr key={product.productId}>
+                                        <td className="text-center"> <b>{product.productId}</b></td>
+                                        <td className="text-center"> {product.name}</td>
+                                    </tr>)
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <h3>Customer segmentation by gender</h3>
-                    <img src={HOST.flask_api + "/genders"} alt="gender_segm"/>
+                    <img src={HOST.flask_api + "/genders"} alt="gender_segm" />
 
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <h3>Customer segmentation by performing k-means clustering</h3>
@@ -315,8 +341,8 @@ class StatisticsPage extends React.Component {
 
                     <hr
                     style={{
-                        color: 'rgb(255, 81, 81)',
-                        backgroundColor: 'rgb(255, 81, 81)',
+                        color: 'rgb(220,53,69)',
+                        backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
                     <h3>Customer segmentation by performing k-means clustering</h3>
