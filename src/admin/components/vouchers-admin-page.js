@@ -110,14 +110,14 @@ class VouchersAdminPage extends React.Component {
                     (voucherList.length > 0 ? 
                     <div className="row" style={{marginLeft:'30px', marginRight:'30px'}}>
                         <table className="table table-striped table-bordered">
-                            <thead>
+                            <thead className="tbl-head">
                             <tr>
                                 <th className="text-center" width='50px'> ID</th>
-                                <th className="text-center"> Code </th>
-                                <th className="text-center"> Discount </th>
-                                <th className="text-center"> Availability </th>
-                                <th className="text-center"> One Use Only </th>
-                                <th className="text-center"> Actions </th>
+                                <th className="text-center"> CODE </th>
+                                <th className="text-center"> DISCOUNT </th>
+                                <th className="text-center"> AVAILABILITY </th>
+                                <th className="text-center"> ONE USE ONLY </th>
+                                <th className="text-center"> ACTIONS </th>
                             </tr>
                             </thead>
                             <tbody>

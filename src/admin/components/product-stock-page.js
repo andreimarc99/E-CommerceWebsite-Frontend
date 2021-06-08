@@ -81,18 +81,18 @@ class ProductStockPage extends React.Component {
                    </CardHeader>
                    <CardBody>
                    <div className="row">
-                       <table className="table table-striped table-bordered">
-                           <thead>
+                       <table className="table table-striped table-bordered" >
+                           <thead className="tbl-head">
                            <tr>
                                <th className="text-center" width='50px'> ID</th>
-                               <th className="text-center"> Name</th>
-                               <th className="text-center"> Price</th>
-                               <th className="text-center"> Description</th>
-                               <th className="text-center"> Stock</th>
-                               <th className="text-center"> Sold</th>
-                               <th className="text-center"> Specs</th>
-                               <th className="text-center"> Categories</th>
-                               <th className="text-center"> Actions</th>
+                               <th className="text-center"> NAME</th>
+                               <th className="text-center"> PRICE</th>
+                               <th className="text-center"> DESCRIPTION</th>
+                               <th className="text-center"> STOCK</th>
+                               <th className="text-center"> SOLD</th>
+                               <th className="text-center"> SPECS</th>
+                               <th className="text-center"> CATEGORIES</th>
+                               <th className="text-center"> ACTIONS</th>
                            </tr>
                            </thead>
                            <tbody>
