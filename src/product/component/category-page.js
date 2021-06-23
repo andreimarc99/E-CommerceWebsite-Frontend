@@ -280,7 +280,7 @@ class CategoryPage extends React.Component {
                                     <div className="col">
 
                                         <img
-                                        style={{width:'60%'}}
+                                        className="categ-img"
                                         src={imageElems[prod.productId]}
                                         alt="First slide"
                                         />

@@ -11,6 +11,9 @@ import {
 import axios from 'axios';
 import ComplaintResponseForm from './complaint-response-form';
 import ReactSpinner from 'react-bootstrap-spinner'
+import check from "../../img/checked.png"
+import cancel from "../../img/cancel.png"
+
 
 class ComplaintsAdminPage extends React.Component {
 
@@ -102,70 +105,69 @@ class ComplaintsAdminPage extends React.Component {
 
             <div style={{marginBottom:'20px', marginTop:'20px'}}>  
             {(done === true ? (complaintList.length > 0 ? <div>
-               <div style={{justifyContent:'center', marginTop:'20px'}} className="container fluid">
-               <div className="row">
 
-               <div style={{marginLeft:'5px'}} className="col">
-                       <div style={{marginLeft:'5px'}} className="row"><h5>UNANSWERED</h5></div>
+                       
+                <h5><img src={cancel} style={{width:"35px", marginRight:'5px'}} />UNANSWERED</h5>
                            <hr
                            style={{
                                color: 'rgb(220,53,69)',
                                backgroundColor: 'rgb(220,53,69)',
                                height: 3
                            }}/>
-                           {
-                               unanswered.map((complaint) => {
-                                   return (
-                                       <div style={{marginBottom:'20px'}}>
-                                           <div style={{color:'red'}} className="row"><b>Complaint #{complaint.complaintId} </b>
-                                           <Button onClick={() => this.toggleRespondForm(complaint)} size="sm" variant="outline-danger" style={{marginLeft:'10px'}}>REPLY</Button></div>
-                                           <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Customer</b></div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Username </b> {complaint.customer.user.username}</div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Name </b> {complaint.customer.user.firstName} {complaint.customer.user.lastName}</div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>CNP </b> {complaint.customer.user.cnp}</div>
-                                           <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>COMPLAINT</b> </div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Reason</b> {complaint.type}</div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Message</b> {complaint.message}</div>
-
-                                       </div>);
-                                   
-                               })
-                           }
-                   </div>
-
-                   <div style={{marginRight:'5px'}} className="col">
-
-                       <div style={{marginLeft:'5px'}} className="row"><h5>ANSWERED</h5></div>
-                       <hr
-                       style={{
-                           color: 'rgb(220,53,69)',
-                           backgroundColor: 'rgb(220,53,69)',
-                           height: 3
-                       }}/>
-                           {
-                               answered.map((complaint) => {
-                                   return (
-                                       <div style={{marginBottom:'20px'}}>
-                                           <div style={{color:'red'}} className="row"><b>Complaint #{complaint.complaintId} </b></div>
-                                           <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>Customer</b></div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Username </b> {complaint.customer.user.username}</div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Name </b> {complaint.customer.user.firstName} {complaint.customer.user.lastName}</div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>CNP </b> {complaint.customer.user.cnp}</div>
-
-                                           <div style={{marginLeft:'10px'}} className="row"><b style={{marginRight:'2px'}}>COMPLAINT</b> </div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Reason</b> {complaint.type}</div>
-                                           <div style={{marginLeft:'20px'}} className="row"><b style={{marginRight:'2px'}}>Message</b> {complaint.message}</div>
-                                           <div style={{marginLeft:'10px', color:'red'}} className="row"><b style={{marginRight:'2px'}}>RESPONSE</b> </div>
-                                           <div style={{marginLeft:'20px', color:'red'}} className="row"><b style={{marginRight:'2px'}}>Message</b> {responses[complaint.complaintId].message}</div>
+                            <table className="table table-striped table-bordered tbl-orders" style={{display:'inline-block', overflow:'auto', width:'80%', marginBottom:'50px'}}>
+                                <thead className="tbl-head">
+                                <tr>
+                                    <th className="text-center"> ID</th>
+                                    <th className="text-center"> CUSTOMER</th>
+                                    <th className="text-center"> REASON</th>
+                                    <th className="text-center"> MESSAGE</th>
+                                    <th className="text-center"> ACTIONS</th>
+                                </tr>
+                                </thead>
+                                <tbody>{
+                                unanswered.map((c) => 
+                                            <tr key={c.complaintId}>
+                                                <td className="text-center"> {c.complaintId}</td>
+                                                <td className="text-center"> <b>{c.customer.user.firstName} {c.customer.user.lastName}</b> <p className="text-muted">@{c.customer.user.username}</p></td>
+                                                <td className="text-center"> {c.type} </td>
+                                                <td className="text-center"> {c.message} </td>
+                                                <td className="text-center"><Button onClick={() => this.toggleRespondForm(c)} style={{marginLeft:'10px'}} variant="outline-danger" size="sm">RESPOND</Button></td>
+                                            </tr>)
+                                }
+                                </tbody>
+                       </table>
 
 
-                                       </div>);
-                               })
-                           }
-                   </div>
-                   
-               </div>
-           </div>
+                       <h5><img src={check} style={{width:"35px", marginRight:'5px'}} />ANSWERED</h5>
+                           <hr
+                           style={{
+                               color: 'rgb(220,53,69)',
+                               backgroundColor: 'rgb(220,53,69)',
+                               height: 3
+                           }}/>
+                            <table className="table table-striped table-bordered tbl-orders" style={{display:'inline-block', overflow:'auto', width:'80%', marginBottom:'50px'}}>
+                                <thead className="tbl-head">
+                                <tr>
+                                    <th className="text-center"> ID</th>
+                                    <th className="text-center"> CUSTOMER</th>
+                                    <th className="text-center"> REASON</th>
+                                    <th className="text-center"> MESSAGE</th>
+                                    <th className="text-center"> RESPONSE</th>
+                                </tr>
+                                </thead>
+                                <tbody>{
+                                answered.map((c) => 
+                                            <tr key={c.complaintId}>
+                                                <td className="text-center"> {c.complaintId}</td>
+                                                <td className="text-center"> <b>{c.customer.user.firstName} {c.customer.user.lastName}</b> <p className="text-muted">@{c.customer.user.username}</p></td>
+                                                <td className="text-center"> {c.type} </td>
+                                                <td className="text-center"> {c.message} </td>
+                                                <td className="text-center" style={{color:'rgb(220,53,69)'}}> <strong>{responses[c.complaintId].message} </strong></td>
+                                               </tr>)
+                                }
+                                </tbody>
+                       </table>
+
             <Modal isOpen={this.state.selected_complaint_response} toggle={this.toggleRespondForm}
             className={this.props.className} size="lg">
         <ModalHeader toggle={this.toggleRespondForm} style={{color:'rgb(220,53,69)'}}> Respond to complaint </ModalHeader>

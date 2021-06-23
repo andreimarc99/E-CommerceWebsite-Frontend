@@ -252,7 +252,9 @@ class NavbarPage extends React.Component {
                 <div />
               )
               }
-                {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "") ? <img onClick={this.handleLogout} src={logout} height="30" alt="cart" className="logo lower-zoom" style={{marginLeft:'20px'}}></img> : <div />)}
+                {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "") ? 
+                
+                <button className="custom-btn" style={{marginLeft:'10px'}} onClick={this.handleLogout} ><img src={logout} height="30" alt="cart" className="logo" ></img></button> : <div />)}
               </Form>
             </Navbar>
         </div>

@@ -242,7 +242,7 @@ class Home extends React.Component {
                                         
                                     <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.product.productId}`, state: { product: prod.product }}} >
                                     <Card.Header className="red-card-header">{prod.product.name}</Card.Header></Link>
-                                    <Card.Body style={{backgroundImage: 'linear-gradient(to bottom right, rgb(216, 216, 216),  rgb(245, 245, 245))'}}>
+                                    <Card.Body>
                                         
                                     <img
                                       className="rel-img"

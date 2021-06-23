@@ -14,12 +14,14 @@ import {HOST} from '../../commons/hosts'
 import ReactSpinner from 'react-bootstrap-spinner'
 import axios from 'axios';
 import CategoryCreationForm from './category-creation-page';
+import ProductUpdateForm from './product-update-form';
 
 class ProductStockPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.toggleCreateProductForm = this.toggleCreateProductForm.bind(this);
+        this.toggleCreateProductForm = this.toggleCreateProductForm.bind(this);        
+        this.toggleUpdateProduct = this.toggleUpdateProduct.bind(this);
         this.toggleCreateCategoryForm = this.toggleCreateCategoryForm.bind(this);
         this.fetchProducts = this.fetchProducts.bind(this);
         this.reloadProducts = this.reloadProducts.bind(this);
@@ -30,7 +32,9 @@ class ProductStockPage extends React.Component {
             error: '',
             selected_create_product: false,
             selected_create_category: false,
-            done: false
+            done: false,
+            selected_update_product: false,
+            selected_product: {}
         }
     }
 
@@ -63,6 +67,25 @@ class ProductStockPage extends React.Component {
                 done: true
             }));
     }
+
+
+    toggleUpdateProduct(product) {
+        if (this.state.selected_update_product === true) {
+            this.setState(
+                {
+                    selected_update_product: !this.state.selected_update_product
+                }
+            )
+        } else {
+            this.setState(
+                {
+                    selected_update_product: !this.state.selected_update_product,
+                    selected_product: JSON.parse(JSON.stringify(product))
+                }
+            )
+        }
+    }
+
 
     render() {
         const {done, productList} = this.state;
@@ -108,7 +131,7 @@ class ProductStockPage extends React.Component {
                                            <td className="text-center"> {product.numberSold}</td>
                                            <td className="text-center"> <b>Size:</b> {product.specs.size}  <br /><b>Weight:</b> {product.specs.weight}</td>
                                            <td className="text-center"> {product.specs.categories.map((category) => <p style={{color:'white', backgroundColor:'rgb(255,81,81', borderStyle:"solid", borderRadius:'12px'}}> {category.name} </p> )}</td>
-                                           <td className="text-center"><Button style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button></td>
+                                           <td className="text-center"><Button onClick={() => this.toggleUpdateProduct(product)} style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button></td>
                                        </tr>)
                            }
                            </tbody>
@@ -131,6 +154,14 @@ class ProductStockPage extends React.Component {
                            <CategoryCreationForm reloadHandler={this.reloadProducts}/>
                        </ModalBody>
                    </Modal>
+
+                   <Modal isOpen={this.state.selected_update_product} toggle={this.toggleUpdateProduct}
+                    className={this.props.className} size="lg">
+                        <ModalHeader toggle={this.toggleUpdateProduct} style={{color:'rgb(220,53,69)'}}> Update Product </ModalHeader>
+                        <ModalBody>
+                            <ProductUpdateForm product={this.state.selected_product} reloadHandler={this.refresh}/>
+                        </ModalBody>
+                    </Modal>
                    </div>  
                 : <h2>No products.</h2>) :  <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
              

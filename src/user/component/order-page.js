@@ -8,7 +8,13 @@ import {Button} from 'react-bootstrap'
 import Select from "react-select";
 import {HOST} from '../../commons/hosts'
 import axios from "axios"
-
+import AddressCreationForm from "./address-creation-form"
+import EmailCreationForm from './email-creation-form';
+import {
+    Modal,
+    ModalBody,
+    ModalHeader
+} from 'reactstrap';
 
 class OrderPage extends React.Component {
 
@@ -27,7 +33,9 @@ class OrderPage extends React.Component {
             addressList: [],
             usedVouchers: [],
             emails: [],
-            email: {}
+            email: {},
+            selected_add_address: false,
+            selected_add_email: false
         }
         this.fetchProducts = this.fetchProducts.bind(this);
         this.fetchEmails = this.fetchEmails.bind(this);
@@ -36,6 +44,8 @@ class OrderPage extends React.Component {
         this.fetchVouchers = this.fetchVouchers.bind(this);
         this.handleAddVoucher = this.handleAddVoucher.bind(this);
         this.handlePlaceOrder = this.handlePlaceOrder.bind(this);
+        this.toggleAddressForm = this.toggleAddressForm.bind(this);
+        this.toggleEmailForm = this.toggleEmailForm.bind(this);
     }
 
     fetchEmails() {
@@ -418,6 +428,22 @@ class OrderPage extends React.Component {
         }
     }
 
+    toggleAddressForm() {
+        this.setState(
+            {
+                selected_add_address: !this.state.selected_add_address
+            }
+        )
+    }
+
+    toggleEmailForm() {
+        this.setState(
+            {
+                selected_add_email: !this.state.selected_add_email
+            }
+        )
+    }
+
     componentDidMount() {
         this.fetchProducts();
         this.fetchVouchers();
@@ -549,14 +575,31 @@ class OrderPage extends React.Component {
                 <div style={{marginLeft:'400px', marginRight:'400px', marginBottom:'40px'}}>
                     <h5>Choose your address</h5>
                     <Select options={addressOptions} value={address} onChange={this.handleAddressChange}/>
+                    <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddressForm} variant="outline-danger"> NEW ADDRESS </Button>
                 </div>
 
                 <div style={{marginLeft:'400px', marginRight:'400px', marginBottom:'40px'}}>
                     <h5>Choose your email address</h5>
                     <Select options={emailOptions} value={email} onChange={this.handleEmailChange}/>
+                    <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleEmailForm} variant="outline-danger"> NEW EMAIL </Button>
                 </div>
 
                 <Button onClick={this.handlePlaceOrder} style={{marginBottom:"30px"}} variant="danger" disabled={JSON.stringify(address) === JSON.stringify({}) || JSON.stringify(email) === JSON.stringify({})}>Place order</Button>
+            
+                <Modal isOpen={this.state.selected_add_address} toggle={this.toggleAddressForm}
+                    className={this.props.className} size="lg">
+                    <ModalHeader toggle={this.toggleAddressForm} style={{color:'rgb(220,53,69)'}}> Create new address </ModalHeader>
+                    <ModalBody>
+                        <AddressCreationForm reloadHandler={this.refresh}/>
+                    </ModalBody>
+                </Modal>
+                <Modal isOpen={this.state.selected_add_email} toggle={this.toggleEmailForm}
+                    className={this.props.className} size="lg">
+                    <ModalHeader toggle={this.toggleEmailForm} style={{color:'rgb(220,53,69)'}}> Create new email </ModalHeader>
+                    <ModalBody>
+                        <EmailCreationForm reloadHandler={this.refresh}/>
+                    </ModalBody>
+                </Modal>
             </div>
         );
     }

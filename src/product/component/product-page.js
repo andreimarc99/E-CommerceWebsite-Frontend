@@ -38,7 +38,8 @@ class ProductPage extends React.Component {
             relatedDone: false,
             reviewsDone: false,
             predictedProducts: [],
-            predictedDone: false
+            predictedDone: false,
+            myReview: {}
         }
         this.handleAddToFavorites = this.handleAddToFavorites.bind(this);
         this.handleAddToCart = this.handleAddToCart.bind(this);
@@ -165,10 +166,20 @@ class ProductPage extends React.Component {
         const {product} = this.state
         return REVIEW_API.getReviewsByProductId(product.productId, (result, status, err) => {
             if (result !== null && status === 200) {
+                var reviews = result;
+                var myReview = {};
+                for (let i = 0; i < reviews.length; ++i) {
+                    if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+                    if (reviews[i].customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username) {
+                        myReview = reviews[i];
+                        reviews.splice(i, 1);
+                    }}
+                }
                 this.setState({
-                    reviewList: result,
+                    reviewList: reviews,
                     isReviewListLoaded: true,
-                    reviewsDone: true
+                    reviewsDone: true,
+                    myReview: myReview
                 });
             } else {
                 this.setState(({
@@ -181,12 +192,14 @@ class ProductPage extends React.Component {
 
     fetchRelatedProducts() {
         const {product} = this.state;
-
+        var rel = [];
         product.specs.categories.map((category) => {
             PRODUCT_API.getProductsByCategoryId(category.categoryId, (result, status, err) => {
                 if (result !== null && status === 200) {
                     
-                    this.setState({relatedProducts : result, relatedDone: true});
+                    rel = rel.concat(result);
+                    
+                this.setState({relatedProducts: rel, relatedDone: true})
                 } else {
                     this.setState(({
                         errorStatus: status,
@@ -241,16 +254,19 @@ class ProductPage extends React.Component {
         const {product} = this.state;
         axios.get(HOST.flask_api + "/predict?product=" + product.productId)
         .then(response => {
-            var IDs = response.data.predictions.match(/\d+/g).map(Number);
-            if (IDs.length > 0) {
-                for (let i = 0; i < IDs.length; ++i) {
-                    var id = IDs[i];
-                    axios.get(HOST.backend_api + '/products/get/' + id)
-                    .then(response => this.setState(prevState => ({
-                        predictedProducts: [...prevState.predictedProducts, response.data]
-                      })))
-                }
-            }
+            if (response.data.predictions !== "") 
+            {
+                var IDs = response.data.predictions.match(/\d+/g).map(Number);
+                if (IDs.length > 0) {
+                    for (let i = 0; i < IDs.length; ++i) {
+                        var id = IDs[i];
+                        axios.get(HOST.backend_api + '/products/get/' + id)
+                        .then(response => this.setState(prevState => ({
+                            predictedProducts: [...prevState.predictedProducts, response.data]
+                          })))
+                    }
+                }}
+            
             this.setState({predictedDone : true});
         })
     }
@@ -296,7 +312,8 @@ class ProductPage extends React.Component {
 
     render() {
         const {product} = this.state;
-        const {reviewList, reviewsDone} = this.state;
+        const { reviewsDone, myReview} = this.state;
+        var reviewList = this.state.reviewList;
         const {isFavorite} = this.state;
         const {predictedProducts, predictedDone} = this.state;
         var reviewedAlready = false;
@@ -314,6 +331,12 @@ class ProductPage extends React.Component {
                     }
                 }
             });
+            
+            if (JSON.stringify(myReview) !== JSON.stringify({})) {
+                reviewedAlready = true;
+                reviewNumber += 1;
+                reviewList = [myReview].concat(reviewList);
+            }
         }
         rating /= reviewNumber;
         var imageElems = [];
@@ -427,7 +450,7 @@ class ProductPage extends React.Component {
             {reviewsDone === true ? 
 
             <div>
-            {(reviewList.length > 0 ? <p>{reviewList.length} reviews found.</p> : <div />)}
+            {(reviewList.length > 0 ? <p>{reviewNumber} reviews found.</p> : <div />)}
             {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {(Math.round(rating * 100) / 100).toFixed(1)}</p>}
             { (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) ?
 
@@ -504,7 +527,7 @@ class ProductPage extends React.Component {
             (relatedProducts.length > 0) ? 
             
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left">
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
                     {relatedProducts.map((prod) => { 
 
                 return(
@@ -513,7 +536,7 @@ class ProductPage extends React.Component {
                             
                         <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
                         <Card.Header className="red-card-header">{prod.name}</Card.Header></Link>
-                        <Card.Body style={{backgroundImage: 'linear-gradient(to bottom right, rgb(216, 216, 216),  rgb(255, 255, 255))'}}>
+                        <Card.Body>
                             
                         <img
                         className="rel-img"
@@ -566,7 +589,7 @@ class ProductPage extends React.Component {
                             
                         <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
                         <Card.Header className="red-card-header">{prod.name}</Card.Header></Link>
-                        <Card.Body style={{backgroundImage: 'linear-gradient(to bottom right, rgb(216, 216, 216),  rgb(255, 255, 255))'}}>
+                        <Card.Body>
                             
                         <img
                         className="rel-img"

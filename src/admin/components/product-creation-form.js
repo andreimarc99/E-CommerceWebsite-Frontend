@@ -36,6 +36,7 @@ class PatientForm extends React.Component {
                     touched: false,
                     validationRules: {
                         minLength: 3,
+                        maxLength: 100,
                         isRequired: true
                     }
                 },
@@ -76,7 +77,8 @@ class PatientForm extends React.Component {
                     touched: false,
                     validationRules: {
                         minLength: 3,
-                        isRequired: true
+                        isRequired: true,
+                        maxLength: 244
                     }
                 },
                 stock: {

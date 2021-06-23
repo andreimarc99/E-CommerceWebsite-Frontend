@@ -19,6 +19,7 @@ import EmailCreationForm from './email-creation-form';
 import EmailUpdateForm from './email-update-form';
 import ReactSpinner from 'react-bootstrap-spinner'
 
+
 class UserPage extends React.Component {
 
     constructor(props) {
@@ -76,6 +77,11 @@ class UserPage extends React.Component {
         const {user} = this.state;
         axios.get(HOST.backend_api + "/emails/" + JSON.parse(user).username)
         .then(response => this.setState({emails: response.data, doneEmails: true}))
+    }
+
+    handleEmailDelete(id) {
+        fetch(HOST.backend_api + '/emails/' + id, {method: 'DELETE'})
+            .then(response => this.refresh());
     }
 
     handleSave() {
@@ -243,7 +249,7 @@ class UserPage extends React.Component {
             <p style={{textAlign:'center'}}>{JSON.parse(user).role}</p>
             </div>
 
-            <Button style={{marginBottom:'20px'}} size="lg" variant="outline-danger" disabled={!this.state.valid} onClick={this.handleSave}>SAVE</Button>
+            <Button style={{marginBottom:'20px'}} size="lg" variant="danger" disabled={!this.state.valid} onClick={this.handleSave}>SAVE</Button>
           {(JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ?  <div>
               
                 <h3 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>REGISTERED ADDRESSES
@@ -351,7 +357,8 @@ class UserPage extends React.Component {
                                     email => 
                                         <tr key={email.emailId}>
                                             <td className="text-center"> {email.email}</td>
-                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button></td>
+                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button>
+                                            <Button onClick={() => this.handleEmailDelete(email.emailId)} style={{margin:'5px'}} variant='danger' size='sm'>DELETE</Button></td>
                                         </tr>)
                             }
                             </tbody>

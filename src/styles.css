@@ -144,7 +144,9 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
 }
 
 .rel-img {
-  height: 12vh;
+  object-fit: contain;
+  width: 25vh;
+  height: 20vh;
 }
 
 
@@ -170,8 +172,9 @@ outline: 1px solid rgb(255, 255, 255);
 }
 
 .categ-img {
-  width: 30%
-
+  object-fit: contain;
+  width: 35vh;
+  height: 35vh;
 }
 
 .txtarea {
@@ -277,4 +280,9 @@ background-color: rgb(220,53,69);
 .scrollable-reviews::-webkit-scrollbar-thumb {
 background-color: rgb(220,53,69);
 outline: 1px solid rgb(220,53,69);
+}
+
+.custom-btn {
+  background-color: transparent;
+  border-color: transparent;
 }
