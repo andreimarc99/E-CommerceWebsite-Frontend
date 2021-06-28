@@ -369,10 +369,8 @@ class ProductPage extends React.Component {
         <div>
             <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{product.name.toString().toUpperCase()}
             <h5 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{product.stock} IN STOCK</h5></h1>
-           
-           
-            <br />
-            <img
+            <img    
+                style={{padding:'10px'}}
                   className="d-block w-100 prod-img shadowed"
                   src={imageElem.src}
                   alt="First slide"
@@ -410,11 +408,11 @@ class ProductPage extends React.Component {
                 height: 10
             }}
             />
-           <h3><b>Technical specs</b></h3>
+           <h3><b>TECHNICAL SPECS</b></h3>
            <div className="container fluid">
                <div>
-                    <h4><b>Size:</b> {product.specs.size}</h4>
-                    <h4><b>Weight:</b> {product.specs.weight}g</h4>
+                    <h4><b>SIZE: </b> {product.specs.size}</h4>
+                    <h4><b>WEIGHT: </b> {product.specs.weight}g</h4>
                 </div>
            </div>
            <hr
@@ -423,7 +421,7 @@ class ProductPage extends React.Component {
                 backgroundColor: 'rgb(220,53,69)',
                 height: 10
             }}/>
-            <h3><b>Categories</b></h3>
+            <h3><b>CATEGORIES</b></h3>
             <div className="container fluid">
                 <div className="row justify-content-center " style={{display:'inline-block', verticalAlign:'middle'}}>
                 {product.specs.categories.map((category) => 
@@ -445,7 +443,7 @@ class ProductPage extends React.Component {
                 height: 25
             }}
             />
-            <h3><b>Reviews</b></h3>
+            <h3><b>REVIEWS</b></h3>
 
             {reviewsDone === true ? 
 
@@ -463,16 +461,9 @@ class ProductPage extends React.Component {
                     <ReviewCreationForm product={product} reloadHandler={this.reloadReviewsAfterCreation}/>
                 </ModalBody>
             </Modal>
-            {(reviewList.length > 0 ? <div className="scrollable-reviews"> {
+            {(reviewList.length > 0 ? <div className="scrollable-reviews" style={{ marginLeft:'200px', marginRight:'200px' }}> {
             reviewList.map((review) => {return(
-                <div >
-                    <hr
-                    style={{
-                        color: 'rgb(220,53,69)',
-                        backgroundColor: 'rgb(220,53,69)',
-                        height: 3
-                    }}
-                    />
+                <div style={{borderLeft:'20px rgb(220,53,69) solid', borderTop:'3px rgb(220,53,69) solid', marginRight:'5px', marginLeft:'5px'}} >
                     <p style={{float:'right', marginRight:'20px'}}>
                 <StarRatings
                     rating={review.rating}
@@ -520,18 +511,18 @@ class ProductPage extends React.Component {
                 height: 10
             }}
             />
-            <h3><b>Related products</b></h3>
+            <h3><b>RELATED PRODUCTS</b></h3>
             
             {(relatedDone === true ? 
             
             (relatedProducts.length > 0) ? 
             
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
+                <div style={{overflow:'scroll'}} className="row flex-nowrap justify-content-center prods_categ">
                     {relatedProducts.map((prod) => { 
 
                 return(
-                    <div className="col-lg-4 d-flex align-items-stretch ">
+                    <div className="col-lg-64 d-flex align-items-stretch ">
                         <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
                             
                         <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >
@@ -574,17 +565,17 @@ class ProductPage extends React.Component {
                 height: 10
             }}
             />
-        <h3><h3 className="text-muted">If you're enjoying this product,</h3><b> we recommend:</b></h3>
+        <h3><h3 className="text-muted">IF YOU'RE ENJOYING THIS PRODUCT, </h3><b> WE RECOMMEND </b></h3>
         {(predictedDone === false ?   <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div> :
             
             (predictedProducts.length > 0) ? 
             
             <div className="container fluid">
-                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-left prods_categ">
+                <div className=" d-flex flex-row flex-nowrap overflow-auto justify-content-center prods_categ">
                     {predictedProducts.map((prod) => { 
 
                 return(
-                    <div className="col-lg-4 d-flex align-items-stretch">
+                    <div className="col-lg-64 d-flex align-items-stretch">
                         <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
                             
                         <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >

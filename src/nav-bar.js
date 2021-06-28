@@ -27,6 +27,7 @@ import stats from "./img/stats.png"
 import orders from "./img/orders.png"
 import stock from "./img/stock.png"
 import product_search from "./img/product.png"
+import ecomsyst from "./img/ecomsyst.png"
 
 import {Link} from 'react-router-dom'
 import * as CATEGORY_API from "./product/api/category-api"
@@ -99,7 +100,7 @@ class NavbarPage extends React.Component {
 
   handleLogout() {
     localStorage.removeItem('loggedUser');
-    window.location.href = "/";
+    window.location.replace("/");
   }
 
   render() {
@@ -115,11 +116,8 @@ class NavbarPage extends React.Component {
       <div>
         <Navbar color="danger" light expand="md">
         <a href="/" className="navbar-brand lower-zoom">
-              <img className="logo" src={bear} height="33" alt="logo"></img>
+              <img src={ecomsyst} height="55" alt="logo"></img>
           </a>
-          <NavbarBrand href="/" style={{color:"white"}}>
-            eComSystem
-          </NavbarBrand>
             <Nav className="mr-auto" navbar>
               {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
               <NavItem>
@@ -253,8 +251,8 @@ class NavbarPage extends React.Component {
               )
               }
                 {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "") ? 
-                
-                <button className="custom-btn" style={{marginLeft:'10px'}} onClick={this.handleLogout} ><img src={logout} height="30" alt="cart" className="logo" ></img></button> : <div />)}
+                <Link to="/" onClick={() => localStorage.removeItem("loggedUser")}> <button className="custom-btn" style={{marginLeft:'10px'}} onClick={this.handleLogout} ><img src={logout} height="30" alt="cart" className="logo" ></img></button> 
+                </Link>: <div />)}
               </Form>
             </Navbar>
         </div>

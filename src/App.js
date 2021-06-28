@@ -5,10 +5,6 @@ import Home from "./home/home.js"
 import ErrorPage from "./error-page.js"
 import "./styles.css"
 import NavbarPage from "./nav-bar.js"
-import instagram from "./img/instagram_icon.png"
-import facebook from "./img/facebook_icon.png"
-import email from "./img/gmail_icon.png"
-import twitter from "./img/twitter_icon.png"
 import ProductStockPage from './admin/components/product-stock-page';
 import ProductPage from './product/component/product-page';
 import Login from "./login/login-page"
@@ -28,6 +24,7 @@ import ComplaintsAdminPage from './admin/components/complaints-admin-page';
 import VouchersAdminPage from './admin/components/vouchers-admin-page';
 import OrdersDeliveryPage from './delivery/components/orders-delivery-page';
 import {EmailTest} from './email-test';
+import ecomsyst from "./img/ecomsyst.png";
 
 function App() {
   return (
@@ -134,7 +131,8 @@ function App() {
             </Router>
 
               <footer className="bg-danger text-center text-lg-start" style={{color:"white"}}>
-                  <p> © eCommerce System </p>
+                 <img src={ecomsyst} style={{height:'70px'}}/>
+                <br />
                 {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
                 <Button onClick={() => {window.location.href="/complaints"}} style={{marginTop:'5px', marginBottom:'10px'}} variant="outline-light">File a complaint</Button> : <div />)}
               </footer>

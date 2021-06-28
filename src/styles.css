@@ -140,7 +140,7 @@ filter: invert(26%) sepia(99%) saturate(7175%) hue-rotate(358deg) brightness(95%
 
 .prod-img {
   object-fit: contain;
-  height: 60vh;
+  height: 50vh;
 }
 
 .rel-img {
@@ -273,7 +273,7 @@ background-color: rgb(220,53,69);
 }
 
 .scrollable-reviews::-webkit-scrollbar {
-  width: 0.5em;
+  width: 0.3em;
   height: 0.15em;
 }
 

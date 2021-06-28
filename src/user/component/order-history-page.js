@@ -4,7 +4,6 @@ import {HOST} from "../../commons/hosts"
 import ReactSpinner from 'react-bootstrap-spinner'
 import OrderVisualizationForm from "./order-visualization-form"
 import {Card, Button} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import {
     Modal,
     ModalBody,
@@ -58,7 +57,7 @@ class OrderHistoryPage extends React.Component {
     }
 
     render() {
-        const {orderList, username, done} = this.state;
+        const {orderList, done} = this.state;
         var delivered = [];
         var undelivered = [];
         if (orderList.length > 0) {

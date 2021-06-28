@@ -218,11 +218,9 @@ class OrderPage extends React.Component {
             console.log(cart);
             var noVoucher = {};
             if (JSON.stringify(voucher) === JSON.stringify({})) {
-                var exists = false;
                 for (let i = 0; i < voucherList.length; ++i) {
                     if (voucherList[i].code === "NONE") {
                         noVoucher = voucherList[i];
-                        exists = true; break;
                     }
                 }
 

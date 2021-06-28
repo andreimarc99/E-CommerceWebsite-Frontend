@@ -107,7 +107,7 @@ class ComplaintsAdminPage extends React.Component {
             {(done === true ? (complaintList.length > 0 ? <div>
 
                        
-                <h5><img src={cancel} style={{width:"35px", marginRight:'5px'}} />UNANSWERED</h5>
+                <h5><img src={cancel} style={{width:"35px", marginRight:'5px'}} alt="cancel" />UNANSWERED</h5>
                            <hr
                            style={{
                                color: 'rgb(220,53,69)',
@@ -138,7 +138,7 @@ class ComplaintsAdminPage extends React.Component {
                        </table>
 
 
-                       <h5><img src={check} style={{width:"35px", marginRight:'5px'}} />ANSWERED</h5>
+                       <h5><img src={check} style={{width:"35px", marginRight:'5px'}} alt="check" />ANSWERED</h5>
                            <hr
                            style={{
                                color: 'rgb(220,53,69)',
