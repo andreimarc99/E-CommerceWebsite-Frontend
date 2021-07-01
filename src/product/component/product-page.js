@@ -453,13 +453,7 @@ class ProductPage extends React.Component {
                     <h4><b>WEIGHT: </b> {product.specs.weight}g</h4>
                 </div>
            </div>
-           <hr
-            style={{
-                color: 'rgb(220,53,69)',
-                backgroundColor: 'rgb(220,53,69)',
-                height: 10
-            }}/>
-            <h3><b>CATEGORIES</b></h3>
+            <h3 style={{marginTop:'50px'}}><b>CATEGORIES</b></h3>
             <div className="container fluid">
                 <div className="row justify-content-center " style={{display:'inline-block', verticalAlign:'middle'}}>
                 {product.specs.categories.map((category) => 
@@ -471,18 +465,17 @@ class ProductPage extends React.Component {
                 )}
 
             </div>
-            
             </div>
             
             <hr
             style={{
                 color: 'rgb(220,53,69)',
                 backgroundColor: 'rgb(220,53,69)',
-                height: 25
+                height: 10
             }}
             />
             <h3><b>REVIEWS</b></h3>
-
+            
             {reviewsDone === true ? 
 
             <div>
@@ -503,6 +496,7 @@ class ProductPage extends React.Component {
             </Modal>
             {(reviewList.length > 0 ? <div className="scrollable-reviews" style={{ marginLeft:'200px', marginRight:'200px' }}> {
             reviewList.map((review) => {return(
+                
                 <div style={{borderLeft:'20px rgb(220,53,69) solid', borderTop:'3px rgb(220,53,69) solid', marginRight:'5px', marginLeft:'5px'}} >
                     <p style={{float:'right', marginRight:'20px'}}>
                 <StarRatings

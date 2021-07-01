@@ -262,7 +262,7 @@ class UserPage extends React.Component {
                     ((addresses.length > 0 && addresses !== undefined) ? 
                          addresses.map((address) => {
                             return( 
-                                <div style={{textAlign:'left', marginLeft: '30px', marginBottom:'20px'}}>
+                                <div data-aos="fade-up" data-aos-duration="1000" style={{textAlign:'left', marginLeft: '30px', marginBottom:'20px'}}>
     
     
                                     <h4>  
@@ -345,6 +345,7 @@ class UserPage extends React.Component {
             {(doneEmails === true ? 
                 <div> 
         <Button style={{marginBottom:'10px', marginTop:'10px'}} onClick={this.toggleAddEmailForm} variant="outline-danger"> NEW EMAIL </Button>
+        <div data-aos="fade-up" data-aos-duration="1000">
             <table style={{margin:'auto',width:'60%'}} className="table">
                             <thead>
                             <tr>
@@ -363,7 +364,7 @@ class UserPage extends React.Component {
                                         </tr>)
                             }
                             </tbody>
-                        </table>
+                        </table></div>
 
                 </div>
                 : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}

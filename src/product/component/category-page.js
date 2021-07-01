@@ -257,17 +257,15 @@ class CategoryPage extends React.Component {
 
         return (
             <div style={{marginBottom:"40px"}}>   
+                <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{categoryName.toString().toUpperCase()} CATEGORY</h1> 
 
                 {(done === true ? (productList.length > 0 ? 
-               <div>
-                    <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>{categoryName.toString().toUpperCase()} CATEGORY</h1> 
                     <div className="container fluid">
-                        
-                          
+                    
                         {
                         productList.map((prod) => { 
                             return(
-                                <div className="row">
+                            <div data-aos="fade-up" data-aos-duration="1000" className="row">
                             <div className="col">
 
                             <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
@@ -319,7 +317,7 @@ class CategoryPage extends React.Component {
                             </Card.Body>
                         </Card></div></div> );
                         })}
-                    </div></div>
+                    </div>
                     : <h2>No products for "{categoryName}" category.</h2>) 
                     : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
 

@@ -106,8 +106,8 @@ class ComplaintsAdminPage extends React.Component {
             <div style={{marginBottom:'20px', marginTop:'20px'}}>  
             {(done === true ? (complaintList.length > 0 ? <div>
 
-                       
-                <h5><img src={cancel} style={{width:"35px", marginRight:'5px'}} alt="cancel" />UNANSWERED</h5>
+                       <div data-aos="fade-up" data-aos-duration="1000"> 
+                <h5>UNANSWERED</h5>
                            <hr
                            style={{
                                color: 'rgb(220,53,69)',
@@ -137,8 +137,9 @@ class ComplaintsAdminPage extends React.Component {
                                 </tbody>
                        </table>
 
-
-                       <h5><img src={check} style={{width:"35px", marginRight:'5px'}} alt="check" />ANSWERED</h5>
+                    </div>
+                    <div data-aos="fade-up" data-aos-duration="1000">
+                       <h5>ANSWERED</h5>
                            <hr
                            style={{
                                color: 'rgb(220,53,69)',
@@ -167,6 +168,7 @@ class ComplaintsAdminPage extends React.Component {
                                 }
                                 </tbody>
                        </table>
+                       </div>
 
             <Modal isOpen={this.state.selected_complaint_response} toggle={this.toggleRespondForm}
             className={this.props.className} size="lg">

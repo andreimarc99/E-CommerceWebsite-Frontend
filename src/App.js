@@ -138,7 +138,7 @@ function App() {
             </Router>
 
               <footer className="bg-danger text-center text-lg-start" style={{color:"white"}}>
-                 <img src={ecomsyst} style={{height:'70px'}}/>
+                 <img src={ecomsyst} style={{height:'50px'}}/>
                 <br />
                 {((localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== "" && localStorage.getItem("loggedUser") !== undefined  && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") ? 
                 <Button onClick={() => {window.location.href="/complaints"}} style={{marginTop:'5px', marginBottom:'10px'}} variant="outline-light">File a complaint</Button> : <div />)}

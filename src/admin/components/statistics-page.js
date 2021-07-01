@@ -262,41 +262,51 @@ class StatisticsPage extends React.Component {
                 <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>STATISTICS</h1>
                {(done === false ? <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div> : 
                <div style={{marginBottom:'20px', marginTop:'20px', marginLeft: '150px', marginRight: '150px'}}>
+                   <div data-aos="fade-up" data-aos-duration="1000">
                    <CanvasJSChart options = {productChartOptions} />
                     <hr
                     style={{
                         color: 'rgb(220,53,69)',
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
-                    }}/>
+                    }}/></div>
+
+                    <div data-aos="fade-up" data-aos-duration="1000">
                     <CanvasJSChart options = {categoriesChartOptions} />
                     <hr
                     style={{
                         color: 'rgb(220,53,69)',
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
-                    }}/>
+                    }}/></div>
+
+                    <div data-aos="fade-up" data-aos-duration="1000">
                     <CanvasJSChart options = {userAgesChartOptions} />
                     <hr
                     style={{
                         color: 'rgb(220,53,69)',
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
-                    }}/>
+                    }}/></div>
+
+                    <div data-aos="fade-up" data-aos-duration="1000">    
                     <CanvasJSChart options = {vouchersChartOptions} />
                     <hr
                     style={{
                         color: 'rgb(220,53,69)',
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
-                    }}/>
+                    }}/></div>
+                    <div data-aos="fade-up" data-aos-duration="1000">
                     <CanvasJSChart options = {orderChartOptions} />
                     <hr
                     style={{
                         color: 'rgb(220,53,69)',
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
-                    }}/>
+                    }}/></div>
+
+                    <div data-aos="fade-up" data-aos-duration="1000">
                     <h3>Top rated products</h3>
                     <p className="text-muted">using IMDb's product ranking formula</p>
                     <div className="row">
@@ -326,6 +336,9 @@ class StatisticsPage extends React.Component {
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
+                    </div>
+
+                    <div data-aos="fade-up" data-aos-duration="1000">
                     <h3>Customer segmentation by gender</h3>
                     <img src={HOST.flask_api + "/genders"} alt="gender_segm" />
 
@@ -335,6 +348,9 @@ class StatisticsPage extends React.Component {
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
+                    </div>
+
+                    <div data-aos="fade-up" data-aos-duration="1000">
                     <h3>Customer segmentation by performing k-means clustering</h3>
                     <h5 className="text-muted">depending on age and total money spent on the platform</h5>
                     <img src={HOST.flask_api + "/clustering/age"} alt="Age-Money Clustering"/>
@@ -345,10 +361,13 @@ class StatisticsPage extends React.Component {
                         backgroundColor: 'rgb(220,53,69)',
                         height: 10
                     }}/>
+                    </div>
+
+                    <div data-aos="fade-up" data-aos-duration="1000">
                     <h3>Customer segmentation by performing k-means clustering</h3>
                     <h5 className="text-muted">depending on gender and total money spent on the platform</h5>
                     <img src={HOST.flask_api + "/clustering/gender"} alt="Gender-Money Clustering"/>
-                    
+                    </div>
                </div> 
                
                )}

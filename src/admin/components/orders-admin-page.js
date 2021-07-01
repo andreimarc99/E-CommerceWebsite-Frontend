@@ -85,6 +85,7 @@ class OrdersAdminPage extends React.Component {
             <div style={{marginBottom:'20px', marginTop:'20px'}}>  
             {(done === true ? (orderList.length > 0 ? 
             <div>
+                <div data-aos="fade-up">
                 <h5>UNDELIVERED</h5>
                 <hr
                 style={{
@@ -130,6 +131,8 @@ class OrdersAdminPage extends React.Component {
                     backgroundColor: 'rgb(220,53,69)',
                     height: 10
                 }}/>
+                </div>
+                <div data-aos="fade-up">
                        <h5>DELIVERED</h5>
                 <hr
                 style={{
@@ -166,6 +169,7 @@ class OrdersAdminPage extends React.Component {
                     )}
                     </tbody>
                        </table>
+                       </div>
                 
             </div>
             : <h2>No orders.</h2>) : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}

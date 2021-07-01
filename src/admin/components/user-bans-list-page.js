@@ -78,7 +78,8 @@ class UserBansPage extends React.Component {
                 
                 {(done === true ?  
                     (banList.length > 0 ? 
-                    <div className="row" style={{marginLeft:'30px', marginRight:'30px'}}>
+                    <div className="row" style={{marginLeft:'100px', marginRight:'100px'}}>
+                        <div style={{width:'100%'}} data-aos="fade-up" data-aos-duration="1000">
                         <table className="table table-striped table-bordered">
                             <thead className="tbl-head">
                             <tr>
@@ -104,7 +105,7 @@ class UserBansPage extends React.Component {
                                         </tr>)
                             }
                             </tbody>
-                        </table>
+                        </table></div>
                     </div> : <div >No bans</div>)
                 
                 : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)

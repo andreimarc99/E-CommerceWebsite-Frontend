@@ -105,7 +105,7 @@ class ComplaintCustomerPage extends React.Component {
                 {(complaintList.length > 0 ? 
                     complaintList.map((complaint) => {
                         return (
-                        <div className="row" style={{marginTop:'20px'}}>
+                        <div data-aos="fade-up" data-aos-duration="1000" className="row" style={{marginTop:'20px', marginBottom:'40px'}}>
                             <div className="col"> 
                                 <div className="row">
                                     <h3>Complaint #{complaint.complaintId}</h3>

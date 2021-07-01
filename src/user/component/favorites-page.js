@@ -154,7 +154,7 @@ class FavoritesPage extends React.Component {
             (done === true ? 
                 ((productList !== "undefined" && productList.length > 0) ? productList.map((prod) => { 
                     return(
-                        <div className="row">
+                    <div data-aos="fade-up" data-aos-duration="1000" className="row">
                     <div className="col">
     
                     <Card bg="card border-danger" text="black" style={{margin: '10px'}}>

@@ -234,7 +234,8 @@ class Home extends React.Component {
                           }}/>
             
                           <div className="d-flex overflow-auto justify-content-left prods_categ" style={{marginBottom:'20px'}}>
-
+                          
+                        
                             {temp.map((prod) => { 
                               return(
                                 <div className="col">
@@ -267,7 +268,9 @@ class Home extends React.Component {
                                   </Card>
                                   </div> );
                                 })} 
-                                </div></div>)
+                                </div>
+                                
+                                </div>)
                   })
                     : 
                     <div> No products found. </div> 
