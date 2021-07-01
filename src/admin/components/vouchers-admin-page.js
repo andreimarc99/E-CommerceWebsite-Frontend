@@ -1,5 +1,4 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
 import {HOST} from "../../commons/hosts"
 import {Button} from "react-bootstrap"
 import {
@@ -10,28 +9,9 @@ import {
 
 
 import axios from 'axios';
-import ComplaintResponseForm from './complaint-response-form';
 import VoucherCreationForm from './voucher-creation-form';
 import VoucherUpdateForm from "./voucher-update-form"
 import ReactSpinner from 'react-bootstrap-spinner'
-
-const columns = [
-    {
-        Header: 'Code',
-        accessor: 'code',
-    },
-    {
-        Header: 'Discount',
-        accessor: 'discount',
-    }
-];
-
-const filters = [
-    {
-        accessor: 'code',
-    }
-];
-
 
 class VouchersAdminPage extends React.Component {
 

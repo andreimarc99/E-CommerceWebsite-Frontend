@@ -18,6 +18,7 @@ import axios from 'axios';
 import EmailCreationForm from './email-creation-form';
 import EmailUpdateForm from './email-update-form';
 import ReactSpinner from 'react-bootstrap-spinner'
+import trash from "../../img/trash.png"
 
 
 class UserPage extends React.Component {
@@ -358,7 +359,7 @@ class UserPage extends React.Component {
                                         <tr key={email.emailId}>
                                             <td className="text-center"> {email.email}</td>
                                             <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button>
-                                            <Button onClick={() => this.handleEmailDelete(email.emailId)} style={{margin:'5px'}} variant='danger' size='sm'>DELETE</Button></td>
+                                            <Button onClick={() => this.handleEmailDelete(email.emailId)} style={{margin:'5px'}} variant='danger' size='sm'> <img src={trash} className="logo" style={{width:'20px'}}/></Button></td>
                                         </tr>)
                             }
                             </tbody>

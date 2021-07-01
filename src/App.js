@@ -25,6 +25,7 @@ import VouchersAdminPage from './admin/components/vouchers-admin-page';
 import OrdersDeliveryPage from './delivery/components/orders-delivery-page';
 import {EmailTest} from './email-test';
 import ecomsyst from "./img/ecomsyst.png";
+import UserBansPage from './admin/components/user-bans-list-page';
 
 function App() {
   return (
@@ -99,6 +100,12 @@ function App() {
                             exact 
                             path='/vouchers_admin_page'
                             render={() => <VouchersAdminPage /> }
+                        />
+
+                        <Route 
+                            exact 
+                            path='/user_ban_list'
+                            render={() => <UserBansPage /> }
                         />
 
                         <Route 

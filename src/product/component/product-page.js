@@ -8,7 +8,10 @@ import StarRatings from "react-star-ratings"
 import {Card, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import logo from "../../img/logo.png"
+import ban from "../../img/ban.png"
 import heart from "../../img/heart.png"
+import trash from "../../img/trash.png"
+import edit from "../../img/edit.png"
 import {HOST} from "../../commons/hosts"
 import ReviewUpdateForm from '../../review/review-update-form'
 import ReviewCreationForm from '../../review/review-creation-form'
@@ -19,6 +22,7 @@ import {
 } from 'reactstrap';
 import ReactSpinner from 'react-bootstrap-spinner'
 import axios from 'axios';
+import BanCreationForm from '../../admin/components/ban-creation-form';
 
 class ProductPage extends React.Component {
 
@@ -35,11 +39,14 @@ class ProductPage extends React.Component {
             isFavorite: false,
             selected_update_review: false,
             selected_create_review: false,
+            selected_create_ban: false,
             relatedDone: false,
             reviewsDone: false,
             predictedProducts: [],
             predictedDone: false,
-            myReview: {}
+            myReview: {},
+            selected_review: {},
+            banList: []
         }
         this.handleAddToFavorites = this.handleAddToFavorites.bind(this);
         this.handleAddToCart = this.handleAddToCart.bind(this);
@@ -50,7 +57,9 @@ class ProductPage extends React.Component {
         this.toggleUpdateReview = this.toggleUpdateReview.bind(this);
         this.reloadReviews = this.reloadReviews.bind(this);
         this.toggleCreateReview = this.toggleCreateReview.bind(this);
+        this.toggleBanCreation = this.toggleBanCreation.bind(this);
         this.reloadReviewsAfterCreation = this.reloadReviewsAfterCreation.bind(this);
+        this.fetchUserBans = this.fetchUserBans.bind(this);
     }
 
     isAFavorite() {
@@ -271,11 +280,21 @@ class ProductPage extends React.Component {
         })
     }
 
+    fetchUserBans() {
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+            if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") {
+                axios.get(HOST.backend_api + "/user_bans/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+                .then(response => this.setState({banList: response.data}))
+            }
+        }
+    }
+
     componentDidMount() {
         this.fetchReviews();
         this.fetchRelatedProducts();
         this.isAFavorite();
         this.fetchPredictions();
+        this.fetchUserBans();
     }
 
     handleDeleteReview(reviewId) { 
@@ -292,6 +311,11 @@ class ProductPage extends React.Component {
 
     toggleCreateReview() {
         this.setState({selected_create_review: !this.state.selected_create_review});
+    }
+
+    toggleBanCreation(review) {
+        this.setState({selected_create_ban: !this.state.selected_create_ban, 
+                    selected_review: review});
     }
     
     reloadReviewsAfterCreation() {
@@ -312,10 +336,12 @@ class ProductPage extends React.Component {
 
     render() {
         const {product} = this.state;
-        const { reviewsDone, myReview} = this.state;
+        const {reviewsDone, myReview} = this.state;
+        const {banList} = this.state;
         var reviewList = this.state.reviewList;
         const {isFavorite} = this.state;
-        const {predictedProducts, predictedDone} = this.state;
+        const {predictedProducts, predictedDone} = this.state;      
+        var isBanned = false;
         var reviewedAlready = false;
         let rating = 0;
         let reviewNumber = 0;
@@ -336,6 +362,18 @@ class ProductPage extends React.Component {
                 reviewedAlready = true;
                 reviewNumber += 1;
                 reviewList = [myReview].concat(reviewList);
+            }
+        }
+        if (banList.length > 0) {
+            for (let i = 0; i < banList.length; ++i) {
+                var startDate = banList[i].startDate.substring(0,10);
+                var endDate = banList[i].endDate.substring(0,10);
+                var s = new Date(startDate);
+                var e = new Date(endDate);
+                var now = new Date();
+                if (now.getTime() <= e.getTime() && now.getTime() >= s.getTime()) {
+                    isBanned = true;
+                }
             }
         }
         rating /= reviewNumber;
@@ -451,8 +489,10 @@ class ProductPage extends React.Component {
             {(reviewList.length > 0 ? <p>{reviewNumber} reviews found.</p> : <div />)}
             {(isNaN(rating)) ? <p  className="text-muted">No reviews found</p> : <p className="text-muted">Average: {(Math.round(rating * 100) / 100).toFixed(1)}</p>}
             { (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) ?
-
-            (!reviewedAlready && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? <Button onClick={this.toggleCreateReview} variant = "danger">Add review</Button> : <div /> )
+            (!isBanned ?
+                (!reviewedAlready && JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER" ? 
+            <Button onClick={this.toggleCreateReview} variant = "danger" style={{marginBottom:'10px'}}>Add review</Button> : <div /> ) : <div style={{margin:'10px'}} className="text-muted">You are currently banned from adding reviews.</div>)
+            
             :<div />}
             <Modal isOpen={this.state.selected_create_review} toggle={this.toggleCreateReview}
                  className={this.props.className} size="lg">
@@ -480,8 +520,17 @@ class ProductPage extends React.Component {
                     (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) ?
                     (review.customer.user.username === JSON.parse(localStorage.getItem("loggedUser")).username ? 
                     <div>
-                        <Button onClick={this.toggleUpdateReview} variant="outline-danger">Edit</Button>
-                        <Button style={{marginLeft:'10px'}} variant="danger" onClick={() => this.handleDeleteReview(review.reviewId)}>Delete</Button>
+                        <Button disabled={isBanned} onClick={this.toggleUpdateReview} variant="danger" style={{marginBottom:'5px'}}><img src={edit} className="logo" style={{width:'22px'}}/></Button>
+                        <Button style={{marginLeft:'10px'}} variant="danger" onClick={() => this.handleDeleteReview(review.reviewId)} style={{marginLeft:'5px',marginBottom:'5px'}}>
+                            <img src={trash} className="logo" style={{width:'22px'}}/></Button>
+                    </div> 
+                    : <div />) : <div />}
+                     {
+                    (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) ?
+                    (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ? 
+                    <div>
+                        <Button onClick={() => this.toggleBanCreation(review)} variant="danger" className="btn btn-sm" style={{marginBottom:'5px'}}>
+                            <img src={ban} className="logo" style={{width:'15px', marginRight:'3px'}}/>BAN</Button>
                     </div> 
                     : <div />) : <div />}
                 </div>
@@ -492,7 +541,8 @@ class ProductPage extends React.Component {
                     <ModalBody>
                         <ReviewUpdateForm review={review} reloadHandler={this.reloadReviews}/>
                     </ModalBody>
-                </Modal>                
+                </Modal>  
+           
                 </div>
                 )
             })
@@ -503,6 +553,13 @@ class ProductPage extends React.Component {
             : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>}
 
             
+            <Modal isOpen={this.state.selected_create_ban} toggle={this.toggleBanCreation}
+                 className={this.props.className} size="lg">
+                    <ModalHeader toggle={this.toggleBanCreation}><p style={{color:"red"}}> Apply ban </p></ModalHeader>
+                    <ModalBody>
+                        <BanCreationForm review={this.state.selected_review} reloadHandler={this.reloadReviews}/>
+                    </ModalBody>
+                </Modal>    
 
             <hr
             style={{

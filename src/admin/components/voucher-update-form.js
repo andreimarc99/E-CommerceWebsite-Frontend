@@ -156,8 +156,6 @@ class VoucherUpdateForm extends React.Component {
             oneTimeOnly: isOneTimeOnly
         };
 
-        console.log(v);
-
         this.updateVoucher(v);
     }
 
@@ -188,7 +186,7 @@ class VoucherUpdateForm extends React.Component {
                            required
                     />
                     {this.state.formControls.code.touched && !this.state.formControls.code.valid &&
-                    <div className={"error-message"}> * Code not valid </div>}
+                    <div className={"error-message"}> Code not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='discount'>
@@ -202,7 +200,7 @@ class VoucherUpdateForm extends React.Component {
                            required
                     />
                     {this.state.formControls.discount.touched && !this.state.formControls.discount.valid &&
-                    <div className={"error-message"}> * Discount not valid </div>}
+                    <div className={"error-message"}> Discount not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='startDate'>
@@ -216,7 +214,7 @@ class VoucherUpdateForm extends React.Component {
                            required
                     />
                     {this.state.formControls.startDate.touched && !this.state.formControls.startDate.valid &&
-                    <div className={"error-message"}> * Start date not valid </div>}
+                    <div className={"error-message"}> Start date not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='endDate'>
@@ -230,7 +228,7 @@ class VoucherUpdateForm extends React.Component {
                            required
                     />
                     {this.state.formControls.endDate.touched && !this.state.formControls.endDate.valid &&
-                    <div className={"error-message"}> * End date not valid </div>}
+                    <div className={"error-message"}> End date not valid </div>}
                 </FormGroup>
 
                 <div className="form-group" style={{marginLeft: "auto", marginRight:"auto"}}>

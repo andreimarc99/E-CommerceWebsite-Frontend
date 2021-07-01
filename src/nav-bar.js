@@ -28,6 +28,7 @@ import orders from "./img/orders.png"
 import stock from "./img/stock.png"
 import product_search from "./img/product.png"
 import ecomsyst from "./img/ecomsyst.png"
+import ban from "./img/ban.png"
 
 import {Link} from 'react-router-dom'
 import * as CATEGORY_API from "./product/api/category-api"
@@ -165,6 +166,16 @@ class NavbarPage extends React.Component {
                 <NavLink href="/vouchers_admin_page" style={{color:"white"}}> 
                 <div id="side-menu">
                 <img src={voucher} className="logo" height="30" alt="vouchers" style={{marginRight:'3px'}}></img><span>VOUCHERS</span>
+                </div>
+                </NavLink>
+              </NavItem> : <div />) : <div />)
+              }
+
+              {(localStorage.getItem("loggedUser") !== null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN" ?
+              <NavItem>
+                <NavLink href="/user_ban_list" style={{color:"white"}}> 
+                <div id="side-menu">
+                <img src={ban} className="logo" height="27" alt="vouchers" style={{marginRight:'3px'}}></img><span>USER BANS</span>
                 </div>
                 </NavLink>
               </NavItem> : <div />) : <div />)
