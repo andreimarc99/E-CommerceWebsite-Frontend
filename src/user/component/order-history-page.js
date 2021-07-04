@@ -73,7 +73,7 @@ class OrderHistoryPage extends React.Component {
                 <h1 style={{backgroundColor:'rgb(220,53,69)', color:'white'}}>ORDER HISTORY</h1>
             
             <div style={{marginBottom:'20px', marginTop:'20px', justifyContent:'center'}}>  
-               <h2>Undelivered orders</h2>
+               <h2>UNDELIVERED</h2>
                <hr
                 style={{
                     color: 'rgb(220,53,69)',
@@ -87,7 +87,7 @@ class OrderHistoryPage extends React.Component {
                         {return (o.products.length > 0 ? 
                             
                         <div className="col">
-                        <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
+                        <Card bg="card border-danger" text="black" style={{margin: '10px', minWidth:'200px'}}>
                              
                       
                         <Card.Header style={{backgroundColor:'rgb(220,53,69)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>
@@ -116,7 +116,7 @@ class OrderHistoryPage extends React.Component {
                 : <div style={{marginTop:'30px', marginBottom:'30px'}}> <ReactSpinner  type="border" color="danger" size="2" /></div>)}
               
 
-              <h2 style={{marginTop:'40px'}}>Delivered orders</h2>
+              <h2 style={{marginTop:'40px'}}>DELIVERED</h2>
                <hr
                 style={{
                     color: 'rgb(220,53,69)',
@@ -131,7 +131,7 @@ class OrderHistoryPage extends React.Component {
                             
                         <div className="col">
 
-                        <Card bg="card border-danger" text="black" style={{margin: '10px'}}>
+                        <Card bg="card border-danger" text="black" style={{margin: '10px', minWidth:'200px'}}>
                              
                       
                         <Card.Header style={{backgroundColor:'rgb(220,53,69)', color:'white'}}><h4>Order #{o.orderId}</h4></Card.Header>

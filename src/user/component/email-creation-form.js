@@ -16,7 +16,7 @@ class EmailCreationForm extends React.Component {
             errorStatus: 0,
             error: null,
 
-            formIsValid: true,
+            formIsValid: false,
 
             formControls: {
                 email: {
@@ -111,7 +111,7 @@ class EmailCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.email.touched && !this.state.formControls.email.valid &&
-                    <div className={"error-message"}> * Email not valid </div>}
+                    <div className={"error-message"}> Email not valid </div>}
                 </FormGroup>
 
                 <Row>

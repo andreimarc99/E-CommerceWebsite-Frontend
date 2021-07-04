@@ -16,7 +16,7 @@ class AddressCreationForm extends React.Component {
             errorStatus: 0,
             error: null,
 
-            formIsValid: true,
+            formIsValid: false,
 
             formControls: {
                 alias: {
@@ -186,7 +186,7 @@ class AddressCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.alias.touched && !this.state.formControls.alias.valid &&
-                    <div className={"error-message"}> * Alias not valid </div>}
+                    <div className={"error-message"}> Alias not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='country'>
@@ -198,7 +198,7 @@ class AddressCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.country.touched && !this.state.formControls.country.valid &&
-                    <div className={"error-message"}> * Country not valid </div>}
+                    <div className={"error-message"}> Country not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='county'>
@@ -210,7 +210,7 @@ class AddressCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.county.touched && !this.state.formControls.county.valid &&
-                    <div className={"error-message"}> * County not valid </div>}
+                    <div className={"error-message"}> County not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='town'>
@@ -222,7 +222,7 @@ class AddressCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.town.touched && !this.state.formControls.town.valid &&
-                    <div className={"error-message"}> * Town not valid </div>}
+                    <div className={"error-message"}> Town not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='streetNr'>
@@ -234,7 +234,7 @@ class AddressCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.streetNr.touched && !this.state.formControls.streetNr.valid &&
-                    <div className={"error-message"}> * Street and Number not valid </div>}
+                    <div className={"error-message"}> Street and Number not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='countryCode'>
@@ -246,7 +246,7 @@ class AddressCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.countryCode.touched && !this.state.formControls.countryCode.valid &&
-                    <div className={"error-message"}> * Country Code not valid </div>}
+                    <div className={"error-message"}> Country Code not valid </div>}
                 </FormGroup>
 
                 <Row>

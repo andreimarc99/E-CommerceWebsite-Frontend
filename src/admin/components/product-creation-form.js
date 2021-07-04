@@ -236,7 +236,7 @@ class PatientForm extends React.Component {
             <div>
 
                 <FormGroup id='name'>
-                    <Label for='nameField'> Name: </Label>
+                    <Label for='nameField'> Name </Label>
                     <Input name='name' id='nameField' placeholder={this.state.formControls.name.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.name.value}
@@ -249,7 +249,7 @@ class PatientForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='price'>
-                    <Label for='priceField'> Price: </Label>
+                    <Label for='priceField'> Price </Label>
                     <Input name='price' id='priceField' placeholder={this.state.formControls.price.placeholder}
                            onChange={this.handleChange} type="number"
                            defaultValue={this.state.formControls.price.value}
@@ -262,7 +262,7 @@ class PatientForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='size'>
-                    <Label for='sizeField'> Size: </Label>
+                    <Label for='sizeField'> Size </Label>
                     <Input name='size' id='sizeField' placeholder={this.state.formControls.size.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.size.value}
@@ -275,7 +275,7 @@ class PatientForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='weight'>
-                    <Label for='weightField'> Weight: </Label>
+                    <Label for='weightField'> Weight </Label>
                     <Input name='weight' id='weightField' placeholder={this.state.formControls.weight.placeholder}
                            onChange={this.handleChange} type="number"
                            defaultValue={this.state.formControls.weight.value}
@@ -288,7 +288,7 @@ class PatientForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='description'>
-                    <Label for='descriptionField'> Description: </Label>
+                    <Label for='descriptionField'> Description </Label>
                     <Input name='description' id='descriptionField' placeholder={this.state.formControls.description.placeholder}
                            onChange={this.handleChange}
                            defaultValue={this.state.formControls.description.value}
@@ -301,7 +301,7 @@ class PatientForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup id='stock'>
-                    <Label for='stockField'> Stock: </Label>
+                    <Label for='stockField'> Stock </Label>
                     <Input name='stock' id='stockField' placeholder={this.state.formControls.stock.placeholder}
                            onChange={this.handleChange} type="number"
                            defaultValue={this.state.formControls.stock.value}

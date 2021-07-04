@@ -19,7 +19,7 @@ class BanCreationForm extends React.Component {
             errorStatus: 0,
             error: null,
 
-            formIsValid: true,
+            formIsValid: false,
 
             formControls: {
                 reason: {

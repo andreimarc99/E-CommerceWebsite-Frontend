@@ -573,7 +573,7 @@ class ProductPage extends React.Component {
                     {relatedProducts.map((prod) => { 
 
                 return(
-                    <div className="col-lg-64 d-flex align-items-stretch ">
+                    <div className="col-lg-64 d-flex align-items-stretch">
                         <Card bg="card border-danger mb-3" text="black" style={{ width: '18rem', margin: '10px'}}>
                             
                         <Link style={{textDecoration:"none"}} to={{ pathname: `/product_page/${prod.productId}`, state: { product: prod }}} >

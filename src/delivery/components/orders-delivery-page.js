@@ -65,6 +65,9 @@ class OrdersDeliveryPage extends React.Component {
     }
 
     render() {
+        
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+            if (JSON.parse(localStorage.getItem("loggedUser")).role === "DELIVERY_GUY") {
         const {orderList, done} = this.state;
         var undelivered = [];
         if (orderList.length > 0) {
@@ -151,6 +154,27 @@ class OrdersDeliveryPage extends React.Component {
                 }
             </div>
         );
+   
+        } else {
+            return (
+                <div style={{margin: "auto"}}>
+                    <div className="card-body">
+                        <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                        <p className="card-text text-muted">You do not have access to this page, as your role needs to be DELIVERY_GUY.</p>
+                    </div>
+                </div>
+            )
+        }
+        } else {
+        return (
+            <div style={{margin: "auto"}}>
+                <div className="card-body">
+                <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                    <p className="card-text text-muted">You do not have access to this page, as your role needs to be DELIVERY_GUY.</p>
+                </div>
+            </div>
+        )
+        } 
     }
 
 }

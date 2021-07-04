@@ -35,35 +35,33 @@ class ComplaintCustomerPage extends React.Component {
     }
 
     fetchCustomer() {
-        return fetch(HOST.backend_api + "/customers/" + JSON.parse(localStorage.getItem("loggedUser")).username)
-        .then(response => response.json())
-        .then (data => {
-            this.setState({customer: data})
-            fetch(HOST.backend_api + "/complaints/" + JSON.parse(localStorage.getItem("loggedUser")).username)
-            .then(resp => resp.json())
-            .then(d => {
-                this.setState({complaintList: d})
-                return d.map((complaint) => {
-                    console.log(complaint);
-                    return fetch(HOST.backend_api + "/complaint_responses/" + complaint.complaintId)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.setState(prevState => ({
-                            complaintResponseList: [...prevState.complaintResponseList, data]
-                          }))
+        
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+            return fetch(HOST.backend_api + "/customers/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+            .then(response => response.json())
+            .then (data => {
+                this.setState({customer: data})
+                fetch(HOST.backend_api + "/complaints/" + JSON.parse(localStorage.getItem("loggedUser")).username)
+                .then(resp => resp.json())
+                .then(d => {
+                    this.setState({complaintList: d})
+                    return d.map((complaint) => {
+                        console.log(complaint);
+                        return fetch(HOST.backend_api + "/complaint_responses/" + complaint.complaintId)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.setState(prevState => ({
+                                complaintResponseList: [...prevState.complaintResponseList, data]
+                            }))
+                        })
                     })
-                })
+                });
             });
-        });
+        }
     }
 
     fetchComplaintResponses() {
         const {complaintList} = this.state;
-        /*return fetch(HOST.backend_api + "/complaint_responses")
-        .then(response => response.json())
-        .then(data => {
-            this.setState({complaintResponseList: data})
-        })*/
         console.log(complaintList);
         return complaintList.map((complaint) => {
             console.log(complaint);
@@ -82,6 +80,9 @@ class ComplaintCustomerPage extends React.Component {
     }
 
     render() {
+        
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+            if (JSON.parse(localStorage.getItem("loggedUser")).role === "CUSTOMER") {
         const {customer, complaintList, complaintResponseList} = this.state;
         console.log(complaintResponseList);
         var responses = [];
@@ -168,7 +169,27 @@ class ComplaintCustomerPage extends React.Component {
             </Modal>
 
             </div>
+        );
+        } else {
+            return (
+                <div style={{margin: "auto"}}>
+                    <div className="card-body">
+                        <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                        <p className="card-text text-muted">You do not have access to this page, as your role needs to be CUSTOMER.</p>
+                    </div>
+                </div>
+            )
+        }
+    } else {
+        return (
+            <div style={{margin: "auto"}}>
+                <div className="card-body">
+                <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                    <p className="card-text text-muted">You do not have access to this page, as your role needs to be CUSTOMER.</p>
+                </div>
+            </div>
         )
+    } 
     }
 }
 

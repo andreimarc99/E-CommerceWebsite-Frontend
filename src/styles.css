@@ -213,9 +213,13 @@ outline: 1px solid rgb(220,53,69);
     opacity: 0;
   }
   to {
-    top: 0;
+    top: 0px;
     opacity: 1;
   }
+}
+
+body.modal-open {
+  overflow: visible !important;
 }
 
 .card {
@@ -224,6 +228,7 @@ outline: 1px solid rgb(220,53,69);
 
 .card:hover {
   transform: scale(1.05);
+  box-shadow: 5px 3px 10px grey;    
 }
 
 .zoom-img {
@@ -293,3 +298,8 @@ outline: 1px solid rgb(220,53,69);
 
 .fadeOut { opacity: 0; }
 .fadeIn { opacity: 1; }
+
+.error-message {
+  color: rgb(220,53,69)
+}
+

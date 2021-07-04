@@ -15,7 +15,7 @@ class CategoryCreationForm extends React.Component {
             errorStatus: 0,
             error: null,
 
-            formIsValid: true,
+            formIsValid: false,
 
             formControls: {
                 name: {
@@ -103,7 +103,7 @@ class CategoryCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.name.touched && !this.state.formControls.name.valid &&
-                    <div className={"error-message"}> * Name not valid </div>}
+                    <div className={"error-message"}> Name not valid </div>}
                 </FormGroup>
 
                 <Row>

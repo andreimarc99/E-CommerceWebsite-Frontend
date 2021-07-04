@@ -19,13 +19,13 @@ class ReviewCreationForm extends React.Component {
             errorStatus: 0,
             error: null,
 
-            formIsValid: true,
+            formIsValid: false,
 
             formControls: {
                 message: {
                     value: '',
                     placeholder: 'Your message...',
-                    valid: true,
+                    valid: false,
                     touched: true,
                     validationRules: {
                         minLength: 5,
@@ -35,7 +35,7 @@ class ReviewCreationForm extends React.Component {
                 rating: {
                     value: '',
                     placeholder: 'Your rating...',
-                    valid: true,
+                    valid: false,
                     touched: true,
                     validationRules: {
                         isRequired: true,
@@ -147,7 +147,7 @@ class ReviewCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.message.touched && !this.state.formControls.message.valid &&
-                    <div className={"error-message"}> * Message not valid </div>}
+                    <div className={"error-message"}> Message not valid </div>}
                 </FormGroup>
 
                 <FormGroup id='rating'>
@@ -160,7 +160,7 @@ class ReviewCreationForm extends React.Component {
                            required
                     />
                     {this.state.formControls.rating.touched && !this.state.formControls.rating.valid &&
-                    <div className={"error-message"}> * Rating not valid! Choose a number between 0 and 5 </div>}
+                    <div className={"error-message"}> Rating not valid! Choose a number between 0 and 5 </div>}
                 </FormGroup>
 
                 <Row>

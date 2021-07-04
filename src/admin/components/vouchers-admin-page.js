@@ -72,6 +72,9 @@ class VouchersAdminPage extends React.Component {
     }
 
     render() {
+        
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+            if (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN") {
         const {done} = this.state;
         var {voucherList} = this.state;
         if (voucherList.length > 0) {
@@ -138,6 +141,26 @@ class VouchersAdminPage extends React.Component {
                 </Modal>
             </div></div>
         );
+        } else {
+            return (
+                <div style={{margin: "auto"}}>
+                    <div className="card-body">
+                        <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                        <p className="card-text text-muted">You do not have access to this page, as your role needs to be ADMIN.</p>
+                    </div>
+                </div>
+            )
+        }
+    } else {
+        return (
+            <div style={{margin: "auto"}}>
+                <div className="card-body">
+                <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                    <p className="card-text text-muted">You do not have access to this page, as your role needs to be ADMIN.</p>
+                </div>
+            </div>
+        )
+    } 
     }
 
 }

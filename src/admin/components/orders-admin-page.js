@@ -67,6 +67,9 @@ class OrdersAdminPage extends React.Component {
     }
 
     render() {
+        
+        if (localStorage.getItem("loggedUser") !== null && localStorage.getItem("loggedUser") !== undefined) {
+            if (JSON.parse(localStorage.getItem("loggedUser")).role === "ADMIN") {
         const {orderList, done} = this.state;
         var delivered = [];
         var undelivered = [];
@@ -86,7 +89,7 @@ class OrdersAdminPage extends React.Component {
             {(done === true ? (orderList.length > 0 ? 
             <div>
                 <div data-aos="fade-up">
-                <h5>UNDELIVERED</h5>
+                <h2>UNDELIVERED</h2>
                 <hr
                 style={{
                     color: 'rgb(220,53,69)',
@@ -133,7 +136,7 @@ class OrdersAdminPage extends React.Component {
                 }}/>
                 </div>
                 <div data-aos="fade-up">
-                       <h5>DELIVERED</h5>
+                       <h2>DELIVERED</h2>
                 <hr
                 style={{
                     color: 'rgb(220,53,69)',
@@ -176,7 +179,27 @@ class OrdersAdminPage extends React.Component {
                 
             </div></div>
         );
-    }
+        } else {
+            return (
+                <div style={{margin: "auto"}}>
+                    <div className="card-body">
+                        <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                        <p className="card-text text-muted">You do not have access to this page, as your role needs to be ADMIN.</p>
+                    </div>
+                </div>
+            )
+        }
+    } else {
+        return (
+            <div style={{margin: "auto"}}>
+                <div className="card-body">
+                <h2 style={{color:'rgb(220,53,69)'}} className="card-title font-weight-bold">Access denied!</h2>
+                    <p className="card-text text-muted">You do not have access to this page, as your role needs to be ADMIN.</p>
+                </div>
+            </div>
+        )
+    } 
+}
 
 }
 

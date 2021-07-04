@@ -20,13 +20,13 @@ class ComplaintResponseForm extends React.Component {
             error: null,
             admin: {},
 
-            formIsValid: true,
+            formIsValid: false,
 
             formControls: {
                 message: {
                     value: '',
                     placeholder: 'Your message...',
-                    valid: true,
+                    valid: false,
                     touched: true,
                     validationRules: {
                         minLength: 5,
@@ -131,7 +131,7 @@ class ComplaintResponseForm extends React.Component {
                            required
                     />
                     {this.state.formControls.message.touched && !this.state.formControls.message.valid &&
-                    <div className={"error-message"}> * Message not valid </div>}
+                    <div className={"error-message"}> Message not valid </div>}
                 </FormGroup>
 
                 <Row>

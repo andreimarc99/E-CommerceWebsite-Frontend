@@ -19,7 +19,7 @@ import EmailCreationForm from './email-creation-form';
 import EmailUpdateForm from './email-update-form';
 import ReactSpinner from 'react-bootstrap-spinner'
 import trash from "../../img/trash.png"
-
+import eye from "../../img/eye.png"
 
 class UserPage extends React.Component {
 
@@ -239,9 +239,8 @@ class UserPage extends React.Component {
             <input id='firstName' name='firstName' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).firstName}></input>
             <h4 style={{marginTop:'10px'}}>LAST NAME</h4>
             <input id='lastName' name='lastName' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).lastName}></input>
-            <h4 onClick={this.toggleVisibility} style={{marginTop:'10px'}}>PASSWORD</h4>     
+            <h4 onClick={this.toggleVisibility} style={{marginTop:'10px'}}>PASSWORD</h4>  
             <input id='password' type="password" name='password' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).password}></input>
-       
             <h4 style={{marginTop:'10px'}}>CNP</h4>
             <input id='cnp' name='cnp' onChange={this.handleChange} style={{textAlign:'center', outlineColor:'rgb(220,53,69)'}} defaultValue={JSON.parse(user).cnp}></input>
             <h4 style={{marginTop:'10px'}}>BIRTH DATE</h4>
@@ -359,7 +358,7 @@ class UserPage extends React.Component {
                                     email => 
                                         <tr key={email.emailId}>
                                             <td className="text-center"> {email.email}</td>
-                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>UPDATE</Button>
+                                            <td className="text-center"> <Button onClick={() => this.toggleUpdateEmailForm(email)} style={{margin:'5px'}} variant='outline-danger' size='sm'>EDIT</Button>
                                             <Button onClick={() => this.handleEmailDelete(email.emailId)} style={{margin:'5px'}} variant='danger' size='sm'> <img src={trash} className="logo" style={{width:'20px'}}/></Button></td>
                                         </tr>)
                             }
