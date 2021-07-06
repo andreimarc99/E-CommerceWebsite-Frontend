@@ -124,8 +124,9 @@ class OrderPage extends React.Component {
         const code = document.getElementById('voucherInput').value;
         if (usedVouchers.length > 0) {
             for (let i = 0; i < usedVouchers.length; ++i) {
-                if (usedVouchers[i].code === code) {
-                    if (usedVouchers[i].oneTimeOnly === true) {
+                if (usedVouchers[i].voucher.code === code) {
+                    if (usedVouchers[i].voucher.oneTimeOnly === true) {
+                        console.log(true);
                         uniqueAndUsed = true;
                         break;
                     }
@@ -155,6 +156,7 @@ class OrderPage extends React.Component {
                                 found = true;
                                 break;
                             } else {
+                                found = true;
                                 alert("Can't apply voucher with code \"" + code + "\". It's either unusable yet, or expired.")
                             }
                         }
